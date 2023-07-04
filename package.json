@@ -5,8 +5,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "dev": "webpack-dev-server",
-    "build": "webpack --env=production",
-    "start": "node server.js"
+    "build": "webpack --env=production"
   },
   "dependencies": {
     "autosize": "^4.0.2",
