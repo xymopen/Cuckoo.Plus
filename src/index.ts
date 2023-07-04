@@ -56,19 +56,6 @@ if (window.Notification) {
 
 ThemeManager.setTheme(store.state.appStatus.settings.theme)
 
-if ('serviceWorker' in navigator && (process.env.NODE_ENV !== 'develop')) {
-  navigator.serviceWorker.register('/sw.js')
-}
-
-if (process.env.NODE_ENV === 'develop') {
-  navigator.serviceWorker && navigator.serviceWorker.getRegistrations()
-    .then(registrations => {
-      for(let registration of registrations) {
-        registration.unregister()
-      }
-    })
-}
-
 new Vue({
   el: '#app',
   store,
