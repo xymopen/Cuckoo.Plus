@@ -28,7 +28,7 @@ class Formatter {
 
         const isFinalCharacterDel = trimString[trimString.length - 1] === `${fragment}`
         const isMatchStringFinalPixel = (index + matchString.length) === text.length && isFinalCharacterDel
-        const centralSubString = trimString.substring(1, trimString.length - ( isFinalCharacterDel ? 1 : 2 ))
+        const centralSubString = trimString.substring(1, trimString.length - (isFinalCharacterDel ? 1 : 2))
 
         return `${matchString[0] === ' ' ? ' ' : ''}<${tag}>${centralSubString}</${tag}>${isMatchStringFinalPixel ? '' : matchString[matchString.length - 1]}`
       })

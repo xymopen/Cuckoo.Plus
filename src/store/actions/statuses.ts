@@ -67,9 +67,11 @@ const statuses = {
       const ancestors = result.data.ancestors
       const descendants = result.data.descendants
 
-      commit('updateContextMap', { [statusId]: {
-        ancestors: ancestors.map(status => status.id),
-        descendants: descendants.map(status => status.id) }
+      commit('updateContextMap', {
+        [statusId]: {
+          ancestors: ancestors.map(status => status.id),
+          descendants: descendants.map(status => status.id)
+        }
       })
 
       const newStatusMap = {}

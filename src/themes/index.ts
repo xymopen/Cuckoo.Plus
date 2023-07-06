@@ -139,7 +139,7 @@ class ThemeManager {
   }
 
   public exportTheme (themeName: string) {
-    const blob = new Blob([JSON.stringify(this.themeInfo[themeName].theme.colorSet)], {type: "text/plain;charset=utf-8"});
+    const blob = new Blob([JSON.stringify(this.themeInfo[themeName].theme.colorSet)], { type: "text/plain;charset=utf-8" });
     fileSaver.saveAs(blob, `${themeName}.json`);
   }
 

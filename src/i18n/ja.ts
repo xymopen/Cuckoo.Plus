@@ -57,7 +57,7 @@ const drawer = {
   [I18nTags.drawer.profile]: 'プロフィール',
   [I18nTags.drawer.settings]: '設定',
   [I18nTags.drawer.logout]: 'ログアウト',
-  [I18nTags.drawer.do_logout_message_confirm]: 'ログアウトしてもよろしいですか？' ,
+  [I18nTags.drawer.do_logout_message_confirm]: 'ログアウトしてもよろしいですか？',
   [I18nTags.drawer.do_logout_message_yes]: 'はい',
   [I18nTags.drawer.do_logout_message_no]: 'いいえ',
   [I18nTags.drawer.toHostInstance]: '現在のインスタンスを開く',
@@ -109,7 +109,7 @@ const postStatusDialog = {
 const notifications = {
   [I18nTags.notifications.someone_followed_you]: 'さんがあなたをフォローしています',
   [I18nTags.notifications.mentioned_you]: '返信',
-  [I18nTags.notifications.favourited_your_status]:'お気に入り',
+  [I18nTags.notifications.favourited_your_status]: 'お気に入り',
   [I18nTags.notifications.boosted_your_status]: 'ブースト'
 }
 

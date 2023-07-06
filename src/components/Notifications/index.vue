@@ -1,5 +1,6 @@
 <template>
-  <div class="notification-panel-container base-theme-bg-color" :style="isLoadingTargetStatus ? { overflow: 'hidden' } : null">
+  <div class="notification-panel-container base-theme-bg-color"
+    :style="isLoadingTargetStatus ? { overflow: 'hidden' } : null">
 
     <keep-alive>
       <div class="notification-list" v-show="!shouldShowTargetStatus">
@@ -17,7 +18,7 @@
 
           <mu-list textline="three-line">
             <notification-card :notification="notification" @updateCurrentCheckStatus="onUpdateCurrentCheckStatus"
-                               v-for="(notification, index) in notificationsToShow" :key="index"/>
+              v-for="(notification, index) in notificationsToShow" :key="index" />
           </mu-list>
 
         </mu-load-more>
@@ -31,7 +32,8 @@
         </mu-button>
       </mu-appbar>
       <div class="notification-status-card-container">
-        <status-card class="status-card-container no-limit-reply-area-height" v-if="currentCheckStatus" :status="currentCheckStatus"/>
+        <status-card class="status-card-container no-limit-reply-area-height" v-if="currentCheckStatus"
+          :status="currentCheckStatus" />
       </div>
     </div>
 
@@ -39,156 +41,160 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-  import { State, Action, Mutation } from 'vuex-class'
-  import { NotificationTypes, UiWidthCheckConstants } from '@/constant'
-  import StatusCard from '@/components/StatusCard'
-  import NotificationCard from './Card'
-  import { mastodonentities } from '@/interface'
-  import { prepareRootStatus, formatHtml } from "@/util"
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { State, Action, Mutation } from 'vuex-class'
+import { NotificationTypes, UiWidthCheckConstants } from '@/constant'
+import StatusCard from '@/components/StatusCard'
+import NotificationCard from './Card'
+import { mastodonentities } from '@/interface'
+import { prepareRootStatus, formatHtml } from "@/util"
 
-  @Component({
-    components: {
-      'status-card': StatusCard,
-      'notification-card': NotificationCard
-    }
-  })
-  class Notifications extends Vue {
+@Component({
+  components: {
+    'status-card': StatusCard,
+    'notification-card': NotificationCard
+  }
+})
+class Notifications extends Vue {
 
-    $progress
+  $progress
 
-    @Prop() hideHeader: boolean
+  @Prop() hideHeader: boolean
 
-    @Action('updateNotifications') updateNotifications
+  @Action('updateNotifications') updateNotifications
 
-    @Mutation('updateNotificationsPanelStatus') updateNotificationsPanelStatus
+  @Mutation('updateNotificationsPanelStatus') updateNotificationsPanelStatus
 
-    @State('notifications') notifications: Array<mastodonentities.Notification>
-    @State('contextMap') contextMap: {
-      [statusId: string]: {
-        ancestors: Array<string>
-        descendants: Array<string>
-      }
-    }
-    @State('appStatus') appStatus
-
-    isLoadingNotifications: boolean = false
-
-    // todo
-    isLoadingTargetStatus: boolean = false
-
-    shouldShowTargetStatus: boolean = false
-
-    currentCheckStatus: mastodonentities.Status = null
-
-    @Watch('isLoadingNotifications')
-    onLoadingNotificationStatusChanged (toValue) {
-      toValue ? this.$progress.start() : this.$progress.done()
-    }
-
-    @Watch('shouldShowTargetStatus')
-    onShouldShowTargetStatusChanged (val) {
-      this.$emit('shouldShowTargetStatusChanged', val)
-    }
-
-    get notificationsToShow () {
-      const allDescendantsToMute = []
-
-      this.appStatus.settings.muteMap.statusList.forEach(statusId => {
-        if (this.contextMap[statusId]) {
-          allDescendantsToMute.push(...this.contextMap[statusId].descendants, statusId)
-        }
-      })
-
-      return this.notifications.filter(notification => {
-        let toMuteByStatus, toMuteByUser
-
-        if (notification.status) toMuteByStatus = allDescendantsToMute.indexOf(notification.status.id) !== -1
-        if (notification.account) toMuteByUser = this.appStatus.settings.muteMap.userList.indexOf(notification.account.id) !== -1
-
-        return !toMuteByStatus && !toMuteByUser
-      })
-    }
-
-    async loadNotifications (isLoadMore, isFetchMore) {
-      if (this.shouldShowTargetStatus) return
-
-      this.isLoadingNotifications = true
-      await this.updateNotifications({
-        isLoadMore,
-        isFetchMore
-      })
-      this.isLoadingNotifications = false
-    }
-
-    onUpdateCurrentCheckStatus (targetStatus: mastodonentities.Status) {
-
-      if (this.appStatus.documentWidth < UiWidthCheckConstants.NOTIFICATION_DIALOG_TOGGLE_WIDTH) {
-        this.updateNotificationsPanelStatus(false)
-        return this.$router.push({
-          name: this.$routersInfo.statuses.name,
-          params: { statusId: targetStatus.id }
-        })
-      }
-
-      this.currentCheckStatus = targetStatus
-      this.shouldShowTargetStatus = true
+  @State('notifications') notifications: Array<mastodonentities.Notification>
+  @State('contextMap') contextMap: {
+    [statusId: string]: {
+      ancestors: Array<string>
+      descendants: Array<string>
     }
   }
+  @State('appStatus') appStatus
 
-  export default Notifications
+  isLoadingNotifications: boolean = false
+
+  // todo
+  isLoadingTargetStatus: boolean = false
+
+  shouldShowTargetStatus: boolean = false
+
+  currentCheckStatus: mastodonentities.Status = null
+
+  @Watch('isLoadingNotifications')
+  onLoadingNotificationStatusChanged (toValue) {
+    toValue ? this.$progress.start() : this.$progress.done()
+  }
+
+  @Watch('shouldShowTargetStatus')
+  onShouldShowTargetStatusChanged (val) {
+    this.$emit('shouldShowTargetStatusChanged', val)
+  }
+
+  get notificationsToShow () {
+    const allDescendantsToMute = []
+
+    this.appStatus.settings.muteMap.statusList.forEach(statusId => {
+      if (this.contextMap[statusId]) {
+        allDescendantsToMute.push(...this.contextMap[statusId].descendants, statusId)
+      }
+    })
+
+    return this.notifications.filter(notification => {
+      let toMuteByStatus, toMuteByUser
+
+      if (notification.status) toMuteByStatus = allDescendantsToMute.indexOf(notification.status.id) !== -1
+      if (notification.account) toMuteByUser = this.appStatus.settings.muteMap.userList.indexOf(notification.account.id) !== -1
+
+      return !toMuteByStatus && !toMuteByUser
+    })
+  }
+
+  async loadNotifications (isLoadMore, isFetchMore) {
+    if (this.shouldShowTargetStatus) return
+
+    this.isLoadingNotifications = true
+    await this.updateNotifications({
+      isLoadMore,
+      isFetchMore
+    })
+    this.isLoadingNotifications = false
+  }
+
+  onUpdateCurrentCheckStatus (targetStatus: mastodonentities.Status) {
+
+    if (this.appStatus.documentWidth < UiWidthCheckConstants.NOTIFICATION_DIALOG_TOGGLE_WIDTH) {
+      this.updateNotificationsPanelStatus(false)
+      return this.$router.push({
+        name: this.$routersInfo.statuses.name,
+        params: { statusId: targetStatus.id }
+      })
+    }
+
+    this.currentCheckStatus = targetStatus
+    this.shouldShowTargetStatus = true
+  }
+}
+
+export default Notifications
 </script>
 
 <style lang="less" scoped>
-  .notification-panel-container {
-    width: 100%;
-    height: calc(100vh - 56px) !important;
-    max-height: 1200px;
-    position: relative;
+.notification-panel-container {
+  width: 100%;
+  height: calc(100vh - 56px) !important;
+  max-height: 1200px;
+  position: relative;
 
-    .notification-list {
-      padding: 8px;
-      height: 100%;
-      overflow: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-    }
+  .notification-list {
+    padding: 8px;
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    .notification-status-check-area {
-      height: 100%;
+  .notification-status-check-area {
+    height: 100%;
 
-      .notification-status-card-container {
-        padding-top: 8px;
+    .notification-status-card-container {
+      padding-top: 8px;
 
-        .status-card-container {
-          height: 100%;
-          margin-bottom: 40px;
-        }
+      .status-card-container {
+        height: 100%;
+        margin-bottom: 40px;
       }
     }
   }
+}
 </style>
 
 <style lang="less">
-  .notification-panel-container {
-    .notification-list {
+.notification-panel-container {
+  .notification-list {
 
-      .mu-item-wrapper.hover {
-        background-color: inherit !important;
-        cursor: pointer;
-      }
+    .mu-item-wrapper.hover {
+      background-color: inherit !important;
+      cursor: pointer;
+    }
 
-      .notification-content {
-        > p { display: inline }
-      }
-
-      .mu-item-sub-title {
-        p { margin: 0 }
-      }
-
-      .mu-avatar {
-        margin: 0;
+    .notification-content {
+      >p {
+        display: inline
       }
     }
+
+    .mu-item-sub-title {
+      p {
+        margin: 0
+      }
+    }
+
+    .mu-avatar {
+      margin: 0;
+    }
   }
+}
 </style>

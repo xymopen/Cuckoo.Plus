@@ -58,7 +58,7 @@ const drawer = {
   [I18nTags.drawer.profile]: '个人资料',
   [I18nTags.drawer.settings]: '设置',
   [I18nTags.drawer.logout]: '注销',
-  [I18nTags.drawer.do_logout_message_confirm]: '你确定要注销Cuckoo吗？' ,
+  [I18nTags.drawer.do_logout_message_confirm]: '你确定要注销Cuckoo吗？',
   [I18nTags.drawer.do_logout_message_yes]: '是的',
   [I18nTags.drawer.do_logout_message_no]: '我只是手滑',
   [I18nTags.drawer.toHostInstance]: '打开当前实例站点',
@@ -105,7 +105,7 @@ const postStatusDialog = {
 const notifications = {
   [I18nTags.notifications.someone_followed_you]: '关注了你',
   [I18nTags.notifications.mentioned_you]: '提及了你',
-  [I18nTags.notifications.favourited_your_status]:'喜欢了你的嘟文',
+  [I18nTags.notifications.favourited_your_status]: '喜欢了你的嘟文',
   [I18nTags.notifications.boosted_your_status]: '转发了你的嘟文'
 }
 

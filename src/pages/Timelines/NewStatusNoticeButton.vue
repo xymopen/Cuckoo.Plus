@@ -1,85 +1,87 @@
 <template>
   <mu-button v-if="!appStatus.settings.realTimeLoadStatusMode" v-show="currentTimeLineStreamPool.length"
-             class="new-status-notice-button" round color="primary" @click="onNoticeButtonClick" :style="buttonStyle">
+    class="new-status-notice-button" round color="primary" @click="onNoticeButtonClick" :style="buttonStyle">
     <svg style="margin-left: 6px" width="18px" height="18px" viewBox="0 0 48 48" fill="#fff">
       <path fill="none" d="M0 0h48v48H0V0z"></path>
       <path d="M8 24l2.83 2.83L22 15.66V40h4V15.66l11.17 11.17L40 24 24 8 8 24z"></path>
     </svg>
-    {{$tc($i18nTags.timeLines.new_message_notice, currentTimeLineStreamPool.length, { count: currentTimeLineStreamPool.length })}}
+    {{ $tc($i18nTags.timeLines.new_message_notice, currentTimeLineStreamPool.length, {
+      count:
+        currentTimeLineStreamPool.length
+    }) }}
   </mu-button>
 </template>
 
 <script lang="ts">
-  import { Vue, Component, Watch } from 'vue-property-decorator'
-  import { State, Mutation, Action } from 'vuex-class'
-  import { animatedScrollTo } from '@/util'
-  import { getTimeLineTypeAndHashName, isBaseTimeLine, getTargetStatusesList } from '@/util'
+import { Vue, Component, Watch } from 'vue-property-decorator'
+import { State, Mutation, Action } from 'vuex-class'
+import { animatedScrollTo } from '@/util'
+import { getTimeLineTypeAndHashName, isBaseTimeLine, getTargetStatusesList } from '@/util'
 
-  (window as any).animatedScrollTo = animatedScrollTo
+(window as any).animatedScrollTo = animatedScrollTo
 
-  @Component({})
-  class NewStatusNoticeButton extends Vue {
+@Component({})
+class NewStatusNoticeButton extends Vue {
 
-    @State('appStatus') appStatus
+  @State('appStatus') appStatus
 
-    @State('statusMap') statusMap
+  @State('statusMap') statusMap
 
-    @Mutation('unShiftTimeLineStatuses') unShiftTimeLineStatuses
+  @Mutation('unShiftTimeLineStatuses') unShiftTimeLineStatuses
 
-    @Action('loadStreamStatusesPool') loadStreamStatusesPool
+  @Action('loadStreamStatusesPool') loadStreamStatusesPool
 
-    translateY: number = 0
+  translateY: number = 0
 
-    get currentTimeLineStreamPool () {
-      const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)
+  get currentTimeLineStreamPool () {
+    const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)
 
-      if (timeLineType === '') return []
+    if (timeLineType === '') return []
 
-      const targetStreamPool = getTargetStatusesList(this.appStatus.streamStatusesPool, timeLineType, hashName)
+    const targetStreamPool = getTargetStatusesList(this.appStatus.streamStatusesPool, timeLineType, hashName)
 
-      // filter root status
-      return targetStreamPool.filter(id => this.statusMap[id] && !this.statusMap[id].in_reply_to_id)
-    }
-
-    get buttonStyle () {
-      return { transform: `translate(-50%, ${this.translateY}px)` }
-    }
-
-    mounted () {
-      this.initWindowScrollEvent()
-    }
-
-    initWindowScrollEvent () {
-      let preScrollY = window.scrollY
-
-      const minTranslateY = -110
-      const maxTranslateY = 0
-
-      window.addEventListener('scroll', () => {
-        if (!this.currentTimeLineStreamPool.length) return
-
-        if (this.translateY >= minTranslateY && this.translateY <= maxTranslateY) {
-          this.translateY -= window.scrollY - preScrollY
-
-          if (this.translateY < minTranslateY) this.translateY = minTranslateY
-          if (this.translateY > maxTranslateY) this.translateY = maxTranslateY
-        }
-
-        preScrollY = window.scrollY
-
-      }, { passive: true })
-    }
-
-    onNoticeButtonClick () {
-      animatedScrollTo(document.querySelector('html'), 0, 400, () => {
-        this.loadStreamStatusesPool({ ...getTimeLineTypeAndHashName(this.$route) })
-      })
-    }
+    // filter root status
+    return targetStreamPool.filter(id => this.statusMap[id] && !this.statusMap[id].in_reply_to_id)
   }
 
-  export default NewStatusNoticeButton
+  get buttonStyle () {
+    return { transform: `translate(-50%, ${this.translateY}px)` }
+  }
+
+  mounted () {
+    this.initWindowScrollEvent()
+  }
+
+  initWindowScrollEvent () {
+    let preScrollY = window.scrollY
+
+    const minTranslateY = -110
+    const maxTranslateY = 0
+
+    window.addEventListener('scroll', () => {
+      if (!this.currentTimeLineStreamPool.length) return
+
+      if (this.translateY >= minTranslateY && this.translateY <= maxTranslateY) {
+        this.translateY -= window.scrollY - preScrollY
+
+        if (this.translateY < minTranslateY) this.translateY = minTranslateY
+        if (this.translateY > maxTranslateY) this.translateY = maxTranslateY
+      }
+
+      preScrollY = window.scrollY
+
+    }, { passive: true })
+  }
+
+  onNoticeButtonClick () {
+    animatedScrollTo(document.querySelector('html'), 0, 400, () => {
+      this.loadStreamStatusesPool({ ...getTimeLineTypeAndHashName(this.$route) })
+    })
+  }
+}
+
+export default NewStatusNoticeButton
 </script>
 
 <style lang="less" scoped>
-
 </style>

@@ -5,59 +5,59 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component, Watch } from 'vue-property-decorator'
-  import { State, Action } from 'vuex-class'
-  import { mastodonentities } from '@/interface'
-  import StatusCard from '@/components/StatusCard'
+import { Vue, Component, Watch } from 'vue-property-decorator'
+import { State, Action } from 'vuex-class'
+import { mastodonentities } from '@/interface'
+import StatusCard from '@/components/StatusCard'
 
-  @Component({
-    components: {
-      'status-card': StatusCard,
-    }
-  })
-  class Statuses extends Vue {
+@Component({
+  components: {
+    'status-card': StatusCard,
+  }
+})
+class Statuses extends Vue {
 
-    $progress
+  $progress
 
-    @Action('fetchStatusById') fetchStatusById
+  @Action('fetchStatusById') fetchStatusById
 
-    @State('statusMap') statusMap: {
-      [statusId: string]: mastodonentities.Status
-    }
-
-    @Watch('$route')
-    onRouteChanged () {
-      this.fetchTargetStatus()
-    }
-
-    get status (): mastodonentities.Status {
-      return this.statusMap[this.$route.params.statusId]
-    }
-
-    mounted () {
-      this.fetchTargetStatus()
-    }
-
-    async fetchTargetStatus () {
-      this.$progress.start()
-      await this.fetchStatusById(this.$route.params.statusId)
-      this.$progress.done()
-    }
+  @State('statusMap') statusMap: {
+    [statusId: string]: mastodonentities.Status
   }
 
-  export default Statuses
+  @Watch('$route')
+  onRouteChanged () {
+    this.fetchTargetStatus()
+  }
+
+  get status (): mastodonentities.Status {
+    return this.statusMap[this.$route.params.statusId]
+  }
+
+  mounted () {
+    this.fetchTargetStatus()
+  }
+
+  async fetchTargetStatus () {
+    this.$progress.start()
+    await this.fetchStatusById(this.$route.params.statusId)
+    this.$progress.done()
+  }
+}
+
+export default Statuses
 </script>
 
 <style lang="less" scoped>
-  .statuses-page-container {
-    max-width: 530px;
-    padding-top: 8px;
-    margin: 0 auto 40px;
+.statuses-page-container {
+  max-width: 530px;
+  padding-top: 8px;
+  margin: 0 auto 40px;
 
-    .status-card-container {
-      @media (max-width: 530px) {
-        height: 100%;
-      }
+  .status-card-container {
+    @media (max-width: 530px) {
+      height: 100%;
     }
   }
+}
 </style>

@@ -8,7 +8,7 @@ const allTimeLineTypeList = [
   TimeLineTypes.TAG, TimeLineTypes.LIST
 ]
 
-async function getTimeLineStatuses ({ timeLineType = '', maxId = '', sinceId = '', hashName = '', limit = 40, local = false} = {}): Promise<{ data: Array<mastodonentities.Status> }> {
+async function getTimeLineStatuses ({ timeLineType = '', maxId = '', sinceId = '', hashName = '', limit = 40, local = false } = {}): Promise<{ data: Array<mastodonentities.Status> }> {
   if (allTimeLineTypeList.indexOf(timeLineType) === -1) throw new Error('unknown timeline type!')
 
   let urlFragmentString = ''

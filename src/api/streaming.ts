@@ -8,22 +8,22 @@ import i18n from '@/i18n'
 class NotificationHandler {
   public emit (newNotification: mastodonentities.Notification) {
     switch (newNotification.type) {
-      case NotificationTypes.MENTION : {
+      case NotificationTypes.MENTION: {
         return this.emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.mentioned_you))
       }
 
-      case NotificationTypes.REBLOG : {
+      case NotificationTypes.REBLOG: {
         return this.emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.boosted_your_status))
       }
 
-      case NotificationTypes.FAVOURITE : {
+      case NotificationTypes.FAVOURITE: {
         // update status info
         store.dispatch('fetchStatusById', newNotification.status.id)
 
         return this.emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.favourited_your_status))
       }
 
-      case NotificationTypes.FOLLOW : {
+      case NotificationTypes.FOLLOW: {
         store.dispatch('updateRelationships', { idList: [newNotification.account.id] })
 
         return this.emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.someone_followed_you))
@@ -33,7 +33,7 @@ class NotificationHandler {
 
   private emitStatusOperateNotification (newNotification: mastodonentities.Notification, operateTypeString) {
     const title = `${this.getFromName(newNotification)} ${operateTypeString}`
-    const bodyText =  newNotification.status ? extractText(newNotification.status.content) : ''
+    const bodyText = newNotification.status ? extractText(newNotification.status.content) : ''
 
     // ignore all muted status's notification
     if (newNotification.status && (store.state.appStatus.settings.muteMap.statusList.indexOf(newNotification.status) !== -1)) return
@@ -127,23 +127,23 @@ class Streaming {
 
   private initEventListener (targetWs: WebSocket, timeLineType, hashName?) {
     targetWs.onmessage = (message) => {
-     if(message.data.length) {
-      const parsedMessage = JSON.parse(message.data)
+      if (message.data.length) {
+        const parsedMessage = JSON.parse(message.data)
 
-      switch (parsedMessage.event) {
-        case StreamingEventTypes.UPDATE : {
-          return this.updateStatus(JSON.parse(parsedMessage.payload), timeLineType, hashName)
-        }
+        switch (parsedMessage.event) {
+          case StreamingEventTypes.UPDATE: {
+            return this.updateStatus(JSON.parse(parsedMessage.payload), timeLineType, hashName)
+          }
 
-        case StreamingEventTypes.DELETE : {
-          return this.deleteStatus(parsedMessage.payload)
-        }
+          case StreamingEventTypes.DELETE: {
+            return this.deleteStatus(parsedMessage.payload)
+          }
 
-        case StreamingEventTypes.NOTIFICATION : {
-          return this.emitNotification(JSON.parse(parsedMessage.payload))
+          case StreamingEventTypes.NOTIFICATION: {
+            return this.emitNotification(JSON.parse(parsedMessage.payload))
+          }
         }
       }
-     }
     }
   }
 

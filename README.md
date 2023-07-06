@@ -18,4 +18,5 @@ pnpm run build
 the result files will be placed in `dist` folder.
 
 ## Licence
+
 MIT.

@@ -50,10 +50,10 @@ import { UiWidthCheckConstants } from '@/constant'
   interface MasonryContainer extends HTMLDivElement {
     $masonryEl: {
       size: { width: number, height: number }
-      layout()
-      addItems(el)
-      reloadItems()
-      layoutItems(masonryItemList: Array<MasonryItem>)
+      layout ()
+      addItems (el)
+      reloadItems ()
+      layoutItems (masonryItemList: Array<MasonryItem>)
       items: Array<MasonryItem>
     }
   }
@@ -64,7 +64,8 @@ import { UiWidthCheckConstants } from '@/constant'
     $masonryEl.items.forEach((item: MasonryItem) => {
       item.element.style.animation = 'fadein 1s';
       item.element.style.opacity = '1'
-    })}, 200)
+    })
+  }, 200)
 
   Vue.directive('masonry-container', {
 

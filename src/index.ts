@@ -61,7 +61,7 @@ new Vue({
   store,
   router,
   i18n,
-  render(h) {
+  render (h) {
     return h(App)
   }
 });

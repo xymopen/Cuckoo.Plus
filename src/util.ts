@@ -101,7 +101,7 @@ export async function prepareRootStatus (status: mastodonentities.Status) {
 
 
 let formatter
-export function formatHtml(html: string, options: { externalEmojis } = { externalEmojis: [] }): string {
+export function formatHtml (html: string, options: { externalEmojis } = { externalEmojis: [] }): string {
   if (!formatter) {
     formatter = new Formatter(store.state.customEmojis)
   }
@@ -125,7 +125,7 @@ export function formatAccountDisplayName (account: mastodonentities.Account) {
   return formatHtml(store.getters['getAccountDisplayName'](account), { externalEmojis: account.emojis })
 }
 
-export function extractText(html: string): string {
+export function extractText (html: string): string {
   let text = ""
 
   // create a parent node to contain the input html
@@ -167,7 +167,7 @@ export async function resetImageFileSizeForUpload (file: File) {
   })
 }
 
-function walkTextNodes(node, textNodeHandler) {
+function walkTextNodes (node, textNodeHandler) {
   if (node) {
     for (let i = 0; i < node.childNodes.length; ++i) {
       const childNode = node.childNodes[i]
@@ -181,13 +181,13 @@ function walkTextNodes(node, textNodeHandler) {
 }
 
 function easeInOutQuad (t, b, c, d) {
-  t /= d/2
-  if (t < 1) return c/2*t*t + b
+  t /= d / 2
+  if (t < 1) return c / 2 * t * t + b
   t--
-  return -c/2 * (t*(t-2) - 1) + b
+  return -c / 2 * (t * (t - 2) - 1) + b
 }
 
-const requestAnimFrame = (function(){return window.requestAnimationFrame||window.webkitRequestAnimationFrame||function(callback){window.setTimeout(callback,1000/60);};})()
+const requestAnimFrame = (function () { return window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (callback) { window.setTimeout(callback, 1000 / 60); }; })()
 
 export function animatedScrollTo (element: HTMLElement, to: number, duration: number, callback?) {
   const start = element.scrollTop,
@@ -196,7 +196,7 @@ export function animatedScrollTo (element: HTMLElement, to: number, duration: nu
   let animating = true
   let lastpos = null
 
-  const animateScroll = function() {
+  const animateScroll = function () {
     if (!animating) return
 
     requestAnimFrame(animateScroll)

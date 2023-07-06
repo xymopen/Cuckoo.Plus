@@ -5,21 +5,20 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
-  import {  } from 'vuex-class'
+import { Vue, Component } from 'vue-property-decorator'
+import { } from 'vuex-class'
 
-  @Component({})
-  class AccountHeader extends Vue {
+@Component({})
+class AccountHeader extends Vue {
 
-    mounted () {
-      const accountId = this.$route.params.accountId
-    }
-
+  mounted () {
+    const accountId = this.$route.params.accountId
   }
 
-  export default AccountHeader
+}
+
+export default AccountHeader
 </script>
 
 <style lang="less" scoped>
-
 </style>

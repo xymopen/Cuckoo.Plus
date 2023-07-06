@@ -5,22 +5,21 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
-  import { } from 'vuex-class'
-  import AccountHeader from './AccountHeader'
+import { Vue, Component } from 'vue-property-decorator'
+import { } from 'vuex-class'
+import AccountHeader from './AccountHeader'
 
-  @Component({
-    components: {
-      'account-header': AccountHeader
-    }
-  })
-  class Accounts extends Vue {
-
+@Component({
+  components: {
+    'account-header': AccountHeader
   }
+})
+class Accounts extends Vue {
 
-  export default Accounts
+}
+
+export default Accounts
 </script>
 
 <style lang="less" scoped>
-
 </style>

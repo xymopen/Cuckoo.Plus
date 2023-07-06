@@ -13,7 +13,7 @@ async function getSearchResults (q: string, resolve: boolean = false): Promise<{
     params: {
       q, resolve
     },
-    before(request) {
+    before (request) {
       abortSearch()
       preSearchRequest = request
     }
