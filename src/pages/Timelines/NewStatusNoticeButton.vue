@@ -20,8 +20,6 @@
   @Component({})
   class NewStatusNoticeButton extends Vue {
 
-    $route
-
     @State('appStatus') appStatus
 
     @State('statusMap') statusMap

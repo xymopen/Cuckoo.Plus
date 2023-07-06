@@ -11,8 +11,6 @@
   @Component({})
   class AccountHeader extends Vue {
 
-    $route
-
     mounted () {
       const accountId = this.$route.params.accountId
     }

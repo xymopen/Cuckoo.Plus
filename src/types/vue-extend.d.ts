@@ -1,12 +1,7 @@
-import VueRouter, { Route } from "vue-router";
-
 interface routerInfo { path: string, name: string }
 
 declare module "vue/types/vue" {
   interface Vue {
-    $router: VueRouter;
-    $route: Route;
-
     $routersInfo: {
       empty: routerInfo
       home: routerInfo
@@ -123,11 +118,5 @@ declare module "vue/types/vue" {
         favourited_your_status: string
       }
     }
-
-    $toast: {
-      error: (msg: string) => void
-    }
-
-    $confirm: (message: string, title: string, options) => Promise<{ result: boolean }>
   }
 }

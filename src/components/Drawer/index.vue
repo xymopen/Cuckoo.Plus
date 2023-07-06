@@ -109,21 +109,7 @@
   })
   class Drawer extends Vue {
 
-    $route
-
-    $router
-
-    $routersInfo
-
     $progress
-
-    $toast
-
-    $confirm
-
-    $t
-
-    $i18nTags
 
     @State('currentUserAccount') currentUserAccount
 

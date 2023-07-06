@@ -145,14 +145,6 @@
   @Component({})
   class Setting extends Vue {
 
-    $i18n
-
-    $i18nTags
-
-    $t
-
-    $toast
-
     $refs: {
       importThemeInput: HTMLInputElement
     }

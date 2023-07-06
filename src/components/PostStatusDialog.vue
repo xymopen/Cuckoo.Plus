@@ -190,14 +190,6 @@
       visibilitySelectBtn: HTMLDivElement
     }
 
-    $confirm
-
-    $t
-
-    $i18nTags
-
-    $toast
-
     getVisibilityDescInfo = getVisibilityDescInfo
 
     isConfirmDialogShowing: boolean = false

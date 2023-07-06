@@ -31,8 +31,6 @@
   })
   class App extends Vue {
 
-    $route
-
     @State('appStatus') appStatus
     @State('timelines') timelines
     @State('contextMap') contextMap

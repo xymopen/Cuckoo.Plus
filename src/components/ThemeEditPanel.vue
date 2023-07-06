@@ -87,8 +87,6 @@
       colorCakes: any
     }
 
-    $confirm
-
     $prompt
 
     @State('appStatus') appStatus

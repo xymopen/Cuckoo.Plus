@@ -76,12 +76,6 @@
   })
   class FullActionBar extends Vue {
 
-    $confirm
-
-    $t
-
-    $i18nTags
-
     $refs: {
       cuckooInput: Input
       replayTextInput: HTMLTextAreaElement

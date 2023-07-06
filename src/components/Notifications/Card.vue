@@ -38,10 +38,6 @@
   @Component({})
   class Card extends Vue {
 
-    $t
-
-    $i18nTags
-
     isLoadingSingleCard: boolean = false
 
     isLoading: boolean = false

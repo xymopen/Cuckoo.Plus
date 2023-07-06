@@ -109,8 +109,6 @@
       timelinesContainer: HTMLDivElement
     }
 
-    $route;
-
     $progress;
 
     @State('appStatus') appStatus

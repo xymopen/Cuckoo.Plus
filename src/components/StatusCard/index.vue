@@ -149,19 +149,9 @@
   })
   class StatusCard extends Vue {
 
-    $router
-
-    $routersInfo
-
     $refs: {
       replyListContainer: HTMLDivElement
     }
-
-    $confirm
-
-    $t
-
-    $i18nTags
 
     @State('contextMap') contextMap
     @State('statusMap') statusMap

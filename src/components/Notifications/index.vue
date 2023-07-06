@@ -57,10 +57,6 @@
 
     $progress
 
-    $router
-
-    $routersInfo
-
     @Prop() hideHeader: boolean
 
     @Action('updateNotifications') updateNotifications

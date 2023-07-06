@@ -51,14 +51,6 @@
 
     $progress
 
-    $t
-
-    $i18nTags
-
-    $router
-
-    $routersInfo
-
     @State('relationships') relationships: {
       [id: string]: mastodonentities.Relationship
     }

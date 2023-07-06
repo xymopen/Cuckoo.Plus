@@ -127,12 +127,6 @@
       contentArea: HTMLDivElement
     }
 
-    $confirm
-
-    $t
-
-    $i18nTags
-
     @Prop() status: mastodonentities.Status
 
     @State('cardMap') cardMap

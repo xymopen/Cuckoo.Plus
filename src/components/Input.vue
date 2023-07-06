@@ -72,8 +72,6 @@
       spoilerTextArea: HTMLTextAreaElement
     }
 
-    $toast
-
     @Prop() text: string
 
     @Prop() uploadProcesses: Array<{

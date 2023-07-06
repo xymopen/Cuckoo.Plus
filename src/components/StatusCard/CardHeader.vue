@@ -64,16 +64,6 @@
 
     @Prop() status: mastodonentities.Status
 
-    $router
-
-    $routersInfo
-
-    $confirm
-
-    $t
-
-    $i18nTags
-
     $refs: {
       cardHeader: HTMLDivElement
       visibilityInfo: any

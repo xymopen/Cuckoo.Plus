@@ -71,10 +71,6 @@
       notificationBtn: any,
     }
 
-    $router
-
-    $route
-
     $progress
 
     notificationBtnTrigger: HTMLButtonElement = null

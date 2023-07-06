@@ -17,8 +17,6 @@
   })
   class Statuses extends Vue {
 
-    $route
-
     $progress
 
     @Action('fetchStatusById') fetchStatusById
