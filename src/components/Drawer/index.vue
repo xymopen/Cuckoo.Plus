@@ -37,7 +37,7 @@
     <mu-divider />
 
     <mu-list class="secondary-list">
-      <mu-list-item button :to="$routersInfo.settings.path" @click="onSecondaryItemClick">
+      <mu-list-item button to="/settings" @click="onSecondaryItemClick">
         <mu-list-item-title class="secondary-read-text-color">{{ $t($i18nTags.drawer.settings) }}</mu-list-item-title>
       </mu-list-item>
     </mu-list>
@@ -167,7 +167,7 @@ class Drawer extends Vue {
     if (clickedRouterValue === 'profile') {
       // todo
       // this.$router.push({
-      //   name: this.$routersInfo.accounts.name,
+      //   name: 'accounts',
       //   params: {
       //     accountId: this.currentUserAccount.id
       //   }

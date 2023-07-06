@@ -8,6 +8,7 @@ const resolve = pathResolve.bind(undefined, __dirname);
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
+const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { GenerateSW } = require("workbox-webpack-plugin");
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
@@ -54,6 +55,13 @@ const config = {
       template: "index.html",
     }),
     new VueLoaderPlugin(),
+    new VueAutoRoutingPlugin({
+      // Path to the directory that contains your page components.
+      pages: 'src/pages',
+
+      // A string that will be added to importing component path (default @/pages/).
+      importPrefix: '@/pages/'
+    }),
     // disable for now for too many errors
     // new ForkTsCheckerWebpackPlugin({
     //   typescript: {
@@ -153,6 +161,12 @@ const config = {
         resourceQuery: /blockType=i18n/,
         type: 'javascript/auto',
         loader: '@intlify/vue-i18n-loader',
+      },
+
+      {
+        resourceQuery: [/blockType=route/, /blockType=route-meta/],
+        enforce: 'post',
+        loader: './lib/route-loader',
       },
     ],
   },

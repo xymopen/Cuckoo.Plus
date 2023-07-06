@@ -1,5 +1,5 @@
 import store from '@/store'
-import { StreamingEventTypes, TimeLineTypes, NotificationTypes, RoutersInfo, I18nTags } from '@/constant'
+import { StreamingEventTypes, TimeLineTypes, NotificationTypes, I18nTags } from '@/constant'
 import { mastodonentities } from "@/interface"
 import router from '@/router'
 import { extractText, prepareRootStatus } from "@/util"
@@ -65,7 +65,7 @@ class NotificationHandler {
     const targetStatus = await prepareRootStatus(newNotification.status)
 
     router.push({
-      name: RoutersInfo.statuses.name,
+      name: "statuses",
       params: {
         statusId: targetStatus.id
       }

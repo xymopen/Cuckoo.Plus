@@ -4,48 +4,23 @@ export const RoutersInfo = {
     name: 'empty'
   },
 
-  timelines: {
-    path: '/timelines',
-    name: 'timelines'
-  },
-
   defaulttimelines: {
-    path: ':timeLineType',
+    path: '/timelines/:timeLineType',
     name: 'defaulttimelines'
   },
 
   tagtimelines: {
-    path: 'tag/:tagName',
+    path: '/timelines/tag/:tagName',
     name: 'tagtimelines'
   },
 
   listtimelines: {
-    path: 'list/:listName',
+    path: '/timelines/list/:listName',
     name: 'listtimelines'
-  },
-
-  statuses: {
-    path: '/statuses/:statusId',
-    name: 'statuses'
   },
 
   home: {
     path: '/home',
     name: 'home'
   },
-
-  oauth: {
-    path: '/oauth',
-    name: 'oauth'
-  },
-
-  settings: {
-    path: '/settings',
-    name: 'settings'
-  },
-
-  accounts: {
-    path: '/accounts/:accountId',
-    name: 'accounts'
-  }
 };

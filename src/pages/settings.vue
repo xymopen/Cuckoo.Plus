@@ -128,6 +128,12 @@
   </div>
 </template>
 
+<route-meta>
+{
+  "needOAuth": true
+}
+</route-meta>
+
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Mutation, Action } from 'vuex-class'

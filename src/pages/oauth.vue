@@ -25,8 +25,8 @@
           </mu-auto-complete>
         </mu-form-item>
 
-        <mu-button class="submit-server-name-btn" color="primary"
-          @click="onSubmitServerName">{{ $t($i18nTags.oauth.confirm_input) }}</mu-button>
+        <mu-button class="submit-server-name-btn" color="primary" @click="onSubmitServerName">{{
+          $t($i18nTags.oauth.confirm_input) }}</mu-button>
 
       </mu-form>
 
@@ -35,11 +35,19 @@
   </section>
 </template>
 
+<route-meta>
+{
+  "hideHeader": true,
+  "hideDrawer": true
+}
+</route-meta>
+
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { Mutation, State } from 'vuex-class'
 import { apps } from '@/api'
 import { cuckoostore } from '@/interface'
+import { checkShouldRegisterApplication } from '@/util'
 
 // the first step, ask for mastodon OAuth Access token
 // and store this token
@@ -55,7 +63,15 @@ function isURL (str) {
   return pattern.test(str);
 }
 
-@Component({})
+@Component({
+  beforeEnter (to, from, next) {
+    if (!checkShouldRegisterApplication(to, from)) {
+      next(RoutersInfo.empty.path)
+    }
+
+    next()
+  },
+})
 class OAuth extends Vue {
 
   @State('OAuthInfo') OAuthInfo: cuckoostore.OAuthInfo

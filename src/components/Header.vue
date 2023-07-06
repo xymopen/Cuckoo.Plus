@@ -45,7 +45,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Mutation, Action, Getter } from 'vuex-class'
-import { TimeLineTypes, RoutersInfo, UiWidthCheckConstants, ThemeNames } from '@/constant'
+import { TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
 import { cuckoostore } from '@/interface'
 import { animatedScrollTo } from '@/util'
 import Notifications from '@/components/Notifications/index'

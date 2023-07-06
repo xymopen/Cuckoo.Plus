@@ -44,6 +44,12 @@
   </div>
 </template>
 
+<route-meta>
+{
+  "needOAuth": true
+}
+</route-meta>
+
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Action, State, Getter } from 'vuex-class'
@@ -52,8 +58,8 @@ import { mastodonentities } from '@/interface'
 import { getTimeLineTypeAndHashName, isBaseTimeLine, animatedScrollTo, documentGlobalEventBus } from '@/util'
 import StatusCard from '@/components/StatusCard'
 import PostStatusDialog from '@/components/PostStatusDialog'
-import NewStatusNoticeButton from './NewStatusNoticeButton'
-import PostStatusStampCard from './PostStatusStampCard'
+import NewStatusNoticeButton from './components/NewStatusNoticeButton'
+import PostStatusStampCard from './components/PostStatusStampCard'
 
 const noneCardFocusId = '-2'
 const stampCardFocusId = '-1'

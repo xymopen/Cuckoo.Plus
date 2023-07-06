@@ -128,7 +128,7 @@ class Notifications extends Vue {
     if (this.appStatus.documentWidth < UiWidthCheckConstants.NOTIFICATION_DIALOG_TOGGLE_WIDTH) {
       this.updateNotificationsPanelStatus(false)
       return this.$router.push({
-        name: this.$routersInfo.statuses.name,
+        name: 'statuses',
         params: { statusId: targetStatus.id }
       })
     }

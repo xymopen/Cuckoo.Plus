@@ -2,17 +2,14 @@ import { TimeLineTypes } from "../constant";
 
 import Loading from 'muse-ui-loading'
 import Vue from 'vue'
-import Router, { Route } from 'vue-router'
+import Router, { Route, NavigationGuard } from 'vue-router'
 import store from '../store'
 import { RoutersInfo } from '@/constant'
 import * as Api from '@/api'
-import { isBaseTimeLine } from '@/util'
+import { isBaseTimeLine, checkShouldRegisterApplication } from '@/util'
 
-import TimeLinesPage from '@/pages/Timelines'
-import OAuthPage from '@/pages/OAuth'
-import StatusesPage from '@/pages/Statuses'
-import Settings from '@/pages/Settings'
-import AccountsPage from '@/pages/Accounts'
+// Import generated routes
+import routes from 'vue-auto-routing'
 
 Vue.use(Router)
 
@@ -20,110 +17,52 @@ const homePath = '/timelines/home'
 const localPath = '/timelines/local'
 const publicPath = '/timelines/public'
 
+const timelinesRoute = routes.find(route => route.path === '/timelines')!
+
 const router = new Router({
   routes: [
-
     {
       path: RoutersInfo.empty.path,
       redirect: homePath
     },
 
     {
-      path: RoutersInfo.timelines.path,
+      path: '/timelines',
       redirect: homePath
     },
 
-    {
-      path: RoutersInfo.accounts.path,
-      name: RoutersInfo.accounts.name,
-      component: AccountsPage
-    },
+    // timelines alias
 
     {
-      path: RoutersInfo.statuses.path,
-      name: RoutersInfo.statuses.name,
-      component: StatusesPage
-    },
-
-    {
-      path: RoutersInfo.timelines.path,
-      name: RoutersInfo.timelines.name,
-      component: TimeLinesPage,
+      ...timelinesRoute,
+      path: RoutersInfo.defaulttimelines.path,
+      name: RoutersInfo.defaulttimelines.name,
       meta: {
-        needOAuth: true
-      },
-      children: [
-        {
-          path: RoutersInfo.defaulttimelines.path,
-          name: RoutersInfo.defaulttimelines.name,
-          meta: {
-            keepAlive: true,
-            needOAuth: true
-          }
-        },
-        {
-          path: RoutersInfo.tagtimelines.path,
-          name: RoutersInfo.tagtimelines.name,
-          meta: {
-            keepAlive: true,
-            needOAuth: true
-          }
-        },
-        {
-          path: RoutersInfo.listtimelines.path,
-          name: RoutersInfo.listtimelines.name,
-          meta: {
-            keepAlive: true,
-            needOAuth: true
-          }
-        }
-      ]
-    },
-
-    {
-      path: RoutersInfo.oauth.path,
-      name: RoutersInfo.oauth.name,
-      component: OAuthPage,
-      beforeEnter (to, from, next) {
-        if (!checkShouldRegisterApplication(to, from)) {
-          next(RoutersInfo.empty.path)
-        }
-
-        next()
-      },
-      meta: {
-        hideHeader: true,
-        hideDrawer: true
+        ...timelinesRoute.meta,
+        keepAlive: true
       }
     },
-
     {
-      path: RoutersInfo.settings.path,
-      name: RoutersInfo.settings.name,
-      component: Settings,
+      ...timelinesRoute,
+      path: RoutersInfo.tagtimelines.path,
+      name: RoutersInfo.tagtimelines.name,
       meta: {
-        needOAuth: true
+        ...timelinesRoute.meta,
+        keepAlive: true
       }
-    }
+    },
+    {
+      ...timelinesRoute,
+      path: RoutersInfo.listtimelines.path,
+      name: RoutersInfo.listtimelines.name,
+      meta: {
+        ...timelinesRoute.meta,
+        keepAlive: true
+      }
+    },
+    ...routes
   ]
-} as any);
-
-function checkShouldRegisterApplication (to, from): boolean {
-  // should have clientId/clientSecret/code
-  const { clientId, clientSecret } = store.state.OAuthInfo
-
-  let code = store.state.OAuthInfo.code
-  if (from.path === '/' && !code) {
-    if (location.search.substring(0, 6) == "?code=") {
-      code = (new RegExp("[\\?&]code=([^&#]*)")).exec(location.search)
-      code = code == null ? "" : decodeURIComponent(code[1]);
-      // todo maybe shouldn't put this here?
-      store.commit('updateOAuthCode', code)
-    }
-  }
-
-  return !(clientId && clientSecret && store.state.mastodonServerUri && code)
-}
+});
 
 const statusInitManager = new class {
 
@@ -246,7 +185,7 @@ const statusInitManager = new class {
 
 let hasUpdateCurrentUserAccount = false
 
-const beforeEachHooks = {
+const beforeEachHooks: { [key: string]: NavigationGuard } = {
   async beforeEachRoute (to, from, next) {
 
     await statusInitManager.updateCustomEmojis()
@@ -255,7 +194,7 @@ const beforeEachHooks = {
   },
 
   // children routes can't use in-router guide...
-  beforeDefaultTimeLines (to: Route, from, next) {
+  beforeDefaultTimeLines (to, from, next) {
     if (to.name === RoutersInfo.defaulttimelines.name) {
       if (!isBaseTimeLine(to.params.timeLineType)) {
         return next(homePath)
@@ -271,7 +210,7 @@ const beforeEachHooks = {
       // check if need to register
       if (checkShouldRegisterApplication(to, from)) {
         store.commit('clearAllOAuthInfo')
-        return next(RoutersInfo.oauth.path)
+        return next('/oauth')
       }
 
       // check if need to get token
@@ -282,7 +221,7 @@ const beforeEachHooks = {
         await statusInitManager.updateCurrentUserAccount()
       } catch (e) {
         store.commit('clearAllOAuthInfo')
-        return next(RoutersInfo.oauth.path)
+        return next('/oauth')
       }
 
       // should fetch notifications

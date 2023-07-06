@@ -12,14 +12,13 @@ import store from './store'
 import router from './router'
 import App from './App.vue'
 import * as moment from 'moment'
-import { I18nTags, RoutersInfo, I18nLocales } from '@/constant'
+import { I18nTags, I18nLocales } from '@/constant'
 import ThemeManager from '@/themes'
 import './directives'
 
 Vue.use({
   install (Vue) {
     Vue.prototype.$i18nTags = I18nTags;
-    Vue.prototype.$routersInfo = RoutersInfo;
   }
 })
 

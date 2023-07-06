@@ -2,19 +2,6 @@ interface routerInfo { path: string, name: string }
 
 declare module "vue/types/vue" {
   interface Vue {
-    $routersInfo: {
-      empty: routerInfo
-      home: routerInfo
-      oauth: routerInfo
-      settings: routerInfo
-      statuses: routerInfo
-      timelines: routerInfo
-      defaulttimelines: routerInfo
-      tagtimelines: routerInfo
-      listtimelines: routerInfo
-      accounts: routerInfo
-    }
-
     $i18nTags: {
       statusCard: {
         post_new_status_placeholder: string

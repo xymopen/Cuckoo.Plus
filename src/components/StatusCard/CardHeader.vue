@@ -102,7 +102,7 @@ class CardHeader extends Vue {
 
   onCheckStatusInSinglePage () {
     this.$router.push({
-      name: this.$routersInfo.statuses.name,
+      name: 'statuses',
       params: {
         statusId: this.status.id
       }

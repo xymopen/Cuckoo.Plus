@@ -278,7 +278,7 @@ class StatusCard extends Vue {
 
   onCheckSharedOriginalPost () {
     this.$router.push({
-      name: this.$routersInfo.statuses.name,
+      name: 'statuses',
       params: {
         statusId: this.status.reblog.id
       }

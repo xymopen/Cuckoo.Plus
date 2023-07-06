@@ -4,6 +4,12 @@
   </div>
 </template>
 
+<route>
+{
+  "name": "statuses"
+}
+</route>
+
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Action } from 'vuex-class'
