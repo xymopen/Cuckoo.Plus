@@ -44,8 +44,8 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { State, Action, Mutation } from 'vuex-class'
 import { NotificationTypes, UiWidthCheckConstants } from '@/constant'
-import StatusCard from '@/components/StatusCard'
-import NotificationCard from './Card'
+import StatusCard from '@/components/StatusCard/index.vue'
+import NotificationCard from './Card.vue'
 import { mastodonentities } from '@/interface'
 import { prepareRootStatus, formatHtml } from "@/util"
 

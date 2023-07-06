@@ -14,7 +14,7 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Action } from 'vuex-class'
 import { mastodonentities } from '@/interface'
-import StatusCard from '@/components/StatusCard'
+import StatusCard from '@/components/StatusCard/index.vue'
 
 @Component({
   components: {

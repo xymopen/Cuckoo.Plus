@@ -37,7 +37,7 @@ import { State } from 'vuex-class'
 import { AttachmentTypes, StatusCardTypes } from '@/constant'
 import { documentGlobalEventBus } from '@/util'
 import { mastodonentities } from '@/interface'
-import PlaceHolderMediaItem from './PlaceHolderMediaItem'
+import PlaceHolderMediaItem from './PlaceHolderMediaItem.vue'
 import ImageMeta = mastodonentities.ImageMeta
 import GifvMeta = mastodonentities.GifvMeta
 

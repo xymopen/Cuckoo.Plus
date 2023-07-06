@@ -19,8 +19,8 @@ import { Mutation, State, Getter } from 'vuex-class'
 import * as _ from 'underscore'
 import { UiWidthCheckConstants, TimeLineTypes, TITLE } from '@/constant'
 import Header from '@/components/Header.vue'
-import Drawer from '@/components/Drawer'
-import ThemeEditPanel from '@/components/ThemeEditPanel'
+import Drawer from '@/components/Drawer/index.vue'
+import ThemeEditPanel from '@/components/ThemeEditPanel.vue'
 
 @Component({
   components: {

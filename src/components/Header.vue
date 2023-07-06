@@ -48,7 +48,7 @@ import { State, Mutation, Action, Getter } from 'vuex-class'
 import { TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
 import { cuckoostore } from '@/interface'
 import { animatedScrollTo } from '@/util'
-import Notifications from '@/components/Notifications/index'
+import Notifications from '@/components/Notifications/index.vue'
 
 // todo 统一位置管理
 const pathToRouteInfo = {

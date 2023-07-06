@@ -65,7 +65,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Mutation, Action } from 'vuex-class'
 import { isBaseTimeLine } from '@/util'
 import { TimeLineTypes, UiWidthCheckConstants, RoutersInfo, I18nTags } from '@/constant'
-import Search from './Search'
+import Search from './Search.vue'
 import store from '@/store'
 
 const baseRouterInfoList = [

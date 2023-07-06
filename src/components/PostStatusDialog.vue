@@ -98,8 +98,8 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { State, Getter, Action } from 'vuex-class'
 import { UiWidthCheckConstants, VisibilityTypes } from '@/constant'
 import { getVisibilityDescInfo } from '@/util'
-import VisibilitySelectPopOver from '@/components/VisibilitySelectPopOver'
-import Input from '@/components/Input'
+import VisibilitySelectPopOver from '@/components/VisibilitySelectPopOver.vue'
+import Input from '@/components/Input.vue'
 import { mastodonentities } from "../interface";
 
 const maxUploadLength = 4

@@ -38,7 +38,7 @@ import { Getter, State, Action, Mutation } from 'vuex-class'
 import * as Api from '@/api'
 import { mastodonentities } from '@/interface'
 import { UiWidthCheckConstants } from '@/constant'
-import PeopleResultCard from './PeopleResultCard'
+import PeopleResultCard from './PeopleResultCard.vue'
 
 @Component({
   components: {

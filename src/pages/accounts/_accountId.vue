@@ -13,7 +13,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { } from 'vuex-class'
-import AccountHeader from './components/AccountHeader'
+import AccountHeader from './components/AccountHeader.vue'
 
 @Component({
   components: {

@@ -102,8 +102,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Getter, Action, State } from 'vuex-class'
 import * as moment from 'moment'
 import { mastodonentities } from "@/interface"
-import MediaPanel from './MediaPanel'
-import LinkPreviewPanel from './LinkPreviewPanel'
+import MediaPanel from './MediaPanel.vue'
+import LinkPreviewPanel from './LinkPreviewPanel.vue'
 import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromContentLink } from '@/util'
 import * as $ from "jquery"
 

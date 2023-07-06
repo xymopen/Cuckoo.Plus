@@ -112,14 +112,14 @@ import { mastodonentities } from '@/interface'
 import { StatusCardTypes } from '@/constant'
 import * as $ from 'jquery'
 
-import CardHeader from './CardHeader'
-import MediaPanel from './MediaPanel'
-import LinkPreviewPanel from './LinkPreviewPanel'
-import FullReplyListItem from './FullReplyListItem'
-import SimpleActionBar from './SimpleActionBar'
-import FullActionBar from './FullActionBar'
+import CardHeader from './CardHeader.vue'
+import MediaPanel from './MediaPanel.vue'
+import LinkPreviewPanel from './LinkPreviewPanel.vue'
+import FullReplyListItem from './FullReplyListItem.vue'
+import SimpleActionBar from './SimpleActionBar.vue'
+import FullActionBar from './FullActionBar.vue'
 
-import VisibilitySelectPopOver from '@/components/VisibilitySelectPopOver'
+import VisibilitySelectPopOver from '@/components/VisibilitySelectPopOver.vue'
 import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromContentLink } from '@/util'
 
 @Component({
