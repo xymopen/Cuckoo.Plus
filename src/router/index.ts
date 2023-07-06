@@ -1,6 +1,6 @@
 import { TimeLineTypes } from "../constant";
 
-const Loading = require('muse-ui-loading').default
+import Loading from 'muse-ui-loading'
 import Vue from 'vue'
 import Router, { Route } from 'vue-router'
 import store from '../store'

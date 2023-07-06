@@ -1,7 +1,7 @@
-const Toast = require('muse-ui-toast').default
-const Message = require('muse-ui-message').default
-const Loading = require('muse-ui-loading').default
-const NProgress = require('muse-ui-progress').default
+import Toast from 'muse-ui-toast'
+import Message from 'muse-ui-message'
+import Loading from 'muse-ui-loading'
+import NProgress from 'muse-ui-progress'
 import Vue from 'vue'
 import MuseUI from 'muse-ui'
 import 'muse-ui-loading/dist/muse-ui-loading.css'

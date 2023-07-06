@@ -49,8 +49,8 @@ import { mastodonentities } from '@/interface'
 import * as Api from '@/api'
 import { formatAccountDisplayName, resetImageFileSizeForUpload } from '@/util'
 
-const autosize = require('autosize')
-const getCaretCoordinates = require('textarea-caret');
+import autosize from 'autosize'
+import getCaretCoordinates from 'textarea-caret'
 
 const maxImageSize = 7.8 * 1024 * 1024
 
