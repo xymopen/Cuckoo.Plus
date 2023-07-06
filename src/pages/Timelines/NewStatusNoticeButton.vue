@@ -82,6 +82,3 @@ class NewStatusNoticeButton extends Vue {
 
 export default NewStatusNoticeButton
 </script>
-
-<style lang="less" scoped>
-</style>

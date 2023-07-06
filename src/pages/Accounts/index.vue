@@ -20,6 +20,3 @@ class Accounts extends Vue {
 
 export default Accounts
 </script>
-
-<style lang="less" scoped>
-</style>

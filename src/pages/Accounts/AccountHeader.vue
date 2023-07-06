@@ -19,6 +19,3 @@ class AccountHeader extends Vue {
 
 export default AccountHeader
 </script>
-
-<style lang="less" scoped>
-</style>

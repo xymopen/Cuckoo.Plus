@@ -54,6 +54,3 @@ class VisibilitySelectPopOver extends Vue {
 
 export default VisibilitySelectPopOver
 </script>
-
-<style lang="less" scoped>
-</style>
