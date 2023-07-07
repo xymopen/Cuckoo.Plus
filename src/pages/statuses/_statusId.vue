@@ -1,7 +1,9 @@
 <template>
-  <div class="statuses-page-container" v-loading="!status">
-    <status-card class="status-card-container" v-if="status" :status="status" />
-  </div>
+  <DefaultLayout>
+    <div class="statuses-page-container" v-loading="!status">
+      <status-card class="status-card-container" v-if="status" :status="status" />
+    </div>
+  </DefaultLayout>
 </template>
 
 <route>
@@ -15,10 +17,12 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Action } from 'vuex-class'
 import { mastodonentities } from '@/interface'
 import StatusCard from '@/components/StatusCard/index.vue'
+import DefaultLayout from '@/layouts/default/index.vue'
 
 @Component({
   components: {
     'status-card': StatusCard,
+    DefaultLayout
   }
 })
 class Statuses extends Vue {

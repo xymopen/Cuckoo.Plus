@@ -1,131 +1,139 @@
 <template>
-  <div class="setting-page-container">
-    <mu-card v-loading="isLoading">
-      <mu-card-actions class="setting-card">
-        <p class="card-label">{{ $t($i18nTags.settings.general_label) }}</p>
+  <DefaultLayout>
+    <div class="setting-page-container">
+      <mu-card v-loading="isLoading">
+        <mu-card-actions class="setting-card">
+          <p class="card-label">{{ $t($i18nTags.settings.general_label) }}</p>
 
-        <div class="setting-row select-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.choose_theme) }}</span>
-          <mu-select class="setting-select" v-model="themeName">
-            <mu-option v-for="(themeInfo, index) in themeOptions" :key="index" :disabled="appStatus.isEditingThemeMode"
-              :label="themeInfo.value" :value="themeInfo.value">
-            </mu-option>
-          </mu-select>
-        </div>
-
-        <div class="foot-note secondary-read-text-color">
-          <span @click="onSelectThemeColorSetFile">{{ $t($i18nTags.settings.import_theme_color_set) }}</span>
-          /
-          <span
-            @click="shouldOpenThemeColorSetExportDialog = true">{{ $t($i18nTags.settings.export_theme_color_set) }}</span>
-          /
-          <span @click="onShowEditThemePanel">{{ $t($i18nTags.settings.edit_theme_color_set) }}</span>
-          /
-          <span @click="onOpenDeleteThemeColorSetPanel">{{ $t($i18nTags.settings.delete_theme_color_set) }}</span>
-        </div>
-        <mu-dialog :title="$t($i18nTags.settings.export_theme_color_set)"
-          :open.sync="shouldOpenThemeColorSetExportDialog">
-          <div class="setting-row select-row dialog-setting-row">
+          <div class="setting-row select-row">
             <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.choose_theme) }}</span>
-            <mu-select class="setting-select" v-model="themeNameToExport">
-              <mu-option v-for="(themeInfo, index) in themeOptions" :key="index" :label="themeInfo.value"
-                :value="themeInfo.value">
+            <mu-select class="setting-select" v-model="themeName">
+              <mu-option v-for="(themeInfo, index) in themeOptions" :key="index"
+                :disabled="appStatus.isEditingThemeMode" :label="themeInfo.value" :value="themeInfo.value">
               </mu-option>
             </mu-select>
           </div>
 
-          <mu-button slot="actions" flat color="secondary"
-            @click="shouldOpenThemeColorSetExportDialog = false">Cancel</mu-button>
-          <mu-button slot="actions" flat class="secondary-theme-text-color" :disabled="!themeNameToExport"
-            @click="onExportThemeColorSet">Export</mu-button>
-        </mu-dialog>
+          <div class="foot-note secondary-read-text-color">
+            <span @click="onSelectThemeColorSetFile">{{ $t($i18nTags.settings.import_theme_color_set) }}</span>
+            /
+            <span @click="shouldOpenThemeColorSetExportDialog = true">{{ $t($i18nTags.settings.export_theme_color_set)
+              }}</span>
+            /
+            <span @click="onShowEditThemePanel">{{ $t($i18nTags.settings.edit_theme_color_set) }}</span>
+            /
+            <span @click="onOpenDeleteThemeColorSetPanel">{{ $t($i18nTags.settings.delete_theme_color_set) }}</span>
+          </div>
+          <mu-dialog :title="$t($i18nTags.settings.export_theme_color_set)"
+            :open.sync="shouldOpenThemeColorSetExportDialog">
+            <div class="setting-row select-row dialog-setting-row">
+              <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.choose_theme) }}</span>
+              <mu-select class="setting-select" v-model="themeNameToExport">
+                <mu-option v-for="(themeInfo, index) in themeOptions" :key="index" :label="themeInfo.value"
+                  :value="themeInfo.value">
+                </mu-option>
+              </mu-select>
+            </div>
+
+            <mu-button slot="actions" flat color="secondary"
+              @click="shouldOpenThemeColorSetExportDialog = false">Cancel</mu-button>
+            <mu-button slot="actions" flat class="secondary-theme-text-color" :disabled="!themeNameToExport"
+              @click="onExportThemeColorSet">Export</mu-button>
+          </mu-dialog>
 
 
-        <mu-dialog :title="$t($i18nTags.settings.delete_theme_color_set)" :open.sync="shouldOpenThemeDeleteDialog">
-          <div class="setting-row select-row dialog-setting-row">
-            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.choose_theme) }}</span>
-            <mu-select class="setting-select" v-model="themeNameToDelete">
-              <mu-option v-for="(themeInfo, index) in customThemeOptions" :key="index" :label="themeInfo.value"
-                :value="themeInfo.value">
-              </mu-option>
+          <mu-dialog :title="$t($i18nTags.settings.delete_theme_color_set)" :open.sync="shouldOpenThemeDeleteDialog">
+            <div class="setting-row select-row dialog-setting-row">
+              <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.choose_theme) }}</span>
+              <mu-select class="setting-select" v-model="themeNameToDelete">
+                <mu-option v-for="(themeInfo, index) in customThemeOptions" :key="index" :label="themeInfo.value"
+                  :value="themeInfo.value">
+                </mu-option>
+              </mu-select>
+            </div>
+
+            <mu-button slot="actions" flat color="secondary"
+              @click="shouldOpenThemeDeleteDialog = false">Cancel</mu-button>
+            <mu-button slot="actions" flat class="secondary-theme-text-color" :disabled="!themeNameToDelete"
+              @click="onDeleteThemeColorSet">Delete</mu-button>
+          </mu-dialog>
+
+
+          <div class="setting-row select-row">
+            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.choose_language) }}</span>
+            <mu-select class="setting-select" v-model="locale">
+              <mu-option v-for="(localeInfo, index) in localesOptions" :key="index" :label="localeInfo.label"
+                :value="localeInfo.value" />
             </mu-select>
           </div>
 
-          <mu-button slot="actions" flat color="secondary" @click="shouldOpenThemeDeleteDialog = false">Cancel</mu-button>
-          <mu-button slot="actions" flat class="secondary-theme-text-color" :disabled="!themeNameToDelete"
-            @click="onDeleteThemeColorSet">Delete</mu-button>
-        </mu-dialog>
+          <p class="card-label">{{ $t($i18nTags.settings.stream_label) }}</p>
+
+          <div class="setting-row">
+            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.auto_load_new_status) }}</span>
+            <mu-switch class="setting-switch" v-model="realTimeLoadStatusMode" />
+          </div>
+
+          <div class="setting-row">
+            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.use_multi_line_mode) }}</span>
+            <mu-switch class="setting-switch" v-model="multiLineMode" />
+          </div>
+
+          <div class="setting-row select-row">
+            <span class="setting-label primary-read-text-color">{{
+              $t($i18nTags.settings.maximum_number_of_columns_in_multi_line_mode) }}</span>
+            <mu-select class="setting-select" v-model="maximumNumberOfColumnsInMultiLineMode">
+              <mu-option v-for="(info, index) in maximumColumnsOptions" :key="index" :label="info.label"
+                :value="info.value" />
+            </mu-select>
+          </div>
+
+          <!--<p class="card-label">{{$t($i18nTags.settings.media_label)}}</p>-->
+
+          <p class="card-label">{{ $t($i18nTags.settings.publishing_label) }}</p>
+
+          <div class="setting-row select-row">
+            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.post_privacy) }}</span>
+            <mu-select class="setting-select" v-model="postPrivacy">
+              <mu-option v-for="(visibilityInfo, index) in postPrivacyOptions" :key="index"
+                :label="visibilityInfo.label" :value="visibilityInfo.value" />
+            </mu-select>
+          </div>
+
+          <div class="setting-row">
+            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.post_media_as_sensitive)
+              }}</span>
+            <mu-switch class="setting-switch" v-model="postMediaAsSensitiveMode" />
+          </div>
+
+          <div class="setting-row">
+            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.only_mention_target_user)
+              }}</span>
+            <mu-switch class="setting-switch" v-model="onlyMentionTargetUserMode" />
+          </div>
+
+          <p class="card-label">{{ $t($i18nTags.settings.web_label) }}</p>
+
+          <div class="setting-row">
+            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.show_sensitive_media_files)
+              }}</span>
+            <mu-switch class="setting-switch" v-model="showSensitiveContentMode" />
+          </div>
+
+          <div class="setting-row">
+            <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.auto_expand_spoiler_text)
+              }}</span>
+            <mu-switch class="setting-switch" v-model="autoExpandSpoilerTextMode" />
+          </div>
+
+        </mu-card-actions>
+      </mu-card>
+
+      <input ref="importThemeInput" type="file" @change="onImportThemeColorSet" accept=".json" style="display: none" />
 
 
-        <div class="setting-row select-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.choose_language) }}</span>
-          <mu-select class="setting-select" v-model="locale">
-            <mu-option v-for="(localeInfo, index) in localesOptions" :key="index" :label="localeInfo.label"
-              :value="localeInfo.value" />
-          </mu-select>
-        </div>
-
-        <p class="card-label">{{ $t($i18nTags.settings.stream_label) }}</p>
-
-        <div class="setting-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.auto_load_new_status) }}</span>
-          <mu-switch class="setting-switch" v-model="realTimeLoadStatusMode" />
-        </div>
-
-        <div class="setting-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.use_multi_line_mode) }}</span>
-          <mu-switch class="setting-switch" v-model="multiLineMode" />
-        </div>
-
-        <div class="setting-row select-row">
-          <span
-            class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.maximum_number_of_columns_in_multi_line_mode) }}</span>
-          <mu-select class="setting-select" v-model="maximumNumberOfColumnsInMultiLineMode">
-            <mu-option v-for="(info, index) in maximumColumnsOptions" :key="index" :label="info.label"
-              :value="info.value" />
-          </mu-select>
-        </div>
-
-        <!--<p class="card-label">{{$t($i18nTags.settings.media_label)}}</p>-->
-
-        <p class="card-label">{{ $t($i18nTags.settings.publishing_label) }}</p>
-
-        <div class="setting-row select-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.post_privacy) }}</span>
-          <mu-select class="setting-select" v-model="postPrivacy">
-            <mu-option v-for="(visibilityInfo, index) in postPrivacyOptions" :key="index" :label="visibilityInfo.label"
-              :value="visibilityInfo.value" />
-          </mu-select>
-        </div>
-
-        <div class="setting-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.post_media_as_sensitive) }}</span>
-          <mu-switch class="setting-switch" v-model="postMediaAsSensitiveMode" />
-        </div>
-
-        <div class="setting-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.only_mention_target_user) }}</span>
-          <mu-switch class="setting-switch" v-model="onlyMentionTargetUserMode" />
-        </div>
-
-        <p class="card-label">{{ $t($i18nTags.settings.web_label) }}</p>
-
-        <div class="setting-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.show_sensitive_media_files) }}</span>
-          <mu-switch class="setting-switch" v-model="showSensitiveContentMode" />
-        </div>
-
-        <div class="setting-row">
-          <span class="setting-label primary-read-text-color">{{ $t($i18nTags.settings.auto_expand_spoiler_text) }}</span>
-          <mu-switch class="setting-switch" v-model="autoExpandSpoilerTextMode" />
-        </div>
-
-      </mu-card-actions>
-    </mu-card>
-
-    <input ref="importThemeInput" type="file" @change="onImportThemeColorSet" accept=".json" style="display: none" />
-
-  </div>
+    </div>
+  </DefaultLayout>
 </template>
 
 <route-meta>
@@ -140,6 +148,7 @@ import { State, Mutation, Action } from 'vuex-class'
 import { ThemeNames, I18nLocales, VisibilityTypes } from '@/constant'
 import * as moment from 'moment'
 import ThemeManager from '@/themes'
+import DefaultLayout from '@/layouts/default/index.vue'
 
 const ADD_NEW_THEME_OPTION = 'ADD_NEW_THEME_OPTION'
 
@@ -150,7 +159,11 @@ const presetThemeOptions = [
   { value: ThemeNames.CUCKOO_HUB },
 ]
 
-@Component({})
+@Component({
+  components: {
+    DefaultLayout
+  }
+})
 class Setting extends Vue {
 
   $refs: {

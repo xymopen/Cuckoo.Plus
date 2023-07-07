@@ -1,47 +1,49 @@
 <template>
-  <div class="timelines-container" ref="timelinesContainer" v-loading="isInitLoading">
+  <DefaultLayout>
+    <div class="timelines-container" ref="timelinesContainer" v-loading="isInitLoading">
 
-    <template v-for="(timeLineName, index) in allTimeLineNameList">
-      <mu-load-more :key="index" @load="loadStatuses(true)" v-show="isTimeLineNameEqualCurrentRoute(timeLineName)"
-        :loading="!isInitLoading && isLoading" loading-text="">
-        <div v-masonry-container :style="statusCardsContainerStyle" class="status-cards-container">
+      <template v-for="(timeLineName, index) in allTimeLineNameList">
+        <mu-load-more :key="index" @load="loadStatuses(true)" v-show="isTimeLineNameEqualCurrentRoute(timeLineName)"
+          :loading="!isInitLoading && isLoading" loading-text="">
+          <div v-masonry-container :style="statusCardsContainerStyle" class="status-cards-container">
 
-          <post-status-stamp-card @click="showNewPostDialogPanel" class="status-card-container" :style="[statusCardStyle,
-            isTimeLineNameEqualCurrentRoute(timeLineName) && currentFocusCardId === '-1' && cardFocusStyle]" />
+            <post-status-stamp-card @click="showNewPostDialogPanel" class="status-card-container" :style="[statusCardStyle,
+              isTimeLineNameEqualCurrentRoute(timeLineName) && currentFocusCardId === '-1' && cardFocusStyle]" />
 
-          <template v-for="status in getRootStatuses(timeLineName.split('/')[0], timeLineName.split('/')[1])">
-            <status-card v-masonry-item class="status-card-container" :ref="`${timeLineName}_statusCard_${status.id}`"
-              @statusCardFocus="onStatusCardFocus(status.id)" :shouldCollapseContent="true" :key="status.id"
-              :status="status" :style="[statusCardStyle,
-                isTimeLineNameEqualCurrentRoute(timeLineName) &&
-                currentFocusCardId === status.id && cardFocusStyle]" />
-          </template>
+            <template v-for="status in getRootStatuses(timeLineName.split('/')[0], timeLineName.split('/')[1])">
+              <status-card v-masonry-item class="status-card-container" :ref="`${timeLineName}_statusCard_${status.id}`"
+                @statusCardFocus="onStatusCardFocus(status.id)" :shouldCollapseContent="true" :key="status.id"
+                :status="status" :style="[statusCardStyle,
+                  isTimeLineNameEqualCurrentRoute(timeLineName) &&
+                  currentFocusCardId === status.id && cardFocusStyle]" />
+            </template>
 
-          <p class="no-more-status-notice secondary-read-text-color"
-            v-if="currentTimeLineCannotLoadMore && (count === waterfallLineCount)">
-            {{ $t($i18nTags.timeLines.no_load_more_status_notice) }}
-          </p>
+            <p class="no-more-status-notice secondary-read-text-color"
+              v-if="currentTimeLineCannotLoadMore && (count === waterfallLineCount)">
+              {{ $t($i18nTags.timeLines.no_load_more_status_notice) }}
+            </p>
 
-        </div>
-      </mu-load-more>
-    </template>
+          </div>
+        </mu-load-more>
+      </template>
 
-    <!-- todo move those widgets to a common area -->
-    <mu-snackbar position="top" color="info" :open.sync="isSnackBarOpening">
-      <mu-icon left value="info"></mu-icon>
-      {{ snackBarMessage }}
-      <mu-button flat slot="action" color="#fff" @click="isSnackBarOpening = false">Close</mu-button>
-    </mu-snackbar>
+      <!-- todo move those widgets to a common area -->
+      <mu-snackbar position="top" color="info" :open.sync="isSnackBarOpening">
+        <mu-icon left value="info"></mu-icon>
+        {{ snackBarMessage }}
+        <mu-button flat slot="action" color="#fff" @click="isSnackBarOpening = false">Close</mu-button>
+      </mu-snackbar>
 
-    <mu-button fab class="post-new-status-button" color="primary" v-show="!isPostStatusDialogOpening"
-      @click="showNewPostDialogPanel">
-      <mu-icon value="edit" />
-    </mu-button>
+      <mu-button fab class="post-new-status-button" color="primary" v-show="!isPostStatusDialogOpening"
+        @click="showNewPostDialogPanel">
+        <mu-icon value="edit" />
+      </mu-button>
 
-    <post-status-dialog :open.sync="isPostStatusDialogOpening" />
+      <post-status-dialog :open.sync="isPostStatusDialogOpening" />
 
-    <new-status-notice-button />
-  </div>
+      <new-status-notice-button />
+    </div>
+  </DefaultLayout>
 </template>
 
 <route-meta>
@@ -60,6 +62,7 @@ import StatusCard from '@/components/StatusCard/index.vue'
 import PostStatusDialog from '@/components/PostStatusDialog.vue'
 import NewStatusNoticeButton from './components/NewStatusNoticeButton.vue'
 import PostStatusStampCard from './components/PostStatusStampCard.vue'
+import DefaultLayout from '@/layouts/default/index.vue'
 
 const noneCardFocusId = '-2'
 const stampCardFocusId = '-1'
@@ -104,7 +107,8 @@ function calcFitWaterFallLineCount (containerWidth: number, testLineCount: numbe
     'status-card': StatusCard,
     'post-status-dialog': PostStatusDialog,
     'new-status-notice-button': NewStatusNoticeButton,
-    'post-status-stamp-card': PostStatusStampCard
+    'post-status-stamp-card': PostStatusStampCard,
+    DefaultLayout
   }
 })
 class TimeLines extends Vue {

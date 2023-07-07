@@ -1,46 +1,41 @@
 <template>
-  <section class="oauth-container">
+  <PlainLayout>
+    <section class="oauth-container">
 
-    <div class="form-container">
-      <p class="oauth-form-brand">{{ $t($i18nTags.oauth.form_brand) }}</p>
+      <div class="form-container">
+        <p class="oauth-form-brand">{{ $t($i18nTags.oauth.form_brand) }}</p>
 
-      <p class="oauth-login-hint">{{ $t($i18nTags.oauth.login_hint) }}</p>
+        <p class="oauth-login-hint">{{ $t($i18nTags.oauth.login_hint) }}</p>
 
-      <mu-form ref="form" :model="validateForm">
+        <mu-form ref="form" :model="validateForm">
 
-        <mu-form-item class="server-input-form-item" prop="mastodonServerUri" :rules="uriRules"
-          :label="$t($i18nTags.oauth.server_input_label)">
-          <mu-auto-complete prop="mastodonServerUri" class="server-input" :data="mastodonServerUriList" :full-width="true"
-            :max-search-results="5" label-float :prefix="prefix" @keydown.enter="onSubmitServerName"
-            v-model="validateForm.mastodonServerUri" avatar>
-            <template slot-scope="scope">
-              <mu-list-item-action>
-                <mu-avatar>
-                  <img :src="scope.item.favicon">
-                </mu-avatar>
-              </mu-list-item-action>
-              <mu-list-item-content v-html="scope.item.value">
-              </mu-list-item-content>
-            </template>
-          </mu-auto-complete>
-        </mu-form-item>
+          <mu-form-item class="server-input-form-item" prop="mastodonServerUri" :rules="uriRules"
+            :label="$t($i18nTags.oauth.server_input_label)">
+            <mu-auto-complete prop="mastodonServerUri" class="server-input" :data="mastodonServerUriList" :full-width="true"
+              :max-search-results="5" label-float :prefix="prefix" @keydown.enter="onSubmitServerName"
+              v-model="validateForm.mastodonServerUri" avatar>
+              <template slot-scope="scope">
+                <mu-list-item-action>
+                  <mu-avatar>
+                    <img :src="scope.item.favicon">
+                  </mu-avatar>
+                </mu-list-item-action>
+                <mu-list-item-content v-html="scope.item.value">
+                </mu-list-item-content>
+              </template>
+            </mu-auto-complete>
+          </mu-form-item>
 
-        <mu-button class="submit-server-name-btn" color="primary" @click="onSubmitServerName">{{
-          $t($i18nTags.oauth.confirm_input) }}</mu-button>
+          <mu-button class="submit-server-name-btn" color="primary" @click="onSubmitServerName">{{
+            $t($i18nTags.oauth.confirm_input) }}</mu-button>
 
-      </mu-form>
+        </mu-form>
 
-    </div>
+      </div>
 
-  </section>
+    </section>
+  </PlainLayout>
 </template>
-
-<route-meta>
-{
-  "hideHeader": true,
-  "hideDrawer": true
-}
-</route-meta>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
@@ -48,6 +43,7 @@ import { Mutation, State } from 'vuex-class'
 import { apps } from '@/api'
 import { cuckoostore } from '@/interface'
 import { checkShouldRegisterApplication } from '@/util'
+import PlainLayout from '@/layouts/plain.vue'
 
 // the first step, ask for mastodon OAuth Access token
 // and store this token
@@ -64,6 +60,10 @@ function isURL (str) {
 }
 
 @Component({
+  components: {
+    PlainLayout
+  },
+
   beforeEnter (to, from, next) {
     if (!checkShouldRegisterApplication(to, from)) {
       next(RoutersInfo.empty.path)

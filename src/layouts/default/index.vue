@@ -1,0 +1,39 @@
+<template>
+  <div>
+    <cuckoo-plus-header />
+    <cuckoo-plus-drawer v-if="isOAuthUser" />
+    <mu-container :fluid="true" class="app-content" :style="appContentStyle">
+      <slot />
+    </mu-container>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from "vue";
+import { mapGetters, mapState } from "vuex";
+import Header from './components/Header.vue'
+import Drawer from './components/Drawer/index.vue'
+import { UiWidthCheckConstants } from '@/constant'
+
+export default defineComponent({
+  name: 'DefaultLayout',
+  components: {
+    'cuckoo-plus-header': Header,
+    'cuckoo-plus-drawer': Drawer,
+  },
+  computed: {
+    ...mapState(['appStatus']),
+    ...mapGetters(['isOAuthUser', 'isMobileMode']),
+    appContentStyle () {
+      if (this.appStatus.isDrawerOpened &&
+        this.isOAuthUser && !this.isMobileMode) {
+        return {
+          paddingLeft: `${UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH}px`
+        }
+      }
+    }
+  }
+})
+</script>
+
+<style scoped src="../styles/app-content.css" />
