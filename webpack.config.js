@@ -50,6 +50,7 @@ const config = {
             files: assets,
             options: pluginOptions,
           },
+          ANALYTICS_SCRIPT: process.env.ANALYTICS_SCRIPT ?? "",
         }
       },
       template: "index.html",
