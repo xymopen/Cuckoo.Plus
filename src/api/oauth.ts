@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import store from '@/store'
 import { patchApiUri } from '@/util'
-import HttpResponse = vuejs.HttpResponse;
+import VueResource from 'vue-resource'
 
-interface fetchOAuthTokenReturnData extends HttpResponse {
+interface fetchOAuthTokenReturnData extends VueResource.HttpResponse {
   data: {
     access_token: string
   }
