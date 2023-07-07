@@ -1,10 +1,10 @@
-import Vue from 'vue'
 import { mastodonentities } from '@/interface'
 import { patchApiUri, generateUniqueKey } from '@/util'
 import { VisibilityTypes } from '@/constant'
+import http from '@/api/http'
 
 async function getStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return Vue.http.get(patchApiUri(`/api/v1/statuses/${id}`)) as any
+  return http.get(patchApiUri(`/api/v1/statuses/${id}`)) as any
 }
 
 interface postStatusFormData {
@@ -41,51 +41,51 @@ async function postStatus (formData: postStatusFormData): Promise<{ data: mastod
     }
   }
 
-  return Vue.http.post(patchApiUri(`/api/v1/statuses`), apiFormData, config) as any
+  return http.post(patchApiUri(`/api/v1/statuses`), apiFormData, config) as any
 }
 
 async function getStatusContextById (id: string): Promise<{ data: mastodonentities.Context }> {
-  return Vue.http.get(patchApiUri(`/api/v1/statuses/${id}/context`)) as any
+  return http.get(patchApiUri(`/api/v1/statuses/${id}/context`)) as any
 }
 
 async function getReBloggedAccountsById (id: string): Promise<{ data: Array<mastodonentities.Account> }> {
-  return Vue.http.get(patchApiUri(`/api/v1/statuses/${id}/reblogged_by`)) as any
+  return http.get(patchApiUri(`/api/v1/statuses/${id}/reblogged_by`)) as any
 }
 
 async function getFavouritedAccountsById (id: string): Promise<{ data: Array<mastodonentities.Account> }> {
-  return Vue.http.get(patchApiUri(`/api/v1/statuses/${id}/favourited_by`)) as any
+  return http.get(patchApiUri(`/api/v1/statuses/${id}/favourited_by`)) as any
 }
 
 async function favouriteStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return Vue.http.post(patchApiUri(`/api/v1/statuses/${id}/favourite`)) as any
+  return http.post(patchApiUri(`/api/v1/statuses/${id}/favourite`)) as any
 }
 
 async function unFavouriteStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return Vue.http.post(patchApiUri(`/api/v1/statuses/${id}/unfavourite`)) as any
+  return http.post(patchApiUri(`/api/v1/statuses/${id}/unfavourite`)) as any
 }
 
 async function reblogStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return Vue.http.post(patchApiUri(`/api/v1/statuses/${id}/reblog`)) as any
+  return http.post(patchApiUri(`/api/v1/statuses/${id}/reblog`)) as any
 }
 
 async function unReblogStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return Vue.http.post(patchApiUri(`/api/v1/statuses/${id}/unreblog`)) as any
+  return http.post(patchApiUri(`/api/v1/statuses/${id}/unreblog`)) as any
 }
 
 async function deleteStatusById (id: string) {
-  return Vue.http.delete(patchApiUri(`/api/v1/statuses/${id}`)) as any
+  return http.delete(patchApiUri(`/api/v1/statuses/${id}`)) as any
 }
 
 async function muteStatusById (id: string) {
-  return Vue.http.post(patchApiUri(`/api/v1/statuses/${id}/mute`)) as any
+  return http.post(patchApiUri(`/api/v1/statuses/${id}/mute`)) as any
 }
 
 async function unMuteStatusById (id: string) {
-  return Vue.http.post(patchApiUri(`/api/v1/statuses/${id}/unmute`)) as any
+  return http.post(patchApiUri(`/api/v1/statuses/${id}/unmute`)) as any
 }
 
 async function getStatusCardInfoById (id: string): Promise<{ data: mastodonentities.Card }> {
-  return Vue.http.get(patchApiUri(`/api/v1/statuses/${id}/card`)) as any
+  return http.get(patchApiUri(`/api/v1/statuses/${id}/card`)) as any
 }
 
 export {

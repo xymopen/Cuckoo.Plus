@@ -1,7 +1,7 @@
-import Vue from 'vue'
 import { patchApiUri, isBaseTimeLine } from '@/util'
 import { TimeLineTypes } from '@/constant'
 import { mastodonentities } from '@/interface'
+import http from '@/api/http'
 
 const allTimeLineTypeList = [
   TimeLineTypes.HOME, TimeLineTypes.PUBLIC, TimeLineTypes.DIRECT, TimeLineTypes.LOCAL,
@@ -27,7 +27,7 @@ async function getTimeLineStatuses ({ timeLineType = '', maxId = '', sinceId = '
     urlFragmentString = TimeLineTypes.PUBLIC
     params.local = true
   }
-  return Vue.http.get(patchApiUri(`/api/v1/timelines/${urlFragmentString}`), {
+  return http.get(patchApiUri(`/api/v1/timelines/${urlFragmentString}`), {
     params
   }) as any
 }

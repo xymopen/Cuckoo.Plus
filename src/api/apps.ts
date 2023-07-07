@@ -1,5 +1,5 @@
-import Vue from 'vue'
 import { patchApiUri } from '@/util'
+import http from '@/api/http'
 
 const clientName = 'Cuckoo.Plus'
 const scopes = 'read write follow'
@@ -38,7 +38,7 @@ async function registerApplication (): Promise<Apps.registerApplicationReturnDat
     scopes: scopes
   }
 
-  return Vue.http.post(patchApiUri('/api/v1/apps'), formData) as any
+  return http.post(patchApiUri('/api/v1/apps'), formData) as any
 }
 
 export {

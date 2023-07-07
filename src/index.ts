@@ -6,7 +6,6 @@ import Vue from 'vue'
 import MuseUI from 'muse-ui'
 import 'muse-ui-loading/dist/muse-ui-loading.css'
 import 'muse-ui-progress/dist/muse-ui-progress.css'
-import VueResource from 'vue-resource'
 import i18n from './i18n'
 import store from './store'
 import router from './router'
@@ -23,7 +22,6 @@ Vue.use({
 })
 
 Vue.use(MuseUI)
-Vue.use(VueResource)
 Vue.use(Toast, {
   position: 'bottom-start'
 })
@@ -41,12 +39,6 @@ Vue.use(Loading, {
 const currentLocale = store.state.appStatus.settings.locale
 
 moment.locale(currentLocale)
-
-const httpInterceptor: any = (request) => {
-  request.headers.set('Authorization', `Bearer ${store.state.OAuthInfo.accessToken}`);
-}
-
-Vue.http.interceptors.push(httpInterceptor)
 
 // @ts-ignore
 if (window.Notification) {

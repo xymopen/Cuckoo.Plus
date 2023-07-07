@@ -1,6 +1,6 @@
-import Vue from 'vue'
 import { mastodonentities } from '@/interface'
 import { patchApiUri } from '@/util'
+import http from '@/api/http'
 
 interface updateAccountFormData {
   // The name to display in the user's profile
@@ -27,15 +27,15 @@ async function fetchAccountInfoById () {
 }
 
 async function fetchCurrentUserAccountInfo (): Promise<{ data: mastodonentities.AuthenticatedAccount }> {
-  return Vue.http.get(patchApiUri('/api/v1/accounts/verify_credentials')) as any
+  return http.get(patchApiUri('/api/v1/accounts/verify_credentials')) as any
 }
 
 async function updateUserAccountInfo (formData: updateAccountFormData): Promise<{ data: mastodonentities.AuthenticatedAccount }> {
-  return Vue.http.patch(patchApiUri('/api/v1/accounts/update_credentials'), formData) as any
+  return http.patch(patchApiUri('/api/v1/accounts/update_credentials'), formData) as any
 }
 
 async function fetchRelationships (idList: Array<string>) {
-  return Vue.http.get(patchApiUri('/api/v1/accounts/relationships'), {
+  return http.get(patchApiUri('/api/v1/accounts/relationships'), {
     params: {
       id: idList
     }
@@ -43,11 +43,11 @@ async function fetchRelationships (idList: Array<string>) {
 }
 
 async function followAccountById (id: string) {
-  return Vue.http.post(patchApiUri(`/api/v1/accounts/${id}/follow`)) as any
+  return http.post(patchApiUri(`/api/v1/accounts/${id}/follow`)) as any
 }
 
 async function unFollowAccountById (id: string) {
-  return Vue.http.post(patchApiUri(`/api/v1/accounts/${id}/unfollow`)) as any
+  return http.post(patchApiUri(`/api/v1/accounts/${id}/unfollow`)) as any
 }
 
 export {

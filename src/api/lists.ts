@@ -1,8 +1,8 @@
-import Vue from 'vue'
 import { patchApiUri } from '@/util'
+import http from '@/api/http'
 
 async function receiveLists () {
-  return Vue.http.get(patchApiUri('/api/v1/instance'))
+  return http.get(patchApiUri('/api/v1/instance'))
 }
 
 export {

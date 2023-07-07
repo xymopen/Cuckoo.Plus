@@ -1,6 +1,6 @@
-import Vue from 'vue'
 import { mastodonentities } from '@/interface'
 import { patchApiUri } from '@/util'
+import http from '@/api/http'
 
 interface getNotificationsQueryParams {
   // Get a list of notifications with ID less than this value
@@ -19,7 +19,7 @@ async function getNotifications (queryParams: getNotificationsQueryParams): Prom
     params: queryParams
   }
 
-  return Vue.http.get(patchApiUri('/api/v1/notifications'), config) as any
+  return http.get(patchApiUri('/api/v1/notifications'), config) as any
 }
 
 export {
