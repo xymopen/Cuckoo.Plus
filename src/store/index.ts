@@ -5,6 +5,7 @@ import actions from './actions'
 import getters from './getters'
 import { cuckoostore } from '@/interface'
 import { UiWidthCheckConstants, ThemeNames, I18nLocales, VisibilityTypes } from '@/constant'
+import { TimeLineTypes } from '@/constant'
 
 Vue.use(Vuex)
 
@@ -98,9 +99,27 @@ const state: cuckoostore.stateInfo = {
   }
 }
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state,
   mutations,
   actions,
   getters
 })
+
+// TODO: We properly need to find a better persist solution
+// Also localStorage is not considered secured and
+// should not be used to store sensitive data
+window.addEventListener('unload', () => {
+  // save timelines
+  localStorage.setItem(TimeLineTypes.HOME, JSON.stringify(store.state.timelines[TimeLineTypes.HOME]))
+
+  // save contextMap
+  localStorage.setItem('contextMap', JSON.stringify(store.state.contextMap))
+
+  // save statusMap
+  localStorage.setItem('statusMap', JSON.stringify(store.state.statusMap))
+
+  localStorage.setItem('cardMap', JSON.stringify(store.state.cardMap))
+})
+
+export default store
