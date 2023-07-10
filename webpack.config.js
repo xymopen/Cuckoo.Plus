@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+// const EslintWebpackPlugin = require('eslint-webpack-plugin')
 const { GenerateSW } = require("workbox-webpack-plugin");
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -71,6 +72,10 @@ const config = {
     //       syntactic: false,
     //     },
     //   },
+    // }),
+    // disable for now for too many errors
+    // new EslintWebpackPlugin({
+    //   extensions: [".tsx", ".ts", ".jsx", ".js", ".vue"],
     // }),
   ],
   module: {
