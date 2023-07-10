@@ -1,7 +1,9 @@
 <template>
   <DefaultLayout>
     <div class="account-container">
-      <account-header />
+      <div class="account-header">
+
+      </div>
     </div>
   </DefaultLayout>
 </template>
@@ -13,20 +15,16 @@
 </route>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import { } from 'vuex-class'
-import AccountHeader from './components/AccountHeader.vue'
+import { defineComponent } from "vue"
 import DefaultLayout from '@/layouts/default/index.vue'
 
-@Component({
+export default defineComponent({
+  name: 'Accounts',
   components: {
-    'account-header': AccountHeader,
     DefaultLayout
+  },
+  mounted () {
+    const accountId = this.$route.params.accountId
   }
 })
-class Accounts extends Vue {
-
-}
-
-export default Accounts
 </script>
