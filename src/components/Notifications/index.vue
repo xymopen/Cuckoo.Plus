@@ -57,8 +57,6 @@ import { prepareRootStatus, formatHtml } from "@/util"
 })
 class Notifications extends Vue {
 
-  $progress
-
   @Prop() hideHeader: boolean
 
   @Action('updateNotifications') updateNotifications
@@ -74,19 +72,12 @@ class Notifications extends Vue {
   }
   @State('appStatus') appStatus
 
-  isLoadingNotifications: boolean = false
-
   // todo
   isLoadingTargetStatus: boolean = false
 
   shouldShowTargetStatus: boolean = false
 
   currentCheckStatus: mastodonentities.Status = null
-
-  @Watch('isLoadingNotifications')
-  onLoadingNotificationStatusChanged (toValue) {
-    toValue ? this.$progress.start() : this.$progress.done()
-  }
 
   @Watch('shouldShowTargetStatus')
   onShouldShowTargetStatusChanged (val) {

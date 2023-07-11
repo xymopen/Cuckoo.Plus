@@ -108,8 +108,6 @@ const baseRouterInfoList = [
 })
 class Drawer extends Vue {
 
-  $progress
-
   @State('currentUserAccount') currentUserAccount
 
   @State('appStatus') appStatus
@@ -232,13 +230,10 @@ class Drawer extends Vue {
    * @desc if clicked timeline item is just current timeline
    * */
   async fetchTimeLineStatuses (timeLineType: string, hashName: string = '') {
-    this.$progress.start()
     await this.updateTimeLineStatuses({
       isFetchMore: true,
       timeLineType, hashName
     })
-
-    this.$progress.done()
   }
 
   onOpenHostInstance () {

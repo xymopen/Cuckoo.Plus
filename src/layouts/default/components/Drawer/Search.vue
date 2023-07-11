@@ -47,8 +47,6 @@ import PeopleResultCard from './PeopleResultCard.vue'
 })
 class Search extends Vue {
 
-  $progress
-
   @State('relationships') relationships: {
     [id: string]: mastodonentities.Relationship
   }
@@ -97,22 +95,13 @@ class Search extends Vue {
 
     this.currentSearchKey = this.searchKey
 
-    this.$progress.start()
+    const result = await Api.search.getSearchResults(this.searchKey)
 
-    try {
-      const result = await Api.search.getSearchResults(this.searchKey)
+    this.searchResults = result.data
 
-      this.searchResults = result.data
+    this.updateRelationship()
 
-      this.updateRelationship()
-
-      this.shouldShowResultPanel = true
-
-      this.$progress.done()
-
-    } catch (e) {
-      this.$progress.done()
-    }
+    this.shouldShowResultPanel = true
   }
 
   updateRelationship () {

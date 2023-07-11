@@ -1,11 +1,9 @@
 import Toast from 'muse-ui-toast'
 import Message from 'muse-ui-message'
 import Loading from 'muse-ui-loading'
-import NProgress from 'muse-ui-progress'
 import Vue from 'vue'
 import MuseUI from 'muse-ui'
 import 'muse-ui-loading/dist/muse-ui-loading.css'
-import 'muse-ui-progress/dist/muse-ui-progress.css'
 import i18n from './i18n'
 import store from './store'
 import router from './router'
@@ -26,10 +24,6 @@ Vue.use(Toast, {
   position: 'bottom-start'
 })
 Vue.use(Message)
-Vue.use(NProgress, {
-  color: 'primary',
-  zIndex: 9999999999,
-})
 Vue.use(Loading, {
   overlayColor: 'hsla(0,0%,100%,.9)',
   size: 48,

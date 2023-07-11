@@ -151,7 +151,7 @@ a {
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
-  
+
   .media-item {
     margin-right: 8px;
     position: relative;
@@ -172,7 +172,7 @@ a {
       display: flex;
       justify-content: center;
     }
-    
+
     img {
       width: 100%;
     }
@@ -188,7 +188,7 @@ a {
 // for overwrite muse-ui style
 .mu-dialog {
   background-color: @dialogBackgroundColor;
-  
+
   .mu-dialog-title {
     color: @textColor;
   }
@@ -275,12 +275,6 @@ a {
 .mu-loading-wrap {
   background-color: fade(@dialogBackgroundColor, 80%) !important;
   color: @textColor;
-}
-
-.mu-linear-progress {
-  .mu-linear-progress-background, .mu-linear-progress-determinate {
-    background-color: @secondaryColor !important;
-  }
 }
 
 .mu-text-field-input {

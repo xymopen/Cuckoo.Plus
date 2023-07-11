@@ -27,8 +27,6 @@ import DefaultLayout from '@/layouts/default/index.vue'
 })
 class Statuses extends Vue {
 
-  $progress
-
   @Action('fetchStatusById') fetchStatusById
 
   @State('statusMap') statusMap: {
@@ -49,9 +47,7 @@ class Statuses extends Vue {
   }
 
   async fetchTargetStatus () {
-    this.$progress.start()
     await this.fetchStatusById(this.$route.params.statusId)
-    this.$progress.done()
   }
 }
 

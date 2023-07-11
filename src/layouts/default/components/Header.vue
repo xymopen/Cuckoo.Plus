@@ -74,8 +74,6 @@ class Header extends Vue {
     notificationBtn: any,
   }
 
-  $progress
-
   notificationBtnTrigger: HTMLButtonElement = null
 
   @State('appStatus') appStatus
@@ -163,11 +161,9 @@ class Header extends Vue {
   }
 
   async onFetchMoreNotifications () {
-    this.$progress.start()
     await this.updateNotifications({
       isFetchMore: true
     })
-    this.$progress.done()
   }
 }
 

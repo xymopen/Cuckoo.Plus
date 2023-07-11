@@ -32,9 +32,6 @@ dependencies:
   muse-ui-message:
     specifier: ^0.2.1
     version: 0.2.1(vue@2.7.14)
-  muse-ui-progress:
-    specifier: ^0.1.0
-    version: 0.1.0(vue@2.7.14)
   muse-ui-toast:
     specifier: ^0.3.0
     version: 0.3.0(vue@2.7.14)
@@ -1317,7 +1314,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.22.5
-      '@babel/parser': 7.22.6
+      '@babel/parser': 7.22.7
       '@babel/types': 7.22.5
     dev: true
 
@@ -1331,7 +1328,7 @@ packages:
       '@babel/helper-function-name': 7.22.5
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.22.6
+      '@babel/parser': 7.22.7
       '@babel/types': 7.22.5
       debug: 4.3.4
       globals: 11.12.0
@@ -1577,7 +1574,7 @@ packages:
   /@types/babel__template@7.4.1:
     resolution: {integrity: sha512-azBFKemX6kMg5Io+/rdGT0dkGreboUVR0Cdm3fz9QJWpaQGJRQXl7C+6hOTCZcMll7KFyEQpgbYI2lHdsS4U7g==}
     dependencies:
-      '@babel/parser': 7.22.6
+      '@babel/parser': 7.22.7
       '@babel/types': 7.22.5
     dev: true
 
@@ -5760,14 +5757,6 @@ packages:
 
   /muse-ui-message@0.2.1(vue@2.7.14):
     resolution: {integrity: sha512-qxV4uO6sxM11t81PpzlqmJGRjmMepZIkiWDr59O9P4mYJ7NsO1ztCN2nhyH8GBS60gs7UzOWSOCvJAp2smd8fg==}
-    peerDependencies:
-      vue: ^2.5.0
-    dependencies:
-      vue: 2.7.14
-    dev: false
-
-  /muse-ui-progress@0.1.0(vue@2.7.14):
-    resolution: {integrity: sha512-rypRmnchMjOKUpaF/1nVYGps+R3oLULkWA661Np3XpdU9j37TXA5rXhdbj1o+8Q9gQO/NPZ9W93g0pj4kYhf2Q==}
     peerDependencies:
       vue: ^2.5.0
     dependencies:

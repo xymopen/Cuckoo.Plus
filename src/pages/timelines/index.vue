@@ -117,8 +117,6 @@ class TimeLines extends Vue {
     timelinesContainer: HTMLDivElement
   }
 
-  $progress;
-
   @State('appStatus') appStatus
 
   @State('timelines') timelines
@@ -204,9 +202,10 @@ class TimeLines extends Vue {
     this.currentFocusCardId = noneCardFocusId
 
     if (!hasCurrentTimeLineInit(this.$route)) {
-      this.currentRootStatuses.length ? this.$progress.start() : this.isInitLoading = true
+      if (this.currentRootStatuses.length === 0) {
+        this.isInitLoading = true
+      }
       await this.loadStatuses()
-      this.$progress.done()
       this.isInitLoading = false
       setCurrentTimeLineHasInit(this.$route)
     } else {
@@ -245,7 +244,6 @@ class TimeLines extends Vue {
     if (this.isLoading) return
 
     this.isLoading = true
-    this.$progress.start()
 
     const preStatusesLength = this.currentRootStatuses.length
     const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)
@@ -262,7 +260,6 @@ class TimeLines extends Vue {
       this.noLoadMoreTimeLineList.push(`${timeLineType}/${hashName}`)
     }
 
-    this.$progress.done()
     this.isLoading = false
   }
 
