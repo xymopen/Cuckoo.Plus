@@ -7,6 +7,7 @@ const resolve = pathResolve.bind(undefined, __dirname);
 
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -55,6 +56,11 @@ const config = {
         }
       },
       template: "index.html",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        "public",
+      ],
     }),
     new VueLoaderPlugin(),
     new VueAutoRoutingPlugin({
