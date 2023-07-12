@@ -13,10 +13,10 @@
     "serve": "webpack serve",
     "lint": "eslint -c .eslintrc.js --ext .tsx,.ts,.jsx,.js,.vue src/ lib/"
   },
-  "packageManager": "pnpm@8.6.6",
+  "packageManager": "pnpm@8.6.11",
   "engines": {
     "node": "^18.0.0",
-    "pnpm": "8.6.6"
+    "pnpm": "8.6.11"
   },
   "dependencies": {
     "@csstools/normalize.css": "^12.0.0",
