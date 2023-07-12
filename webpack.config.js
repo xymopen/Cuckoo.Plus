@@ -132,7 +132,15 @@ const config = {
               importLoaders: 2,
             },
           },
-          "postcss-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                config: false,
+                plugins: ["autoprefixer"],
+              },
+            },
+          },
           "less-loader",
         ],
       },
@@ -146,7 +154,15 @@ const config = {
               importLoaders: 1,
             },
           },
-          "postcss-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                config: false,
+                plugins: ["autoprefixer"],
+              },
+            },
+          },
         ],
       },
       {
