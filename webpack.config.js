@@ -145,6 +145,19 @@ const config = {
         ],
       },
       {
+        test: /\.p(ost)?css$/i,
+        use: [
+          stylesHandler,
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+            },
+          },
+          "postcss-loader",
+        ],
+      },
+      {
         test: /\.css$/i,
         use: [
           stylesHandler,
