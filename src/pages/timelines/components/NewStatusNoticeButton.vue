@@ -15,10 +15,8 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Mutation, Action } from 'vuex-class'
-import { animatedScrollTo } from '@/util'
+import { scrollToTop } from '@/utils'
 import { getTimeLineTypeAndHashName, isBaseTimeLine, getTargetStatusesList } from '@/util'
-
-(window as any).animatedScrollTo = animatedScrollTo
 
 @Component({})
 class NewStatusNoticeButton extends Vue {
@@ -73,10 +71,9 @@ class NewStatusNoticeButton extends Vue {
     }, { passive: true })
   }
 
-  onNoticeButtonClick () {
-    animatedScrollTo(document.querySelector('html'), 0, 400, () => {
-      this.loadStreamStatusesPool({ ...getTimeLineTypeAndHashName(this.$route) })
-    })
+  async onNoticeButtonClick () {
+    await scrollToTop()
+    this.loadStreamStatusesPool({ ...getTimeLineTypeAndHashName(this.$route) })
   }
 }
 

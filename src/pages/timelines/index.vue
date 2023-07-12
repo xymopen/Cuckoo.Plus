@@ -57,7 +57,8 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Action, State, Getter } from 'vuex-class'
 import { TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
 import { mastodonentities } from '@/interface'
-import { getTimeLineTypeAndHashName, isBaseTimeLine, animatedScrollTo, documentGlobalEventBus } from '@/util'
+import { getTimeLineTypeAndHashName, isBaseTimeLine, documentGlobalEventBus } from '@/util'
+import { scrollToTop } from '@/utils'
 import StatusCard from '@/components/StatusCard/index.vue'
 import PostStatusDialog from '@/components/PostStatusDialog.vue'
 import NewStatusNoticeButton from './components/NewStatusNoticeButton.vue'
@@ -425,7 +426,7 @@ class TimeLines extends Vue {
     }
 
     if (scrollToTarget !== null) {
-      animatedScrollTo($html, scrollToTarget, 400)
+      scrollToTop()
     }
 
   }

@@ -47,7 +47,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Mutation, Action, Getter } from 'vuex-class'
 import { TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
 import { cuckoostore } from '@/interface'
-import { animatedScrollTo } from '@/util'
+import { scrollToTop } from '@/utils'
 import Notifications from '@/components/Notifications/index.vue'
 
 // todo 统一位置管理
@@ -147,7 +147,7 @@ class Header extends Vue {
   }
 
   onHeaderBarClick () {
-    animatedScrollTo(document.querySelector('html'), 0, 400)
+    scrollToTop()
   }
 
   onOpenNotificationPanel () {
