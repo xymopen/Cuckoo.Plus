@@ -75,7 +75,7 @@
     /* Allow accessing UMD globals from modules. */
     // "allowUmdGlobalAccess": true,
     /* Enable importing .json files */
-    // "resolveJsonModule": true,
+    "resolveJsonModule": true,
     /* Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project. */
     // "noResolve": true,
 

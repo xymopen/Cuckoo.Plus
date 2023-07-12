@@ -57,8 +57,6 @@ const StreamingEventTypes = {
   FILTERS_CHANGED: 'filters_changed'
 }
 
-const TITLE = 'Cuckoo+'
-
 const StatusCardTypes = {
   LINK: 'link',
   PHOTO: 'photo'
@@ -72,6 +70,5 @@ export {
   ThemeNames,
   NotificationTypes,
   StreamingEventTypes,
-  TITLE,
   StatusCardTypes
 }

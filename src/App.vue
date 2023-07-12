@@ -13,8 +13,10 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Mutation, State } from 'vuex-class'
 import * as _ from 'underscore'
-import { TITLE } from '@/constant'
 import ThemeEditPanel from '@/components/ThemeEditPanel.vue'
+import pkg from '@/../package.json'
+
+const displayName = pkg.displayName ?? 'Cuckoo+'
 
 @Component({
   components: {
@@ -34,7 +36,7 @@ class App extends Vue {
   @Watch('appStatus.unreadNotificationCount')
   onUnreadNotificationCountChanged () {
     document.querySelector('title').innerText = this.appStatus.unreadNotificationCount > 0 ?
-      `(${this.appStatus.unreadNotificationCount}) ${TITLE}` : `${TITLE}`
+      `(${this.appStatus.unreadNotificationCount}) ${displayName}` : `${displayName}`
   }
 }
 

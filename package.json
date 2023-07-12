@@ -3,6 +3,7 @@
   "name": "cuckoo.plus",
   "version": "0.4.0",
   "description": "A third-party client for mastodon",
+  "displayName": "Cuckoo+",
   "scripts": {
     "test:unit": "mochapack --webpack-config webpack.config.js --webpack-env test src/**/*.spec.ts",
     "build": "webpack --mode=production --define-process-env-node-env=production",
