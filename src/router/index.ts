@@ -66,17 +66,17 @@ const router = new Router({
 
 const statusInitManager = new class {
 
-  private hasInitFetchNotifications: boolean = false
+  private hasInitFetchNotifications = false
 
-  private hasInitStreamConnection: boolean = false
-  private hasInitLocalStreamConnection: boolean = false
-  private hasInitPublicStreamConnection: boolean = false
+  private hasInitStreamConnection = false
+  private hasInitLocalStreamConnection = false
+  private hasInitPublicStreamConnection = false
 
-  private hasUpdateOAuthAccessToken: boolean = false
+  private hasUpdateOAuthAccessToken = false
 
-  private hasUpdateCurrentUserAccount: boolean = false
+  private hasUpdateCurrentUserAccount = false
 
-  private hasUpdateCustomEmojis: boolean = false
+  private hasUpdateCustomEmojis = false
 
   private loadingInstance = null
 
@@ -183,7 +183,7 @@ const statusInitManager = new class {
 
 }
 
-let hasUpdateCurrentUserAccount = false
+const hasUpdateCurrentUserAccount = false
 
 const beforeEachHooks: { [key: string]: NavigationGuard } = {
   async beforeEachRoute (to, from, next) {

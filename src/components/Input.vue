@@ -88,7 +88,7 @@ class Input extends Vue {
 
   atAccountSearchResultList: Array<mastodonentities.Account> = []
 
-  currentSelectedResultIndex: number = 0
+  currentSelectedResultIndex = 0
 
   currentSearchTextPosition: [number, number] = null
 

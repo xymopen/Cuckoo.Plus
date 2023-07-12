@@ -108,7 +108,7 @@ class InjectDragAndDropEvents {
 
   private dialogComponent
 
-  private beingDragOver: boolean = false
+  private beingDragOver = false
 
   constructor (dialogComponent: PostStatusDialog) {
     this.dialogComponent = dialogComponent
@@ -187,7 +187,7 @@ class PostStatusDialog extends Vue {
 
   getVisibilityDescInfo = getVisibilityDescInfo
 
-  isConfirmDialogShowing: boolean = false
+  isConfirmDialogShowing = false
 
   postPrivacy = null
 
@@ -214,7 +214,7 @@ class PostStatusDialog extends Vue {
 
   shouldOpenVisibilitySelectPopOver = false
 
-  isPostLoading: boolean = false
+  isPostLoading = false
 
   uploadProcesses: Array<{
     file: File,
@@ -222,11 +222,11 @@ class PostStatusDialog extends Vue {
     uploadResult: mastodonentities.Attachment
   }> = []
 
-  textContentValue: string = ''
+  textContentValue = ''
 
   shouldShowSpoilerTextInputArea: boolean = null
 
-  spoilerTextValue: string = ''
+  spoilerTextValue = ''
 
   @Prop() open: boolean
 

@@ -289,7 +289,7 @@ export const documentGlobalEventBus = new class {
     }>
   } = {}
 
-  on (eventName: string, eventListener: Function, coexistWithOtherListener: boolean = false) {
+  on (eventName: string, eventListener: Function, coexistWithOtherListener = false) {
     if (!this.eventMap[eventName]) {
       this.eventMap[eventName] = []
       this.initDocumentGlobalEvent(eventName)

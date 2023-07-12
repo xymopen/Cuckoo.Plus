@@ -101,31 +101,31 @@ class ThemeEditPanel extends Vue {
     value: ''
   }
 
-  activeTabIndex: number = 0
+  activeTabIndex = 0
 
-  shouldOpenColorPickerPopOver: boolean = false
+  shouldOpenColorPickerPopOver = false
 
-  primaryColor: string = ''
+  primaryColor = ''
 
-  secondaryColor: string = ''
+  secondaryColor = ''
 
-  primaryTextColor: string = ''
+  primaryTextColor = ''
 
-  secondaryTextColor: string = ''
+  secondaryTextColor = ''
 
-  placeholderTextColor: string = ''
+  placeholderTextColor = ''
 
-  disabledColor: string = ''
+  disabledColor = ''
 
-  primaryBGColor: string = ''
+  primaryBGColor = ''
 
-  secondaryBGColor: string = ''
+  secondaryBGColor = ''
 
   triggerPopOverElem: any = null
 
   onSomeColorChangedListener = () => { }
 
-  hasColorChanged: boolean = false
+  hasColorChanged = false
 
   mounted () {
     const currentThemeInfo = ThemeManager.getThemeInfoByThemeName(this.appStatus.settings.theme)

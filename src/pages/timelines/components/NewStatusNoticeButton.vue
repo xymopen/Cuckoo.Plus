@@ -31,7 +31,7 @@ class NewStatusNoticeButton extends Vue {
 
   @Action('loadStreamStatusesPool') loadStreamStatusesPool
 
-  translateY: number = 0
+  translateY = 0
 
   get currentTimeLineStreamPool () {
     const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)

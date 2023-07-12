@@ -8,7 +8,7 @@ let preSearchRequest
  * @param q The search query
  * @param resolve Whether to resolve non-local accounts (default: don't resolve)
  * */
-async function getSearchResults (q: string, resolve: boolean = false): Promise<{ data: mastodonentities.SearchResults }> {
+async function getSearchResults (q: string, resolve = false): Promise<{ data: mastodonentities.SearchResults }> {
   return http.get(patchApiUri('/api/v1/search'), {
     params: {
       q, resolve

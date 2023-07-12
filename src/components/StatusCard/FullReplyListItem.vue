@@ -131,13 +131,13 @@ class FullReplyListItem extends Vue {
 
   @Getter('getAccountAtName') getAccountAtName
 
-  isListItemLoading: boolean = false
+  isListItemLoading = false
 
-  shouldShowMoreOperationTriggerBtn: boolean = false
-  shouldOpenMoreOperationPopOver: boolean = false
+  shouldShowMoreOperationTriggerBtn = false
+  shouldOpenMoreOperationPopOver = false
   moreOperationTriggerBtn = null
 
-  shouldShowContentWhileSpoilerExists: boolean = false
+  shouldShowContentWhileSpoilerExists = false
 
   operationAreaStyle = null
 

@@ -92,7 +92,7 @@ class Header extends Vue {
 
   pathToRouteInfo = pathToRouteInfo
 
-  shouldShowNotificationDialogHeader: boolean = true
+  shouldShowNotificationDialogHeader = true
 
   @Watch('$route')
   onRouteChanged () {

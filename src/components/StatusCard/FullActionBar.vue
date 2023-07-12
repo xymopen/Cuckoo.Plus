@@ -98,7 +98,7 @@ class FullActionBar extends Vue {
 
   @Action('postStatus') postStatus
 
-  isConfirmDialogShowing: boolean = false
+  isConfirmDialogShowing = false
 
   postPrivacy_ = null
 

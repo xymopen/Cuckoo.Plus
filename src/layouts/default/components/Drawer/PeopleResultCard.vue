@@ -28,7 +28,7 @@ import { mastodonentities } from '@/interface'
 @Component({})
 class PeopleResultCard extends Vue {
 
-  isLoading: boolean = false
+  isLoading = false
 
   @Prop() account: mastodonentities.Account
 

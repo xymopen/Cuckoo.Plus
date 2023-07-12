@@ -130,20 +130,20 @@ class TimeLines extends Vue {
   /**
    * @description 这种loading应该是全屏白色遮罩
    **/
-  isInitLoading: boolean = false
+  isInitLoading = false
 
   /**
    * @description 这种则只需要转圈就行
    * */
-  isLoading: boolean = false
+  isLoading = false
 
   noLoadMoreTimeLineList: Array<string> = []
 
-  isSnackBarOpening: boolean = false
+  isSnackBarOpening = false
 
-  snackBarMessage: string = ''
+  snackBarMessage = ''
 
-  isPostStatusDialogOpening: boolean = false
+  isPostStatusDialogOpening = false
 
   currentFocusCardId: string = noneCardFocusId
 
@@ -235,7 +235,7 @@ class TimeLines extends Vue {
     documentGlobalEventBus.on('keydown', e => this.onTimeLinePageKeyDown(e), true)
   }
 
-  async loadStatuses (isLoadMore: boolean = false, isFetchMore: boolean = false) {
+  async loadStatuses (isLoadMore = false, isFetchMore = false) {
 
     if (isLoadMore && this.currentTimeLineCannotLoadMore) return
 

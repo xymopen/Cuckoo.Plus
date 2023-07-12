@@ -59,11 +59,11 @@ class Search extends Vue {
   @Mutation('updateDrawerOpenStatus') updateDrawerOpenStatus
   @Mutation('updateTags') updateTags
 
-  searchKey: string = ''
+  searchKey = ''
 
-  currentSearchKey: string = ''
+  currentSearchKey = ''
 
-  shouldShowResultPanel: boolean = false
+  shouldShowResultPanel = false
 
   searchResults: mastodonentities.SearchResults = {
     accounts: [],

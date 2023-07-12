@@ -37,9 +37,9 @@ const notificationTypeToI18nTagsMap = {
 @Component({})
 class Card extends Vue {
 
-  isLoadingSingleCard: boolean = false
+  isLoadingSingleCard = false
 
-  isLoading: boolean = false
+  isLoading = false
 
   followOperateBtnTypes = {
     FOLLOW: 'FOLLOW',

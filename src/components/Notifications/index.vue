@@ -73,9 +73,9 @@ class Notifications extends Vue {
   @State('appStatus') appStatus
 
   // todo
-  isLoadingTargetStatus: boolean = false
+  isLoadingTargetStatus = false
 
-  shouldShowTargetStatus: boolean = false
+  shouldShowTargetStatus = false
 
   currentCheckStatus: mastodonentities.Status = null
 

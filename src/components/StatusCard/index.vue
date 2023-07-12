@@ -155,11 +155,11 @@ class StatusCard extends Vue {
 
   shouldShowContentWhileSpoilerExists_ = null
 
-  shouldShowFullReplyActionArea: boolean = false
+  shouldShowFullReplyActionArea = false
 
-  replyInputValue: string = ''
+  replyInputValue = ''
 
-  replySpoilerText: string = ''
+  replySpoilerText = ''
 
   isCardLoading = false
 

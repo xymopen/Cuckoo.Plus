@@ -70,7 +70,7 @@ class MediaPanel extends Vue {
 
   manuallyShowSensitiveCover: boolean = null
 
-  isMounted: boolean = false
+  isMounted = false
 
   onLightBoxClick () { }
 
@@ -121,7 +121,7 @@ class MediaPanel extends Vue {
 
     if (this.combinedMediaList.length === 1) {
 
-      let aspect: number = 1
+      let aspect = 1
 
       // for normal media list
       if (this.mediaList.length === 1) {
@@ -217,11 +217,11 @@ class MediaPanel extends Vue {
 
   mediaTypes = AttachmentTypes
 
-  shouldShowLightBox: boolean = false
+  shouldShowLightBox = false
 
-  shouldShowLightBoxControlBtn: boolean = true
+  shouldShowLightBoxControlBtn = true
 
-  lightBoxActiveIndex: number = 0
+  lightBoxActiveIndex = 0
 
   @Watch('$route')
   onRouteChanged () {
