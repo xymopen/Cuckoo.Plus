@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@csstools/normalize.css": "^12.0.0",
+    "@vueuse/components": "^10.2.1",
+    "@vueuse/core": "^10.2.1",
     "autosize": "^4.0.2",
     "core-js": "^3.8.3",
     "file-saver": "^2.0.1",
