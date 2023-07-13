@@ -14,6 +14,8 @@ import { I18nTags, I18nLocales } from '@/constant'
 import ThemeManager from '@/themes'
 import './directives'
 import { Sm, Md, Lg } from '@/components/Breakpoints'
+import DefaultLayout from '@/layouts/default/index.vue'
+import PlainLayout from '@/layouts/plain.vue'
 
 Vue.use({
   install (Vue) {
@@ -35,6 +37,8 @@ Vue.use(Loading, {
 Vue.component('Sm', Sm)
 Vue.component('Md', Md)
 Vue.component('Lg', Lg)
+Vue.component('DefaultLayout', DefaultLayout)
+Vue.component('PlainLayout', PlainLayout)
 
 const currentLocale = store.state.appStatus.settings.locale
 

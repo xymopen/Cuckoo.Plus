@@ -17,12 +17,10 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State, Action } from 'vuex-class'
 import { mastodonentities } from '@/interface'
 import StatusCard from '@/components/StatusCard/index.vue'
-import DefaultLayout from '@/layouts/default/index.vue'
 
 @Component({
   components: {
-    'status-card': StatusCard,
-    DefaultLayout
+      'status-card': StatusCard
   }
 })
 class Statuses extends Vue {

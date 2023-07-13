@@ -148,7 +148,6 @@ import { State, Mutation, Action } from 'vuex-class'
 import { ThemeNames, I18nLocales, VisibilityTypes } from '@/constant'
 import * as moment from 'moment'
 import ThemeManager from '@/themes'
-import DefaultLayout from '@/layouts/default/index.vue'
 
 const ADD_NEW_THEME_OPTION = 'ADD_NEW_THEME_OPTION'
 
@@ -159,11 +158,7 @@ const presetThemeOptions = [
   { value: ThemeNames.CUCKOO_HUB },
 ]
 
-@Component({
-  components: {
-    DefaultLayout
-  }
-})
+@Component({})
 class Setting extends Vue {
 
   $refs: {

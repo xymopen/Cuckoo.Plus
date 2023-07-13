@@ -43,7 +43,6 @@ import { Mutation, State } from 'vuex-class'
 import { apps } from '@/api'
 import { cuckoostore } from '@/interface'
 import { checkShouldRegisterApplication } from '@/util'
-import PlainLayout from '@/layouts/plain.vue'
 
 // the first step, ask for mastodon OAuth Access token
 // and store this token
@@ -60,9 +59,6 @@ function isURL (str) {
 }
 
 @Component({
-  components: {
-    PlainLayout
-  },
 
   beforeEnter (to, from, next) {
     if (!checkShouldRegisterApplication(to, from)) {
