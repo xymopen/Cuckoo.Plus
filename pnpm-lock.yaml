@@ -202,6 +202,9 @@ devDependencies:
   postcss:
     specifier: ^8.2.12
     version: 8.2.12
+  postcss-custom-unit:
+    specifier: ^1.0.0
+    version: 1.0.0
   postcss-loader:
     specifier: ^6.1.1
     version: 6.1.1(postcss@8.2.12)(webpack@5.75.0)
@@ -1630,6 +1633,29 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
+    dev: true
+
+  /@jsmini/extend@0.3.3:
+    resolution: {integrity: sha512-kR8IOP+cwS1f+RF/GFO4pzODqGtubE0XsqAoYDYsK6JGQ8YLsrGuY2ZolpjvwrzjR/vOpuaYpeS9RUfvowSJjA==}
+    engines: {node: '>= 0.12.0'}
+    dependencies:
+      '@babel/runtime': 7.12.13
+      '@jsmini/is': 0.8.5
+    dev: true
+
+  /@jsmini/is@0.8.5:
+    resolution: {integrity: sha512-YVyM6emY6JT/b9D53Nsk32dyccwk2JC7brrh+g+HcWLqa/YLcct7/jbSubIM5jb4ziZfRiygep1hCfL4Wd7XQg==}
+    engines: {node: '>= 0.12.0'}
+    dependencies:
+      '@babel/runtime': 7.12.13
+      '@jsmini/type': 0.9.2
+    dev: true
+
+  /@jsmini/type@0.9.2:
+    resolution: {integrity: sha512-fTsXi1wQQOfSy3KjowGIZE4rrr1U8RpsHG0m/4lxB0s7OD5ghX51PaRL/2heAGD4uDaJzeHYcW9aAwF/v5kUkg==}
+    engines: {node: '>= 0.12.0'}
+    dependencies:
+      '@babel/runtime': 7.12.13
     dev: true
 
   /@nicolo-ribaudo/semver-v6@6.3.3:
@@ -6580,6 +6606,13 @@ packages:
     dependencies:
       postcss: 8.2.12
       postcss-selector-parser: 6.0.13
+    dev: true
+
+  /postcss-custom-unit@1.0.0:
+    resolution: {integrity: sha512-Qp8RKOzurI7XjsbKMSN0YPxlY2sZn/CHmgCZTj8SWW9NjyPKWQrPuYhS0Y5kLRv86gBBn9CgxPinw1Tarcss0A==}
+    dependencies:
+      '@jsmini/extend': 0.3.3
+      postcss: 7.0.39
     dev: true
 
   /postcss-dir-pseudo-class@6.0.5(postcss@8.2.12):

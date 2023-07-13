@@ -86,6 +86,7 @@
     "mocha": "^8.3.0",
     "mochapack": "^2.1.0",
     "postcss": "^8.2.12",
+    "postcss-custom-unit": "^1.0.0",
     "postcss-loader": "^6.1.1",
     "postcss-mixins": "^7.0.3",
     "postcss-nesting": "^10.2.0",

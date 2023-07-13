@@ -1,3 +1,5 @@
+const { dp2px, sp2rem } = require('./src/utils/AndroidMeasurements')
+
 /** @type {import('postcss').ProcessOptions & { plugins: PostCssLoaderPluginsOption }} */
 module.exports = {
   // Add you postcss configuration here
@@ -7,6 +9,15 @@ module.exports = {
     "postcss-mixins",
     "postcss-simple-vars",
     "postcss-nesting",
+    [
+      "postcss-custom-unit",
+      {
+        units: [
+          { from: 'dp', convert (value) { return `${dp2px(value)}px` } },
+          { from: 'sp', convert (value) { return `${sp2rem(value)}rem` } },
+        ],
+      }
+    ],
   ],
 };
 
