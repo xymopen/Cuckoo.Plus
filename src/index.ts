@@ -1,3 +1,4 @@
+import '@csstools/normalize.css';
 import Toast from 'muse-ui-toast'
 import Message from 'muse-ui-message'
 import Loading from 'muse-ui-loading'
