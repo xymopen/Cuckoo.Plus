@@ -13,6 +13,7 @@ import * as moment from 'moment'
 import { I18nTags, I18nLocales } from '@/constant'
 import ThemeManager from '@/themes'
 import './directives'
+import { Sm, Md, Lg } from '@/components/Breakpoints'
 
 Vue.use({
   install (Vue) {
@@ -30,6 +31,10 @@ Vue.use(Loading, {
   size: 48,
   color: 'primary',
 })
+
+Vue.component('Sm', Sm)
+Vue.component('Md', Md)
+Vue.component('Lg', Lg)
 
 const currentLocale = store.state.appStatus.settings.locale
 

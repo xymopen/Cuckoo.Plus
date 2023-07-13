@@ -1,0 +1,36 @@
+// See {@file @/components/Breakpoints.ts}
+@define-mixin sm {
+  @media (min-width: 600dp) {
+    @mixin-content;
+  }
+}
+
+@define-mixin not-sm {
+  @media (max-width: 600dp) {
+    @mixin-content;
+  }
+}
+
+@define-mixin md {
+  @media (min-width: 840dp) {
+    @mixin-content;
+  }
+}
+
+@define-mixin not-md {
+  @media (max-width: 840dp) {
+    @mixin-content;
+  }
+}
+
+@define-mixin lg {
+  @media (min-width: 1440dp) {
+    @mixin-content;
+  }
+}
+
+@define-mixin not-lg {
+  @media (max-width: 1440dp) {
+    @mixin-content;
+  }
+}
