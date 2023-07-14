@@ -3,8 +3,8 @@ import { TimeLineTypes, RoutersInfo, I18nTags, VisibilityTypes } from '@/constan
 import { Route } from "vue-router"
 import Formatter from "./formatter"
 import { mastodonentities } from "@/interface"
-import * as _ from 'underscore'
 import * as $ from 'jquery'
+import { sanitize } from 'dompurify'
 
 export function patchApiUri (uri: string): string {
   const targetServerUri = store.state.mastodonServerUri || 'https://pawoo.net'
@@ -99,7 +99,7 @@ export async function prepareRootStatus (status: mastodonentities.Status) {
   return targetStatus
 }
 
-
+// TODO: Replace with v-html
 let formatter
 export function formatHtml (html: string, options: { externalEmojis } = { externalEmojis: [] }): string {
   if (!formatter) {
@@ -114,7 +114,7 @@ export function formatHtml (html: string, options: { externalEmojis } = { extern
 
   walkTextNodes(parentNode.content, (parentNode, textNode) => {
     const spanNode = document.createElement('span')
-    spanNode.innerHTML = formatter.format(_.escape(textNode.textContent))
+    spanNode.innerHTML = formatter.format(sanitize(textNode.textContent))
     parentNode.replaceChild(spanNode, textNode)
   })
 

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import * as Masonry from 'masonry-layout'
 import ResizeObserver from 'resize-observer-polyfill'
-import * as _ from 'underscore'
+import { throttle } from 'lodash'
 import { UiWidthCheckConstants } from '@/constant'
 
 {
@@ -58,7 +58,7 @@ import { UiWidthCheckConstants } from '@/constant'
     }
   }
 
-  const reLayoutMasonry = _.throttle(($masonryEl) => {
+  const reLayoutMasonry = throttle(($masonryEl) => {
     $masonryEl.layout()
 
     $masonryEl.items.forEach((item: MasonryItem) => {
@@ -100,7 +100,7 @@ import { UiWidthCheckConstants } from '@/constant'
 
   } as any)
 
-  const onMasonryItemSizeChanged = _.throttle(($masonryEl) => {
+  const onMasonryItemSizeChanged = throttle(($masonryEl) => {
     $masonryEl.layout()
   }, 200)
 

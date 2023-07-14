@@ -12,7 +12,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Mutation, State } from 'vuex-class'
-import * as _ from 'underscore'
+import { debounce } from 'lodash'
 import ThemeEditPanel from '@/components/ThemeEditPanel.vue'
 
 const displayName = process.env.npm_package_displayName ?? 'Cuckoo+'
@@ -29,7 +29,7 @@ class App extends Vue {
   @Mutation('updateDocumentWidth') updateDocumentWidth
 
   mounted () {
-    window.addEventListener('resize', _.debounce(() => this.updateDocumentWidth(), 200))
+    window.addEventListener('resize', debounce(() => this.updateDocumentWidth(), 200))
   }
 
   @Watch('appStatus.unreadNotificationCount')

@@ -170,7 +170,6 @@ const config = {
     })],
   },
   externals: {
-    'underscore': '_',
     // todo muse ui has bug
   },
 };
@@ -196,7 +195,6 @@ const callback = (env, argv) => {
           additionalManifestEntries: [
             'https://fonts.loli.net/css?family=Open+Sans',
             'https://fonts.loli.net/icon?family=Material+Icons',
-            'https://cdnjs.loli.net/ajax/libs/underscore.js/1.9.1/underscore-min.js',
             'https://gstatic.loli.net/s/materialicons/v46/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2',
           ],
           // workbox-webpack-plugin has some issues

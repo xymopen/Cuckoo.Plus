@@ -54,7 +54,7 @@ import { State, Getter, Mutation } from 'vuex-class'
 import { UiWidthCheckConstants } from '@/constant'
 import ThemeManager from '@/themes'
 import { Chrome, Compact, Swatches } from 'vue-color'
-import * as _ from 'underscore'
+import { throttle } from 'lodash'
 
 const themeColorNameToDataNameMap = {
   primaryColor: 'primaryColor',
@@ -132,7 +132,7 @@ class ThemeEditPanel extends Vue {
 
     this.initColorList(currentThemeInfo.theme.colorSet)
 
-    this.onSomeColorChangedListener = _.throttle(() => {
+    this.onSomeColorChangedListener = throttle(() => {
       const currentColorSet = this.getCurrentColorSet()
 
       ThemeManager.setTempThemeByColorSet(currentColorSet)
