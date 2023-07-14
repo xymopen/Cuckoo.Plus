@@ -10,34 +10,37 @@
       </div>
       <span v-if="!isCuckooHubTheme" class="host-mastodon-url" @click="onHostMastodonUrlClick">{{ parsedMastodonServerUri
       }}</span>
-      <mu-button v-if="isOAuthUser" ref="notificationBtn" icon @click.stop="onOpenNotificationPanel" slot="right">
-        <mu-icon v-if="appStatus.unreadNotificationCount === 0" value="notifications"></mu-icon>
-        <mu-badge class="notification-badge" v-if="appStatus.unreadNotificationCount > 0"
-          :content="String(appStatus.unreadNotificationCount)" circle color="primary" />
-      </mu-button>
-
-      <mu-popover v-if="isOAuthUser" v-show="showNotificationAsPopOver" cover lazy placement="left-start"
-        style="width: 420px" :open="appStatus.isNotificationsPanelOpened && showNotificationAsPopOver"
-        @close="updateNotificationsPanelStatus(false)" :trigger="notificationBtnTrigger">
-        <notifications />
-      </mu-popover>
-
-      <mu-dialog v-if="isOAuthUser" v-show="!showNotificationAsPopOver" :overlay="false"
-        :open="appStatus.isNotificationsPanelOpened && !showNotificationAsPopOver" :fullscreen="true"
-        transition="slide-bottom">
-        <mu-appbar color="primary" title="Notifications" v-show="shouldShowNotificationDialogHeader">
-          <mu-button slot="left" icon @click="updateNotificationsPanelStatus(false)">
-            <mu-icon value="close" />
-          </mu-button>
-          <mu-button slot="right" icon @click="onFetchMoreNotifications">
-            <mu-icon value="refresh" />
-          </mu-button>
-        </mu-appbar>
-        <notifications :style="notificationContainerStyle" :hideHeader="true"
-          @shouldShowTargetStatusChanged="onDialogNotificationShowStatusChanged" />
-      </mu-dialog>
 
       <span class="route-info" v-if="shouldShowRouteInfo">{{ pathToRouteInfo[$route.path].name }}</span>
+
+      <template v-if="isOAuthUser" slot="right">
+        <Md>
+          <!-- TODO: Remove <div> after migrate to Vue 3 -->
+          <div>
+            <mu-button ref="notificationBtn" icon @click.stop="onOpenNotificationPanel">
+              <mu-icon v-if="appStatus.unreadNotificationCount === 0" value="notifications"></mu-icon>
+              <mu-badge class="notification-badge" v-if="appStatus.unreadNotificationCount > 0"
+                :content="String(appStatus.unreadNotificationCount)" circle color="primary" />
+            </mu-button>
+            <mu-popover cover lazy placement="left-start" style="width: 420px"
+              :open="appStatus.isNotificationsPanelOpened" @close="updateNotificationsPanelStatus(false)"
+              :trigger="notificationBtnTrigger">
+              <notifications />
+            </mu-popover>
+          </div>
+          <template #else>
+            <RouterLink to="/notifications" custom>
+              <template v-slot="{ navigate }">
+                <mu-button icon @click.stop="navigate">
+                  <mu-icon v-if="appStatus.unreadNotificationCount === 0" value="notifications"></mu-icon>
+                  <mu-badge class="notification-badge" v-if="appStatus.unreadNotificationCount > 0"
+                    :content="String(appStatus.unreadNotificationCount)" circle color="primary" />
+                </mu-button>
+              </template>
+            </RouterLink>
+          </template>
+        </Md>
+      </template>
     </mu-appbar>
   </div>
 </template>
@@ -91,8 +94,6 @@ class Header extends Vue {
 
   pathToRouteInfo = pathToRouteInfo
 
-  shouldShowNotificationDialogHeader = true
-
   @Watch('$route')
   onRouteChanged () {
     if (!this.isOAuthUser) return
@@ -113,16 +114,6 @@ class Header extends Vue {
     return url.host.replace(url.host[0], (c) => c.toUpperCase())
   }
 
-  get showNotificationAsPopOver (): boolean {
-    return this.appStatus.documentWidth > UiWidthCheckConstants.NOTIFICATION_DIALOG_TOGGLE_WIDTH
-  }
-
-  get notificationContainerStyle () {
-    return {
-      height: this.shouldShowNotificationDialogHeader ? 'auto' : '100%'
-    }
-  }
-
   get shouldUseSecondaryThemeHeader () {
     return this.isCuckooHubTheme
   }
@@ -133,7 +124,7 @@ class Header extends Vue {
 
   mounted () {
     if (this.isOAuthUser) {
-      this.notificationBtnTrigger = this.$refs.notificationBtn.$el
+      this.notificationBtnTrigger = this.$refs.notificationBtn?.$el
     }
   }
 
@@ -153,10 +144,6 @@ class Header extends Vue {
     this.onFetchMoreNotifications()
     this.updateUnreadNotificationCount(0)
     this.updateNotificationsPanelStatus(!this.appStatus.isNotificationsPanelOpened)
-  }
-
-  onDialogNotificationShowStatusChanged (val) {
-    this.shouldShowNotificationDialogHeader = !val
   }
 
   async onFetchMoreNotifications () {
