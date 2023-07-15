@@ -3,41 +3,42 @@
     <!-- <mu-button slot="right" icon @click="onFetchMoreNotifications">
       <mu-icon value="refresh" />
     </mu-button> -->
-    <notifications :style="notificationContainerStyle" :hideHeader="true"
-      @shouldShowTargetStatusChanged="onDialogNotificationShowStatusChanged" />
+    <Notifications :style="{ height: 'auto' }" @updateCurrentCheckStatus="onUpdateCurrentCheckStatus" />
   </DefaultLayout>
 </template>
 
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from "vue"
+import { defineComponent, onMounted, reactive } from "vue"
 import store from '@/store'
 import Notifications from '@/components/Notifications/index.vue'
+import { mastodonentities } from '@/interface'
+import { useRouter } from "vue-router/composables";
 
 export default defineComponent({
   components: {
-    notifications: Notifications
+    Notifications
   },
   setup () {
-    const shouldShowNotificationDialogHeader = ref(true)
-    const notificationContainerStyle = computed(() => {
-      return {
-        height: shouldShowNotificationDialogHeader.value ? 'auto' : '100%'
-      }
-    })
-    const onDialogNotificationShowStatusChanged = (val: boolean) => {
-      shouldShowNotificationDialogHeader.value = !val
-    }
     const onFetchMoreNotifications = async () => {
       await store.dispatch('updateNotifications', {
         isFetchMore: true
       })
     }
 
+    onMounted(onFetchMoreNotifications)
+
+    const $router = useRouter()
+    const onUpdateCurrentCheckStatus = (targetStatus: mastodonentities.Status) => {
+      $router.push({
+        name: 'statuses',
+        params: { statusId: targetStatus.id }
+      })
+    }
+
     return reactive({
-      notificationContainerStyle,
-      onDialogNotificationShowStatusChanged,
       // onFetchMoreNotifications,
+      onUpdateCurrentCheckStatus,
     })
   },
 })
