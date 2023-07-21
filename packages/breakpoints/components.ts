@@ -1,11 +1,14 @@
-import { defineComponent } from 'vue'
-import { useMediaQuery } from '@vueuse/core'
-import { dp2px } from "@/utils/AndroidMeasurements"
+import { defineComponent, Ref } from 'vue'
+import {
+  useSm,
+  useMd,
+  useLg,
+} from './internal'
 
-const createBreakpoint = (breakpoint: number) => defineComponent({
+const createBreakpoint = (breakpoint: () => Ref<boolean>) => defineComponent({
   inheritAttrs: false,
   setup (_, { slots }) {
-    const matched = useMediaQuery(`(min-width: ${dp2px(breakpoint)}px)`);
+    const matched = breakpoint();
 
     return () => {
       if (matched.value) {
@@ -17,7 +20,6 @@ const createBreakpoint = (breakpoint: number) => defineComponent({
   },
 })
 
-// See {@file ./styles.pcss}
-export const Sm = createBreakpoint(600)
-export const Md = createBreakpoint(840)
-export const Lg = createBreakpoint(1440)
+export const Sm = createBreakpoint(useSm)
+export const Md = createBreakpoint(useMd)
+export const Lg = createBreakpoint(useLg)
