@@ -9,10 +9,6 @@ export default {
     state.appStatus.isDrawerOpened = isDrawerOpened
   },
 
-  updateNotificationsPanelStatus (state, isNotificationsPanelOpened: boolean) {
-    state.appStatus.isNotificationsPanelOpened = isNotificationsPanelOpened
-  },
-
   updateUnreadNotificationCount (state, count: number) {
     state.appStatus.unreadNotificationCount = count
   },

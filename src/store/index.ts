@@ -78,8 +78,6 @@ const state = {
 
     isDrawerOpened: window.innerWidth > UiWidthCheckConstants.DRAWER_DOCKING_BOUNDARY,
 
-    isNotificationsPanelOpened: false,
-
     unreadNotificationCount: 0,
 
     isEditingThemeMode: false,

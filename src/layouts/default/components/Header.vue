@@ -23,7 +23,7 @@
                 :content="String(appStatus.unreadNotificationCount)" circle color="primary" />
             </mu-button>
             <mu-popover cover lazy placement="left-start" style="width: 420px"
-              :open="appStatus.isNotificationsPanelOpened" @close="updateNotificationsPanelStatus(false)"
+              :open="isNotificationsPanelOpened" @close="isNotificationsPanelOpened = false"
               :trigger="notificationBtnTrigger">
               <NotificationPanel />
             </mu-popover>
@@ -88,17 +88,17 @@ class Header extends Vue {
 
   @Mutation('updateDrawerOpenStatus') updateDrawerOpenStatus
 
-  @Mutation('updateNotificationsPanelStatus') updateNotificationsPanelStatus
-
   @Mutation('updateUnreadNotificationCount') updateUnreadNotificationCount
 
   pathToRouteInfo = pathToRouteInfo
+
+  isNotificationsPanelOpened = false
 
   @Watch('$route')
   onRouteChanged () {
     if (!this.isOAuthUser) return
 
-    this.updateNotificationsPanelStatus(false)
+    this.isNotificationsPanelOpened = false
   }
 
   get shouldShowRouteInfo () {
@@ -143,7 +143,7 @@ class Header extends Vue {
   onOpenNotificationPanel () {
     this.onFetchMoreNotifications()
     this.updateUnreadNotificationCount(0)
-    this.updateNotificationsPanelStatus(!this.appStatus.isNotificationsPanelOpened)
+    this.isNotificationsPanelOpened = !this.isNotificationsPanelOpened
   }
 
   async onFetchMoreNotifications () {
