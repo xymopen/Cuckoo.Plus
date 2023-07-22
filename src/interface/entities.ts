@@ -138,13 +138,13 @@ export namespace mastodonentities {
     // Shorter URL for the image, for insertion into text (only present on local images)
     text_url?: string
     /**
-     * May contain small and original (referring to the preview and the original file).
-     * Images may contain width, height, size, aspect,
-     * while videos (including GIFV) may contain width, height,
-     * frame_rate, duration and bitrate. There may be another top-level object,
-     * focus with the coordinates x and y.
-     * These coordinates can be used for smart thumbnail cropping
-     **/
+    * May contain small and original (referring to the preview and the original file).
+    * Images may contain width, height, size, aspect,
+    * while videos (including GIFV) may contain width, height,
+    * frame_rate, duration and bitrate. There may be another top-level object,
+    * focus with the coordinates x and y.
+    * These coordinates can be used for smart thumbnail cropping
+    **/
     meta?: ImageMeta | GifvMeta
     // A description of the image for the visually impaired (maximum 420 characters), or null if none provided
     description?: string

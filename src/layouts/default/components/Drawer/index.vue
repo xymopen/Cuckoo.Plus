@@ -227,8 +227,8 @@ class Drawer extends Vue {
   }
 
   /**
-   * @desc if clicked timeline item is just current timeline
-   * */
+  * @desc if clicked timeline item is just current timeline
+  * */
   async fetchTimeLineStatuses (timeLineType: string, hashName = '') {
     await this.updateTimeLineStatuses({
       isFetchMore: true,

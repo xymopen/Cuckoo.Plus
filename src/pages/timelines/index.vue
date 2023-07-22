@@ -127,13 +127,13 @@ class TimeLines extends Vue {
   @Action('loadStreamStatusesPool') loadStreamStatusesPool
 
   /**
-   * @description 这种loading应该是全屏白色遮罩
-   **/
+  * @description 这种loading应该是全屏白色遮罩
+  **/
   isInitLoading = false
 
   /**
-   * @description 这种则只需要转圈就行
-   * */
+  * @description 这种则只需要转圈就行
+  * */
   isLoading = false
 
   noLoadMoreTimeLineList: Array<string> = []
