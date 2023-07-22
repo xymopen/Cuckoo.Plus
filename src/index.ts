@@ -12,7 +12,7 @@ import * as moment from 'moment'
 import { I18nTags, I18nLocales } from '@/constant'
 import ThemeManager from '@/themes'
 import './directives'
-import { Sm, Md, Lg } from '@/components/Breakpoints'
+import { Sm, Md, Lg } from 'packages/breakpoints/components'
 import DefaultLayout from '@/layouts/default/index.vue'
 import PlainLayout from '@/layouts/plain.vue'
 

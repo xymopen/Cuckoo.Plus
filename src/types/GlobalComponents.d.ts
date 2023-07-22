@@ -1,4 +1,4 @@
-import { Sm, Md, Lg } from '@/components/Breakpoints'
+import { Sm, Md, Lg } from 'packages/breakpoints/components'
 import { RouterView, RouterLink } from 'vue-router'
 
 declare module 'vue' {

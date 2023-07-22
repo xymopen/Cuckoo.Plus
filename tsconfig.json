@@ -59,6 +59,9 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "packages/*": [
+        "packages/*"
       ]
     },
     /* Allow multiple folders to be treated as one when resolving modules. */
@@ -220,7 +223,11 @@
     "lib/**/*.js",
     "lib/**/*.jsx",
     "lib/**/*.ts",
-    "lib/**/*.tsx"
+    "lib/**/*.tsx",
+    "packages/**/*.js",
+    "packages/**/*.jsx",
+    "packages/**/*.ts",
+    "packages/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

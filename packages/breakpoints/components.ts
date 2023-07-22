@@ -17,7 +17,7 @@ const createBreakpoint = (breakpoint: number) => defineComponent({
   },
 })
 
-// See {@file @/styles/breakpoints.pcss}
+// See {@file ./styles.pcss}
 export const Sm = createBreakpoint(600)
 export const Md = createBreakpoint(840)
 export const Lg = createBreakpoint(1440)
