@@ -34,10 +34,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue"
+import { defineComponent, reactive, ref, Ref } from "vue"
 import { useRouter } from "vue-router/composables"
-import store from '@/store'
-import { UiWidthCheckConstants } from '@/constant'
+import { whenNotMd } from "packages/breakpoints/composables"
 import StatusCard from '@/components/StatusCard/index.vue'
 import { mastodonentities } from '@/interface'
 import Notifications from "@/components/Notifications/index.vue"
@@ -53,18 +52,20 @@ export default defineComponent({
 
     const shouldShowTargetStatus = ref(false)
 
-    const currentCheckStatus = ref<mastodonentities.Status | null>(null)
+    const currentCheckStatus: Ref<mastodonentities.Status | null> = ref(null)
 
     const $router = useRouter()
-    const onUpdateCurrentCheckStatus = (targetStatus: mastodonentities.Status) => {
-      if (store.state.appStatus.documentWidth < UiWidthCheckConstants.NOTIFICATION_DIALOG_TOGGLE_WIDTH) {
-        store.dispatch('updateNotificationsPanelStatus', false)
-        return $router.push({
+    whenNotMd(() => {
+      if (shouldShowTargetStatus.value) {
+        const targetStatus = currentCheckStatus.value!
+        $router.push({
           name: 'statuses',
           params: { statusId: targetStatus.id }
         })
       }
+    })
 
+    const onUpdateCurrentCheckStatus = (targetStatus: mastodonentities.Status) => {
       currentCheckStatus.value = targetStatus
       shouldShowTargetStatus.value = true
     }
