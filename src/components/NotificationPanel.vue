@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, Ref } from "vue"
+import store from '@/store'
 import { useRouter } from "vue-router/composables"
 import { whenNotMd } from "packages/breakpoints/composables"
 import StatusCard from '@/components/StatusCard/index.vue'
@@ -46,13 +47,15 @@ export default defineComponent({
     'status-card': StatusCard,
     Notifications
   },
-  setup () {
+  setup (_, ctx) {
     // todo
     const isLoadingTargetStatus = ref(false)
 
     const shouldShowTargetStatus = ref(false)
 
     const currentCheckStatus: Ref<mastodonentities.Status | null> = ref(null)
+
+    const notifications = ref<InstanceType<typeof Notifications> | null>(null)
 
     const $router = useRouter()
     whenNotMd(() => {
@@ -70,10 +73,18 @@ export default defineComponent({
       shouldShowTargetStatus.value = true
     }
 
+    ctx.expose({
+      loadNotifications () {
+        notifications.value!.loadNotifications(false, true)
+        store.commit('updateUnreadNotificationCount', 0)
+      }
+    })
+
     return reactive({
       isLoadingTargetStatus,
       shouldShowTargetStatus,
       currentCheckStatus,
+      notifications,
       onUpdateCurrentCheckStatus,
     })
   }
