@@ -3,8 +3,15 @@
     :loading="isLoadingNotifications">
 
     <mu-list textline="three-line">
-      <NotificationCard :notification="notification" @updateCurrentCheckStatus="$emit('updateCurrentCheckStatus', $event)"
-        v-for="(notification, index) in notificationsToShow" :key="index" />
+      <template v-for="(notification, index) in notificationsToShow">
+        <CircleCard v-if="notification.type === NotificationTypes.FOLLOW" :key="index" :notification="notification"/>
+        <Plus1Card v-else-if="notification.type === NotificationTypes.FAVOURITE" :key="index" :notification="notification"
+          @updateCurrentCheckStatus="$emit('updateCurrentCheckStatus', $event)" />
+        <RepostCard v-else-if="notification.type === NotificationTypes.REBLOG" :key="index" :notification="notification"
+          @updateCurrentCheckStatus="$emit('updateCurrentCheckStatus', $event)" />
+        <MentionCard v-else-if="notification.type === NotificationTypes.MENTION" :key="index" :notification="notification"
+          @updateCurrentCheckStatus="$emit('updateCurrentCheckStatus', $event)" />
+      </template>
     </mu-list>
 
   </mu-load-more>
@@ -13,11 +20,18 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import { mapActions, mapState } from "vuex"
-import NotificationCard from './Card.vue'
+import CircleCard from './components/CircleCard.vue'
+import MentionCard from './components/MentionCard.vue'
+import Plus1Card from './components/Plus1Card.vue'
+import RepostCard from './components/RepostCard.vue'
+import { NotificationTypes } from '@/constant'
 
 export default defineComponent({
   components: {
-    NotificationCard
+    CircleCard,
+    MentionCard,
+    Plus1Card,
+    RepostCard,
   },
   data () {
     return {
@@ -26,6 +40,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['notifications', 'contextMap', 'appStatus']),
+    NotificationTypes () { return NotificationTypes },
     notificationsToShow () {
       const allDescendantsToMute = []
 
