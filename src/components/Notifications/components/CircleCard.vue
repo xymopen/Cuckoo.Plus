@@ -24,9 +24,10 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from "vue"
-import { mapState, mapGetters, mapActions } from "vuex"
+import { mapState, mapActions } from "vuex"
 import { NotificationTypes, ThemeNames } from '@/constant'
 import { mastodonentities } from '@/interface'
+import { getAccountDisplayName } from "@/util"
 
 export default defineComponent({
   props: {
@@ -43,7 +44,6 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['appStatus', 'relationships']),
-    ...mapGetters(['getAccountDisplayName']),
     followOperateBtnTypes () {
       return {
         FOLLOW: 'FOLLOW',
@@ -69,6 +69,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(['followAccountById', 'unFollowAccountById']),
+    getAccountDisplayName,
     onNotificationContentClick () { },
     onCheckUserAccountPage (account: mastodonentities.Account) {
       window.open(account.url, "_blank")

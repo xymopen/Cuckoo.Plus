@@ -98,18 +98,21 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Getter, Action, State } from 'vuex-class'
+import { Action, State } from 'vuex-class'
 import * as moment from 'moment'
 import { mastodonentities } from "@/interface"
 import MediaPanel from './MediaPanel.vue'
 import LinkPreviewPanel from './LinkPreviewPanel.vue'
-import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromContentLink } from '@/util'
+import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromContentLink, getAccountAtName } from '@/util'
 import * as $ from "jquery"
 
 @Component({
   components: {
     'media-panel': MediaPanel,
     'link-preview-panel': LinkPreviewPanel,
+  },
+  methods: {
+    getAccountAtName,
   }
 })
 class FullReplyListItem extends Vue {
@@ -127,8 +130,6 @@ class FullReplyListItem extends Vue {
   @Action('updateFavouriteStatusById') updateFavouriteStatusById
   @Action('updateReblogStatusById') updateReblogStatusById
   @Action('deleteStatus') deleteStatus
-
-  @Getter('getAccountAtName') getAccountAtName
 
   isListItemLoading = false
 

@@ -3,16 +3,6 @@ import { isBaseTimeLine } from '@/util'
 import { UiWidthCheckConstants } from '@/constant'
 import { GetterTree } from ".."
 
-const accounts: GetterTree = {
-  getAccountDisplayName () {
-    return (account: mastodonentities.Account) => account.display_name || account.username || account.acct
-  },
-
-  getAccountAtName () {
-    return (account: mastodonentities.Account) => account.username || account.acct
-  }
-}
-
 const timelines: GetterTree = {
   getRootStatuses (state) {
     return (timeLineType: string, hashName?: string): Array<mastodonentities.Status> => {
@@ -37,7 +27,6 @@ const timelines: GetterTree = {
 }
 
 const getters: GetterTree = {
-  ...accounts,
   ...timelines,
 
   isOAuthUser (state) {

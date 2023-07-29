@@ -120,7 +120,7 @@ import SimpleActionBar from './SimpleActionBar.vue'
 import FullActionBar from './FullActionBar.vue'
 
 import VisibilitySelectPopOver from '@/components/VisibilitySelectPopOver.vue'
-import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromContentLink } from '@/util'
+import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromContentLink, getAccountAtName } from '@/util'
 
 @Component({
   components: {
@@ -131,6 +131,9 @@ import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromCo
     'simple-action-bar': SimpleActionBar,
     'full-action-bar': FullActionBar,
     'visibility-select-pop-over': VisibilitySelectPopOver
+  },
+  methods: {
+    getAccountAtName,
   }
 })
 class StatusCard extends Vue {
@@ -145,7 +148,6 @@ class StatusCard extends Vue {
   @State('currentUserAccount') currentUserAccount: mastodonentities.AuthenticatedAccount
   @State('appStatus') appStatus
 
-  @Getter('getAccountAtName') getAccountAtName
   @Getter('isOAuthUser') isOAuthUser
 
   @Mutation('updateMuteStatusList') updateMuteStatusList

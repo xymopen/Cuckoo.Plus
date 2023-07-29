@@ -122,7 +122,7 @@ export function formatHtml (html: string, options: { externalEmojis } = { extern
 }
 
 export function formatAccountDisplayName (account: mastodonentities.Account) {
-  return formatHtml(store.getters['getAccountDisplayName'](account), { externalEmojis: account.emojis })
+  return formatHtml(getAccountDisplayName(account), { externalEmojis: account.emojis })
 }
 
 export function extractText (html: string): string {
@@ -308,3 +308,7 @@ export function checkShouldRegisterApplication (to, from): boolean {
 
   return !(clientId && clientSecret && store.state.mastodonServerUri && code)
 }
+
+export const getAccountDisplayName = (account: mastodonentities.Account) => account.display_name || account.username || account.acct
+
+export const getAccountAtName = (account: mastodonentities.Account) => account.username || account.acct

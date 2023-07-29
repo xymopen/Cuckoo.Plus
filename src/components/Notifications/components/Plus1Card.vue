@@ -17,10 +17,10 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from "vue"
-import { mapState, mapGetters } from "vuex"
+import { mapState } from "vuex"
 import { ThemeNames, I18nTags } from '@/constant'
 import { mastodonentities } from '@/interface'
-import { prepareRootStatus, formatHtml } from "@/util"
+import { prepareRootStatus, formatHtml, getAccountDisplayName } from "@/util"
 
 export default defineComponent({
   props: {
@@ -38,7 +38,6 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['appStatus']),
-    ...mapGetters(['getAccountDisplayName']),
     notificationCardStyle () {
       const themeToStyle: any = {
         [ThemeNames.GOOGLE_PLUS]: {
@@ -57,6 +56,7 @@ export default defineComponent({
     },
   },
   methods: {
+    getAccountDisplayName,
     onNotificationContentClick () { },
     onCheckUserAccountPage (account: mastodonentities.Account) {
       window.open(account.url, "_blank")

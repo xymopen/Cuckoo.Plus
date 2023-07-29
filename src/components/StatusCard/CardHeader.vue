@@ -55,8 +55,14 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Getter, State, Action } from 'vuex-class'
 import * as moment from 'moment'
 import { mastodonentities } from '@/interface'
+import { getAccountDisplayName, getAccountAtName } from "@/util"
 
-@Component({})
+@Component({
+  methods: {
+    getAccountDisplayName,
+    getAccountAtName,
+  },
+})
 class CardHeader extends Vue {
 
   @Prop() status: mastodonentities.Status
@@ -68,8 +74,6 @@ class CardHeader extends Vue {
     moreOperationTriggerBtn: any
   }
 
-  @Getter('getAccountDisplayName') getAccountDisplayName
-  @Getter('getAccountAtName') getAccountAtName
   @Getter('isOAuthUser') isOAuthUser
 
   @State('currentUserAccount') currentUserAccount: mastodonentities.AuthenticatedAccount

@@ -2,7 +2,7 @@ import store from '@/store'
 import { StreamingEventTypes, TimeLineTypes, NotificationTypes, I18nTags } from '@/constant'
 import { mastodonentities } from "@/interface"
 import router from '@/router'
-import { extractText, prepareRootStatus } from "@/util"
+import { extractText, getAccountDisplayName, prepareRootStatus } from "@/util"
 import i18n from '@/i18n'
 
 class NotificationHandler {
@@ -53,7 +53,7 @@ class NotificationHandler {
 
   private getFromName (newNotification: mastodonentities.Notification): string {
     // account's display name have been formatted
-    return store.getters['getAccountDisplayName'](newNotification.account)
+    return getAccountDisplayName(newNotification.account)
       .replace('<span>', '').replace('</span>', '')
   }
 

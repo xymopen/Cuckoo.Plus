@@ -22,10 +22,16 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { State, Action, Getter } from 'vuex-class'
+import { State, Action } from 'vuex-class'
 import { mastodonentities } from '@/interface'
+import { getAccountDisplayName, getAccountAtName } from "@/util"
 
-@Component({})
+@Component({
+  methods: {
+    getAccountDisplayName,
+    getAccountAtName,
+  },
+})
 class PeopleResultCard extends Vue {
 
   isLoading = false
@@ -37,9 +43,6 @@ class PeopleResultCard extends Vue {
   @State('relationships') relationships: {
     [id: string]: mastodonentities.Relationship
   }
-
-  @Getter('getAccountDisplayName') getAccountDisplayName
-  @Getter('getAccountAtName') getAccountAtName
 
   @Action('followAccountById') followAccountById
   @Action('unFollowAccountById') unFollowAccountById
