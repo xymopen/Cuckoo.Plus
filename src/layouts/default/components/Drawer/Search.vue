@@ -56,7 +56,6 @@ class Search extends Vue {
 
   @Action('updateRelationships') updateRelationships
 
-  @Mutation('updateDrawerOpenStatus') updateDrawerOpenStatus
   @Mutation('updateTags') updateTags
 
   searchKey = ''
@@ -116,8 +115,6 @@ class Search extends Vue {
         tagName: hashTagName
       }
     })
-
-    if (this.isMobileMode) this.updateDrawerOpenStatus(false)
   }
 
   onSaveHashTag (hashTagName: string) {

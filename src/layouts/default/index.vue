@@ -1,7 +1,7 @@
 <template>
   <div>
-    <cuckoo-plus-header />
-    <cuckoo-plus-drawer v-if="isOAuthUser" />
+    <cuckoo-plus-header @menuBtnClick="isDrawerOpened = !isDrawerOpened" />
+    <cuckoo-plus-drawer v-if="isOAuthUser" :isDrawerOpened.sync="isDrawerOpened" />
     <mu-container :fluid="true" class="app-content" :style="appContentStyle">
       <slot />
     </mu-container>
@@ -21,11 +21,16 @@ export default defineComponent({
     'cuckoo-plus-header': Header,
     'cuckoo-plus-drawer': Drawer,
   },
+  data () {
+    return {
+      isDrawerOpened: false,
+    }
+  },
   computed: {
     ...mapState(['appStatus']),
     ...mapGetters(['isOAuthUser', 'isMobileMode']),
     appContentStyle () {
-      if (this.appStatus.isDrawerOpened &&
+      if (this.isDrawerOpened &&
         this.isOAuthUser && !this.isMobileMode) {
         return {
           paddingLeft: `${UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH}px`

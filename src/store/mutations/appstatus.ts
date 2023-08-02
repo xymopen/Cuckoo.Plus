@@ -5,10 +5,6 @@ import ThemeManager from '@/themes'
 import { MutationTree } from ".."
 
 export default {
-  updateDrawerOpenStatus (state, isDrawerOpened: boolean) {
-    state.appStatus.isDrawerOpened = isDrawerOpened
-  },
-
   updateUnreadNotificationCount (state, count: number) {
     state.appStatus.unreadNotificationCount = count
   },

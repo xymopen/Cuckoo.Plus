@@ -2,7 +2,7 @@
   <div class="cuckoo-header-container">
     <mu-appbar class="header" :class="shouldUseSecondaryThemeHeader && 'dialog-theme-bg-color'" color="primary"
       @click.native="onHeaderBarClick">
-      <mu-button v-if="isOAuthUser" icon @click.stop="onMenuBtnClick" slot="left">
+      <mu-button v-if="isOAuthUser" icon @click.stop="$emit('menuBtnClick')" slot="left">
         <mu-icon value="menu"></mu-icon>
       </mu-button>
       <div class="host-mastodon-url cuckoo-hub-logo" v-if="isCuckooHubTheme">
@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
-import { State, Mutation, Getter } from 'vuex-class'
+import { State, Getter } from 'vuex-class'
 import { TimeLineTypes, ThemeNames } from '@/constant'
 import { scrollToTop } from '@/utils'
 import NotificationPanel from '@/components/NotificationPanel.vue'
@@ -67,7 +67,8 @@ const pathToRouteInfo = {
 @Component({
   components: {
     NotificationPanel
-  }
+  },
+  emits: ['menuBtnClick'],
 })
 class Header extends Vue {
 
@@ -83,8 +84,6 @@ class Header extends Vue {
   @State('mastodonServerUri') mastodonServerUri
 
   @Getter('isOAuthUser') isOAuthUser
-
-  @Mutation('updateDrawerOpenStatus') updateDrawerOpenStatus
 
   pathToRouteInfo = pathToRouteInfo
 
@@ -122,10 +121,6 @@ class Header extends Vue {
     if (this.isOAuthUser) {
       this.notificationBtnTrigger = this.$refs.notificationBtn?.$el
     }
-  }
-
-  onMenuBtnClick () {
-    this.updateDrawerOpenStatus(!this.appStatus.isDrawerOpened)
   }
 
   onHostMastodonUrlClick () {

@@ -1,6 +1,7 @@
 <template>
-  <mu-drawer class="cuckoo-drawer default-theme-bg-color primary-read-text-color" :open.sync="appStatus.isDrawerOpened"
-    :style="drawerStyle" :docked="shouldDrawerDocked" :z-depth="shouldDrawerDocked ? 0 : 16">
+  <mu-drawer class="cuckoo-drawer default-theme-bg-color primary-read-text-color" :open="isDrawerOpened"
+    @update:open="$emit('update:isDrawerOpened', $event)" :style="drawerStyle" :docked="shouldDrawerDocked"
+    :z-depth="shouldDrawerDocked ? 0 : 16">
 
     <search />
 
@@ -50,8 +51,8 @@
         <a class="secondary-read-text-color link-text" href="https://github.com/NanaMorse/Cuckoo.Plus"
           target="_blank">Github</a>
       </div>
-      <a class="secondary-read-text-color link-text" :href="mastodonServerUri"
-        target="_blank">{{ $t($i18nTags.drawer.toHostInstance) }}</a>
+      <a class="secondary-read-text-color link-text" :href="mastodonServerUri" target="_blank">{{
+        $t($i18nTags.drawer.toHostInstance) }}</a>
       <div style="margin-top: 6px">
         <a class="secondary-read-text-color link-text" @click="onTryLogout">{{ $t($i18nTags.drawer.logout) }}</a>
       </div>
@@ -61,12 +62,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator'
-import { State, Mutation, Action } from 'vuex-class'
+import { defineComponent } from "vue"
+import { mapState, mapMutations, mapActions } from "vuex"
 import { isBaseTimeLine } from '@/util'
 import { TimeLineTypes, UiWidthCheckConstants, RoutersInfo, I18nTags } from '@/constant'
 import Search from './Search.vue'
-import store from '@/store'
+import { Lg } from "packages/breakpoints/mixins"
 
 const baseRouterInfoList = [
   {
@@ -101,147 +102,135 @@ const baseRouterInfoList = [
   }
 ]
 
-@Component({
+export default defineComponent({
+  mixins: [Lg('shouldDrawerDocked')],
   components: {
     'search': Search
-  }
-})
-class Drawer extends Vue {
+  },
+  props: {
+    isDrawerOpened: {
+      type: Boolean
+    },
+  },
+  emits: ['update:isDrawerOpened'],
+  computed: {
+    ...mapState(['currentUserAccount', 'appStatus', 'mastodonServerUri']),
+    baseRouterInfoList () {
+      // @ts-ignore
+      baseRouterInfoList.find(info => info.value === TimeLineTypes.TAG).hashList = this.appStatus.settings.tags
 
-  @State('currentUserAccount') currentUserAccount
-
-  @State('appStatus') appStatus
-
-  @State('mastodonServerUri') mastodonServerUri
-
-  @Mutation('updateDrawerOpenStatus') updateDrawerOpenStatus
-
-  @Mutation('updateTags') updateTags
-
-  @Action('updateTimeLineStatuses') updateTimeLineStatuses
-
-  @Watch('shouldDrawerDocked')
-  onShouldDrawerDockedChanged () {
-    if (!this.shouldDrawerDocked && this.appStatus.isDrawerOpened) {
-      this.updateDrawerOpenStatus(false)
-    }
-  }
-
-  get shouldDrawerDocked () {
-    return this.appStatus.documentWidth > UiWidthCheckConstants.DRAWER_DOCKING_BOUNDARY
-  }
-
-  get baseRouterInfoList () {
-    // @ts-ignore
-    baseRouterInfoList.find(info => info.value === TimeLineTypes.TAG).hashList = this.appStatus.settings.tags
-
-    return baseRouterInfoList
-  }
-
-  get drawerStyle () {
-    if (this.shouldDrawerDocked) {
-      return {
-        top: '64px',
-        width: `${UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH}px`
+      return baseRouterInfoList
+    },
+    drawerStyle () {
+      if (this.shouldDrawerDocked) {
+        return {
+          top: '64px',
+          width: `${UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH}px`
+        }
+      } else {
+        return {
+          width: `${UiWidthCheckConstants.DRAWER_MOBILE_WIDTH}px`
+        }
       }
-    } else {
-      return {
-        width: `${UiWidthCheckConstants.DRAWER_MOBILE_WIDTH}px`
+    },
+    currentListValue () {
+      if (this.$route.name === RoutersInfo.tagtimelines.name) {
+        return this.$route.path
+      } else {
+        const currentRouterInfo = baseRouterInfoList.find(routerInfo => routerInfo.to === this.$route.path)
+
+        if (currentRouterInfo) return currentRouterInfo.value
+      }
+    },
+  },
+  watch: {
+    shouldDrawerDocked () {
+      if (!this.shouldDrawerDocked && this.isDrawerOpened) {
+        this.$emit('update:isDrawerOpened', false)
       }
     }
-  }
+  },
+  mounted () {
+    this.$emit('update:isDrawerOpened', this.shouldDrawerDocked)
+  },
+  methods: {
+    ...mapMutations(['updateTags']),
+    ...mapActions(['updateTimeLineStatuses']),
+    async onBaseRouteItemClick (clickedRouterValue: string) {
+      if (clickedRouterValue === 'profile') {
+        // todo
+        // this.$router.push({
+        //   name: 'accounts',
+        //   params: {
+        //     accountId: this.currentUserAccount.id
+        //   }
+        // })
 
-  get currentListValue () {
-    if (this.$route.name === RoutersInfo.tagtimelines.name) {
-      return this.$route.path
-    } else {
-      const currentRouterInfo = baseRouterInfoList.find(routerInfo => routerInfo.to === this.$route.path)
+        return window.open(this.currentUserAccount.url, '_blank')
+      } else {
 
-      if (currentRouterInfo) return currentRouterInfo.value
-    }
-  }
+        const targetPath = baseRouterInfoList.find(routerInfo => routerInfo.value === clickedRouterValue).to
 
-  async onBaseRouteItemClick (clickedRouterValue: string) {
-    if (clickedRouterValue === 'profile') {
-      // todo
-      // this.$router.push({
-      //   name: 'accounts',
-      //   params: {
-      //     accountId: this.currentUserAccount.id
-      //   }
-      // })
+        if (isBaseTimeLine(clickedRouterValue) && (targetPath === this.$route.path)) {
+          this.fetchTimeLineStatuses(clickedRouterValue)
+        }
 
-      return window.open(this.currentUserAccount.url, '_blank')
-    } else {
+        this.$router.push(targetPath)
 
-      const targetPath = baseRouterInfoList.find(routerInfo => routerInfo.value === clickedRouterValue).to
-
-      if (isBaseTimeLine(clickedRouterValue) && (targetPath === this.$route.path)) {
-        this.fetchTimeLineStatuses(clickedRouterValue)
+        window.scrollTo(0, 0)
       }
+    },
 
-      if (!this.shouldDrawerDocked) this.updateDrawerOpenStatus(false)
+    async onHashRouteItemClick (clickedRouterValue: string, hashName: string) {
+      const targetPath = baseRouterInfoList.find(routerInfo => routerInfo.value === clickedRouterValue).to + '/' + hashName
+
+      if (targetPath === this.$route.path) {
+        this.fetchTimeLineStatuses(clickedRouterValue, hashName)
+      }
 
       this.$router.push(targetPath)
 
       window.scrollTo(0, 0)
-    }
-  }
+    },
 
-  async onHashRouteItemClick (clickedRouterValue: string, hashName: string) {
-    const targetPath = baseRouterInfoList.find(routerInfo => routerInfo.value === clickedRouterValue).to + '/' + hashName
+    onSecondaryItemClick () {
+      window.scrollTo(0, 0)
+    },
 
-    if (targetPath === this.$route.path) {
-      this.fetchTimeLineStatuses(clickedRouterValue, hashName)
-    }
+    async onTryLogout () {
+      const doLogout = (await this.$confirm(this.$t(this.$i18nTags.drawer.do_logout_message_confirm), {
+        okLabel: this.$t(this.$i18nTags.drawer.do_logout_message_yes),
+        cancelLabel: this.$t(this.$i18nTags.drawer.do_logout_message_no),
+      })).result
+      if (doLogout) {
+        localStorage.clear()
+        location.href = '/'
+      }
+    },
 
-    if (!this.shouldDrawerDocked) this.updateDrawerOpenStatus(false)
+    onDeleteHash (hashName: string) {
+      // todo only tag has hash now
+      const newTags = [...this.appStatus.settings.tags]
+      newTags.splice(newTags.indexOf(hashName as any), 1)
 
-    this.$router.push(targetPath)
+      this.updateTags(newTags)
+    },
 
-    window.scrollTo(0, 0)
-  }
+    /**
+    * @desc if clicked timeline item is just current timeline
+    * */
+    async fetchTimeLineStatuses (timeLineType: string, hashName = '') {
+      await this.updateTimeLineStatuses({
+        isFetchMore: true,
+        timeLineType, hashName
+      })
+    },
 
-  onSecondaryItemClick () {
-    if (!this.shouldDrawerDocked) this.updateDrawerOpenStatus(false)
-    window.scrollTo(0, 0)
-  }
-
-  async onTryLogout () {
-    const doLogout = (await this.$confirm(this.$t(this.$i18nTags.drawer.do_logout_message_confirm), {
-      okLabel: this.$t(this.$i18nTags.drawer.do_logout_message_yes),
-      cancelLabel: this.$t(this.$i18nTags.drawer.do_logout_message_no),
-    })).result
-    if (doLogout) {
-      localStorage.clear()
-      location.href = '/'
-    }
-  }
-
-  onDeleteHash (hashName: string) {
-    // todo only tag has hash now
-    const newTags = [...this.appStatus.settings.tags]
-    newTags.splice(newTags.indexOf(hashName as any), 1)
-
-    this.updateTags(newTags)
-  }
-
-  /**
-  * @desc if clicked timeline item is just current timeline
-  * */
-  async fetchTimeLineStatuses (timeLineType: string, hashName = '') {
-    await this.updateTimeLineStatuses({
-      isFetchMore: true,
-      timeLineType, hashName
-    })
-  }
-
-  onOpenHostInstance () {
-    window.open(this.mastodonServerUri, '_blank');
-  }
-}
-
-export default Drawer
+    onOpenHostInstance () {
+      window.open(this.mastodonServerUri, '_blank');
+    },
+  },
+})
 </script>
 
 <style lang="less" scoped>
