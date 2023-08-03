@@ -40,6 +40,13 @@ const config = {
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     new webpack.ProgressPlugin(),
+    new webpack.DefinePlugin({
+      ...Object.fromEntries(
+        Object.entries(process.env)
+          .filter(([key]) => key.startsWith("npm_"))
+          .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
+      ),
+    }),
     new HtmlWebpackPlugin({
       scriptLoading: 'defer',
       templateParameters: (compilation, assets, assetTags, pluginOptions) => {

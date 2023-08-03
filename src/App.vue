@@ -14,9 +14,8 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Mutation, State } from 'vuex-class'
 import * as _ from 'underscore'
 import ThemeEditPanel from '@/components/ThemeEditPanel.vue'
-import pkg from '@/../package.json'
 
-const displayName = pkg.displayName ?? 'Cuckoo+'
+const displayName = process.env.npm_package_displayName ?? 'Cuckoo+'
 
 @Component({
   components: {

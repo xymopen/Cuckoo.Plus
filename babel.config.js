@@ -1,5 +1,3 @@
-const pkg = require("./package.json")
-
 /** @type {"usage" | "entry" | false} */
 const useBuiltIns = "usage"
 
@@ -12,7 +10,7 @@ module.exports = {
       {
         modules: false,
         useBuiltIns,
-        corejs: pkg.dependencies["core-js"],
+        corejs: process.env.npm_package_dependencies_core_js,
         include: [
           // promise polyfill alone doesn't work in IE,
           // needs this as well. see: vuejs/vue-cli#1642
@@ -45,7 +43,7 @@ module.exports = {
         // polyfills are injected by preset-env, so no need to add them again
         corejs: false,
         helpers: useBuiltIns === "usage",
-        version: pkg.devDependencies["@babel/runtime"]
+        version: process.env.npm_package_devDependencies__babel_runtime
       }
     ]
   ]
