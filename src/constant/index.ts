@@ -25,7 +25,6 @@ const VisibilityTypes = {
 }
 
 const UiWidthCheckConstants = {
-  DRAWER_DOCKING_BOUNDARY: 960,
   POST_STATUS_DIALOG_TOGGLE_WIDTH: 530,
   DRAWER_DESKTOP_WIDTH: 290,
   DRAWER_MOBILE_WIDTH: 300,

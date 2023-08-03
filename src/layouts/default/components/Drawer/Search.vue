@@ -33,26 +33,25 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import { Getter, State, Action, Mutation } from 'vuex-class'
+import { Vue, Component, Mixins } from 'vue-property-decorator'
+import { State, Action, Mutation } from 'vuex-class'
 import * as Api from '@/api'
 import { mastodonentities } from '@/interface'
 import { UiWidthCheckConstants } from '@/constant'
 import PeopleResultCard from './PeopleResultCard.vue'
+import { Lg } from "packages/breakpoints/mixins"
 
 @Component({
   components: {
     'people-result-card': PeopleResultCard
   }
 })
-class Search extends Vue {
+class Search extends Mixins(Vue.extend(Lg('isNotMobileMode'))) {
 
   @State('relationships') relationships: {
     [id: string]: mastodonentities.Relationship
   }
   @State('appStatus') appStatus
-
-  @Getter('isMobileMode') isMobileMode
 
   @Action('updateRelationships') updateRelationships
 
@@ -76,8 +75,8 @@ class Search extends Vue {
 
   get resultPanelStyle () {
     return {
-      height: `calc(100vh - 68px${this.isMobileMode ? '' : ' - 64px'})`,
-      left: this.shouldShowResultPanel ? '0' : `-${this.isMobileMode ? UiWidthCheckConstants.DRAWER_MOBILE_WIDTH : UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH}px`
+      height: `calc(100vh - 68px${this.isNotMobileMode ? ' - 64px' : ''})`,
+      left: this.shouldShowResultPanel ? '0' : `-${this.isNotMobileMode ? UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH : UiWidthCheckConstants.DRAWER_MOBILE_WIDTH}px`
     }
   }
 

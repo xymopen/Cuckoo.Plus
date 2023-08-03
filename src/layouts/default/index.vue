@@ -14,9 +14,11 @@ import { mapGetters, mapState } from "vuex";
 import Header from './components/Header.vue'
 import Drawer from './components/Drawer/index.vue'
 import { UiWidthCheckConstants } from '@/constant'
+import { Lg } from "packages/breakpoints/mixins"
 
 export default defineComponent({
   name: 'DefaultLayout',
+  mixins: [Lg('isNotMobileMode')],
   components: {
     'cuckoo-plus-header': Header,
     'cuckoo-plus-drawer': Drawer,
@@ -28,10 +30,10 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['appStatus']),
-    ...mapGetters(['isOAuthUser', 'isMobileMode']),
+    ...mapGetters(['isOAuthUser']),
     appContentStyle () {
       if (this.isDrawerOpened &&
-        this.isOAuthUser && !this.isMobileMode) {
+        this.isOAuthUser && this.isNotMobileMode) {
         return {
           paddingLeft: `${UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH}px`
         }
