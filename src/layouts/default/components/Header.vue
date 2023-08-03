@@ -175,23 +175,6 @@ export default Header
     padding-left: 10px;
     margin-left: 20px;
   }
-
-  .search-input-area {
-    width: 720px;
-    display: flex;
-    margin-left: 28px;
-    align-items: center;
-
-    .pre-fix-icon {
-      margin-left: 10px;
-    }
-
-    .search-input {
-      margin: 0;
-      padding: 0;
-      padding-left: 10px;
-    }
-  }
 }
 </style>
 
@@ -201,17 +184,6 @@ export default Header
     display: flex;
     align-items: center;
     padding-left: 0;
-
-    .search-input-area {
-      .mu-text-field-input {
-        height: 48px;
-      }
-
-      .mu-input-line,
-      .mu-input-focus-line {
-        display: none;
-      }
-    }
   }
 
   .notification-badge {
