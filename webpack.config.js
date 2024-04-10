@@ -11,7 +11,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-// const EslintWebpackPlugin = require('eslint-webpack-plugin')
 const { GenerateSW } = require("workbox-webpack-plugin");
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -36,6 +35,7 @@ const merge = mergeWithRules({
 });
 
 const PublicConfig = require('./etc/webpack.config.d/public');
+const EslintConfig = require('./etc/webpack.config.d/eslint');
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -94,10 +94,6 @@ const config = {
     //       syntactic: false,
     //     },
     //   },
-    // }),
-    // disable for now for too many errors
-    // new EslintWebpackPlugin({
-    //   extensions: [".tsx", ".ts", ".jsx", ".js", ".vue"],
     // }),
   ],
   module: {
@@ -308,6 +304,8 @@ module.exports = env => {
   return merge(
     config,
     PublicConfig,
+    // disable for now for too many errors
+    // EslintConfig,
     ...overrides
   );
 };
