@@ -9,7 +9,6 @@ const webpack = require('webpack');
 const { mergeWithRules } = require('webpack-merge');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
-// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { GenerateSW } = require("workbox-webpack-plugin");
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -35,6 +34,7 @@ const merge = mergeWithRules({
 
 const PublicConfig = require('./etc/webpack.config.d/public');
 const EslintConfig = require('./etc/webpack.config.d/eslint');
+const ForkTsCheckerConfig = require('./etc/webpack.config.d/fork-ts-checker');
 const VueAutoRoutingConfig = require('./etc/webpack.config.d/vue-auto-routing');
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
@@ -79,15 +79,6 @@ const config = {
       template: "index.html",
     }),
     new VueLoaderPlugin(),
-    // disable for now for too many errors
-    // new ForkTsCheckerWebpackPlugin({
-    //   typescript: {
-    //     diagnosticOptions: {
-    //       semantic: true,
-    //       syntactic: false,
-    //     },
-    //   },
-    // }),
   ],
   module: {
     noParse: /^(vue|vue-router|vuex|vuex-router-sync)$/,
@@ -293,6 +284,7 @@ module.exports = env => {
     PublicConfig,
     // disable for now for too many errors
     // EslintConfig,
+    // ForkTsCheckerConfig,
     VueAutoRoutingConfig,
     ...overrides
   );
