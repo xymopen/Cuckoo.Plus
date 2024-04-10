@@ -253,6 +253,9 @@ devDependencies:
   webpack-dev-server:
     specifier: ^4.7.4
     version: 4.7.4(webpack-cli@5.0.0)(webpack@5.75.0)
+  webpack-merge:
+    specifier: ^5.0.0
+    version: 5.9.0
   webpack-node-externals:
     specifier: ^3.0.0
     version: 3.0.0
@@ -6502,6 +6505,7 @@ packages:
   /pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -7067,6 +7071,7 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
+    requiresBuild: true
     dev: true
 
   /pseudomap@1.0.2:

@@ -6,6 +6,7 @@ const resolve = pathResolve.bind(undefined, __dirname);
 // const getTargets = require('@babel/helper-compilation-targets').default;
 
 const webpack = require('webpack');
+const { mergeWithRules } = require('webpack-merge');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
@@ -22,6 +23,18 @@ const isProduction = process.env.NODE_ENV == "production";
 const stylesHandler = isProduction
   ? MiniCssExtractPlugin.loader
   : "vue-style-loader";
+
+const merge = mergeWithRules({
+  module: {
+    rules: {
+      test: 'match',
+      use: {
+        loader: "match",
+        options: "merge"
+      }
+    }
+  }
+});
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -235,48 +248,69 @@ const config = {
 };
 
 module.exports = env => {
-  if (env === "test") {
-    config.target = "node";
-    config.externalsPresets = { node: true };
-    // @ts-ignore
-    config.externals = [config.externals, nodeExternals()];
+  /** @type {import('webpack').Configuration[]} */
+  const overrides = [];
 
-    // when target === 'node', vue-loader will attempt to generate
-    // SSR-optimized code. We need to turn that off here.
-    // @ts-ignore
-    config.module.rules.find(({ loader }) => loader === "vue-loader").options.optimizeSSR = false
+  if (env === "test") {
+    overrides.push({
+      target: "node",
+      externalsPresets: { node: true },
+      // @ts-ignore
+      externals: [nodeExternals()],
+
+      // when target === 'node', vue-loader will attempt to generate
+      // SSR-optimized code. We need to turn that off here.
+      // @ts-ignore
+      module: {
+        rules: [
+          {
+            loader: "vue-loader",
+            options: {
+              optimizeSSR: false
+            }
+          }
+        ]
+      }
+    })
   }
 
   if (isProduction) {
-    config.mode = "production";
-    config.devtool = false;
+    overrides.push({
+      mode: "production",
+      devtool: false,
 
-    // @ts-ignore
-    config.plugins.push(new MiniCssExtractPlugin());
-
-    // @ts-ignore
-    config.plugins.push(new GenerateSW({
-      additionalManifestEntries: [
-        'https://fonts.loli.net/css?family=Open+Sans',
-        'https://fonts.loli.net/icon?family=Material+Icons',
-        'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment.min.js',
-        'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/zh-cn.js',
-        'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/zh-hk.js',
-        'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/zh-tw.js',
-        'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/ja.js',
-        'https://cdnjs.loli.net/ajax/libs/underscore.js/1.9.1/underscore-min.js',
-        'https://unpkg.com/muse-ui/dist/muse-ui.css',
-        'https://gstatic.loli.net/s/materialicons/v46/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2',
-      ],
-      // workbox-webpack-plugin has some issues
-      // babelPresetEnvTargets: getTargets(),
-      cleanupOutdatedCaches: true,
-      clientsClaim: true,
-      skipWaiting: true,
-    }));
+      plugins: [
+        new MiniCssExtractPlugin(),
+        // @ts-ignore
+        new GenerateSW({
+          additionalManifestEntries: [
+            'https://fonts.loli.net/css?family=Open+Sans',
+            'https://fonts.loli.net/icon?family=Material+Icons',
+            'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment.min.js',
+            'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/zh-cn.js',
+            'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/zh-hk.js',
+            'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/zh-tw.js',
+            'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/ja.js',
+            'https://cdnjs.loli.net/ajax/libs/underscore.js/1.9.1/underscore-min.js',
+            'https://unpkg.com/muse-ui/dist/muse-ui.css',
+            'https://gstatic.loli.net/s/materialicons/v46/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2',
+          ],
+          // workbox-webpack-plugin has some issues
+          // babelPresetEnvTargets: getTargets(),
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+          skipWaiting: true,
+        })
+      ]
+    })
   } else {
-    config.mode = "development";
-    config.devtool = "source-map";
+    overrides.push({
+      mode: "development",
+      devtool: "source-map"
+    })
   }
-  return config;
+  return merge(
+    config,
+    ...overrides
+  );
 };
