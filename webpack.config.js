@@ -9,7 +9,6 @@ const webpack = require('webpack');
 const { mergeWithRules } = require('webpack-merge');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
-const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { GenerateSW } = require("workbox-webpack-plugin");
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
@@ -36,6 +35,7 @@ const merge = mergeWithRules({
 
 const PublicConfig = require('./etc/webpack.config.d/public');
 const EslintConfig = require('./etc/webpack.config.d/eslint');
+const VueAutoRoutingConfig = require('./etc/webpack.config.d/vue-auto-routing');
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -79,13 +79,6 @@ const config = {
       template: "index.html",
     }),
     new VueLoaderPlugin(),
-    new VueAutoRoutingPlugin({
-      // Path to the directory that contains your page components.
-      pages: 'src/pages',
-
-      // A string that will be added to importing component path (default @/pages/).
-      importPrefix: '@/pages/'
-    }),
     // disable for now for too many errors
     // new ForkTsCheckerWebpackPlugin({
     //   typescript: {
@@ -215,12 +208,6 @@ const config = {
         type: 'javascript/auto',
         loader: '@intlify/vue-i18n-loader',
       },
-
-      {
-        resourceQuery: [/blockType=route/, /blockType=route-meta/],
-        enforce: 'post',
-        loader: './lib/route-loader',
-      },
     ],
   },
   resolve: {
@@ -306,6 +293,7 @@ module.exports = env => {
     PublicConfig,
     // disable for now for too many errors
     // EslintConfig,
+    VueAutoRoutingConfig,
     ...overrides
   );
 };
