@@ -8,7 +8,6 @@ const resolve = pathResolve.bind(undefined, __dirname);
 const webpack = require('webpack');
 const { mergeWithRules } = require('webpack-merge');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -35,6 +34,8 @@ const merge = mergeWithRules({
     }
   }
 });
+
+const PublicConfig = require('./etc/webpack.config.d/public');
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -76,11 +77,6 @@ const config = {
         }
       },
       template: "index.html",
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        "public",
-      ],
     }),
     new VueLoaderPlugin(),
     new VueAutoRoutingPlugin({
@@ -311,6 +307,7 @@ module.exports = env => {
   }
   return merge(
     config,
+    PublicConfig,
     ...overrides
   );
 };
