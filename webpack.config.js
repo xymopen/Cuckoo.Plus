@@ -6,13 +6,11 @@ const resolve = pathResolve.bind(undefined, __dirname);
 // const getTargets = require('@babel/helper-compilation-targets').default;
 
 const webpack = require('webpack');
-const { mergeWithRules } = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
 const { GenerateSW } = require("workbox-webpack-plugin");
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const nodeExternals = require('webpack-node-externals');
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -20,23 +18,12 @@ const stylesHandler = isProduction
   ? MiniCssExtractPlugin.loader
   : "vue-style-loader";
 
-const merge = mergeWithRules({
-  module: {
-    rules: {
-      test: 'match',
-      use: {
-        loader: "match",
-        options: "merge"
-      }
-    }
-  }
-});
-
 const PublicConfig = require('./etc/webpack.config.d/public');
 const EslintConfig = require('./etc/webpack.config.d/eslint');
 const ForkTsCheckerConfig = require('./etc/webpack.config.d/fork-ts-checker');
 const VueAutoRoutingConfig = require('./etc/webpack.config.d/vue-auto-routing');
 const VueI18nConfig = require('./etc/webpack.config.d/vue-i18n');
+const VueConfig = require('./etc/webpack.config.d/vue');
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -79,10 +66,8 @@ const config = {
       },
       template: "index.html",
     }),
-    new VueLoaderPlugin(),
   ],
   module: {
-    noParse: /^(vue|vue-router|vuex|vuex-router-sync)$/,
     rules: [
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
@@ -190,18 +175,10 @@ const config = {
         type: "asset",
         generator: { filename: 'fonts/[name].[hash:8][ext]' },
       },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: { compilerOptions: { whitespace: 'condense' } },
-      },
     ],
   },
   resolve: {
-    alias: {
-      "vue$": "vue/dist/vue.runtime.esm.js",
-    },
-    extensions: [".tsx", ".ts", ".jsx", ".js", ".vue"],
+    extensions: [".ts", ".js"],
     plugins: [new TsconfigPathsPlugin({
       extensions: [".tsx", ".ts", ".jsx", ".js", ".vue"],
     })],
@@ -216,29 +193,6 @@ const config = {
 module.exports = env => {
   /** @type {import('webpack').Configuration[]} */
   const overrides = [];
-
-  if (env === "test") {
-    overrides.push({
-      target: "node",
-      externalsPresets: { node: true },
-      // @ts-ignore
-      externals: [nodeExternals()],
-
-      // when target === 'node', vue-loader will attempt to generate
-      // SSR-optimized code. We need to turn that off here.
-      // @ts-ignore
-      module: {
-        rules: [
-          {
-            loader: "vue-loader",
-            options: {
-              optimizeSSR: false
-            }
-          }
-        ]
-      }
-    })
-  }
 
   if (isProduction) {
     overrides.push({
@@ -283,6 +237,7 @@ module.exports = env => {
     // ForkTsCheckerConfig,
     VueAutoRoutingConfig,
     VueI18nConfig,
+    VueConfig(env),
     ...overrides
   );
 };
