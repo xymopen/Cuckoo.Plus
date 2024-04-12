@@ -24,6 +24,7 @@ const ForkTsCheckerConfig = require('./etc/webpack.config.d/fork-ts-checker');
 const VueAutoRoutingConfig = require('./etc/webpack.config.d/vue-auto-routing');
 const VueI18nConfig = require('./etc/webpack.config.d/vue-i18n');
 const VueConfig = require('./etc/webpack.config.d/vue');
+const AssetsConfig = require('./etc/webpack.config.d/assets');
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -160,21 +161,6 @@ const config = {
           },
         ],
       },
-      {
-        test: /\.(png|jpg|gif)$/i,
-        type: "asset",
-        generator: { filename: 'img/[name].[hash:8][ext]' },
-      },
-      {
-        test: /\.(svg)$/i,
-        type: "asset/resource",
-        generator: { filename: 'img/[name].[hash:8][ext]' },
-      },
-      {
-        test: /\.(eot|ttf|woff|woff2)$/i,
-        type: "asset",
-        generator: { filename: 'fonts/[name].[hash:8][ext]' },
-      },
     ],
   },
   resolve: {
@@ -238,6 +224,7 @@ module.exports = env => {
     VueAutoRoutingConfig,
     VueI18nConfig,
     VueConfig(env),
+    AssetsConfig,
     ...overrides
   );
 };
