@@ -36,6 +36,7 @@ const PublicConfig = require('./etc/webpack.config.d/public');
 const EslintConfig = require('./etc/webpack.config.d/eslint');
 const ForkTsCheckerConfig = require('./etc/webpack.config.d/fork-ts-checker');
 const VueAutoRoutingConfig = require('./etc/webpack.config.d/vue-auto-routing');
+const VueI18nConfig = require('./etc/webpack.config.d/vue-i18n');
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -194,11 +195,6 @@ const config = {
         loader: 'vue-loader',
         options: { compilerOptions: { whitespace: 'condense' } },
       },
-      {
-        resourceQuery: /blockType=i18n/,
-        type: 'javascript/auto',
-        loader: '@intlify/vue-i18n-loader',
-      },
     ],
   },
   resolve: {
@@ -286,6 +282,7 @@ module.exports = env => {
     // EslintConfig,
     // ForkTsCheckerConfig,
     VueAutoRoutingConfig,
+    VueI18nConfig,
     ...overrides
   );
 };
