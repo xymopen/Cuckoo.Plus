@@ -1,7 +1,7 @@
-const { dp2px, sp2rem } = require('./src/utils/AndroidMeasurements')
+import { dp2px, sp2rem } from './src/utils/AndroidMeasurements.js'
 
 /** @type {import('postcss').ProcessOptions & { plugins: PostCssLoaderPluginsOption }} */
-module.exports = {
+export default {
   // Add you postcss configuration here
   // Learn more about it at https://github.com/webpack-contrib/postcss-loader#config-files
   plugins: [

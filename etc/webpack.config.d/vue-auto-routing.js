@@ -1,7 +1,7 @@
-const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin');
+import VueAutoRoutingPlugin from 'vue-auto-routing/lib/webpack-plugin.js';
 
 /** @type {import('webpack').Configuration} */
-module.exports = {
+export default {
   plugins: [
     new VueAutoRoutingPlugin({
       // Path to the directory that contains your page components.
@@ -15,8 +15,8 @@ module.exports = {
     rules: [
       {
         resourceQuery: [/blockType=route/, /blockType=route-meta/],
-        enforce: 'post',
-        loader: './lib/route-loader'
+        enforce: (/** @type {'post'} */ ('post')),
+        loader: './lib/route-loader.cjs'
       }
     ]
   }

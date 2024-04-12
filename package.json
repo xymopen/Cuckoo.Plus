@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "cuckoo.plus",
+  "type": "module",
   "version": "0.4.0",
   "description": "A third-party client for mastodon",
   "displayName": "Cuckoo+",
@@ -16,7 +17,7 @@
   },
   "packageManager": "pnpm@8.6.11",
   "engines": {
-    "node": "^18.0.0",
+    "node": "^20.11.0",
     "pnpm": "8.6.11"
   },
   "dependencies": {
@@ -88,7 +89,7 @@
     "mochapack": "^2.1.0",
     "postcss": "^8.2.12",
     "postcss-custom-unit": "^1.0.0",
-    "postcss-loader": "^6.1.1",
+    "postcss-loader": "^8.1.1",
     "postcss-mixins": "^7.0.3",
     "postcss-nesting": "^10.2.0",
     "postcss-preset-env": "7.8.3",

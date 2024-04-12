@@ -2,8 +2,8 @@
 const useBuiltIns = "usage"
 
 /** @type {import('@babel/core').TransformOptions} */
-module.exports = {
-  sourceType: 'unambiguous',
+export default {
+  sourceType: (/** @type {'module'} **/ ('module')),
   presets: [
     [
       "@babel/preset-env",

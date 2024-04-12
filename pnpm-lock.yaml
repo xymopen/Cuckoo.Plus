@@ -206,8 +206,8 @@ devDependencies:
     specifier: ^1.0.0
     version: 1.0.0
   postcss-loader:
-    specifier: ^6.1.1
-    version: 6.1.1(postcss@8.2.12)(webpack@5.75.0)
+    specifier: ^8.1.1
+    version: 8.1.1(postcss@8.2.12)(typescript@4.5.5)(webpack@5.75.0)
   postcss-mixins:
     specifier: ^7.0.3
     version: 7.0.3(postcss@8.2.12)
@@ -3657,15 +3657,20 @@ packages:
       yaml: 1.10.2
     dev: true
 
-  /cosmiconfig@7.1.0:
-    resolution: {integrity: sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==}
-    engines: {node: '>=10'}
+  /cosmiconfig@9.0.0(typescript@4.5.5):
+    resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      typescript: '>=4.9.5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
-      '@types/parse-json': 4.0.0
+      env-paths: 2.2.1
       import-fresh: 3.3.0
+      js-yaml: 4.1.0
       parse-json: 5.2.0
-      path-type: 4.0.0
-      yaml: 1.10.2
+      typescript: 4.5.5
     dev: true
 
   /cross-spawn@7.0.3:
@@ -4096,6 +4101,11 @@ packages:
 
   /entities@2.2.0:
     resolution: {integrity: sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==}
+    dev: true
+
+  /env-paths@2.2.1:
+    resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
+    engines: {node: '>=6'}
     dev: true
 
   /envinfo@7.10.0:
@@ -5491,6 +5501,11 @@ packages:
       supports-color: 8.1.1
     dev: true
 
+  /jiti@1.21.6:
+    resolution: {integrity: sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==}
+    hasBin: true
+    dev: true
+
   /jquery@3.4.1:
     resolution: {integrity: sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==}
     dev: false
@@ -5520,6 +5535,13 @@ packages:
 
   /js-yaml@4.0.0:
     resolution: {integrity: sha512-pqon0s+4ScYUvX30wxQi3PogGFAlUyH0awepWvwkj4jD4v+ova3RiYw8bmA6x2rDrEaj8i/oWKoRxpVNW+Re8Q==}
+    hasBin: true
+    dependencies:
+      argparse: 2.0.1
+    dev: true
+
+  /js-yaml@4.1.0:
+    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
     dependencies:
       argparse: 2.0.1
@@ -6724,18 +6746,26 @@ packages:
       postcss-value-parser: 4.2.0
     dev: true
 
-  /postcss-loader@6.1.1(postcss@8.2.12)(webpack@5.75.0):
-    resolution: {integrity: sha512-lBmJMvRh1D40dqpWKr9Rpygwxn8M74U9uaCSeYGNKLGInbk9mXBt1ultHf2dH9Ghk6Ue4UXlXWwGMH9QdUJ5ug==}
-    engines: {node: '>= 12.13.0'}
+  /postcss-loader@8.1.1(postcss@8.2.12)(typescript@4.5.5)(webpack@5.75.0):
+    resolution: {integrity: sha512-0IeqyAsG6tYiDRCYKQJLAmgQr47DX6N7sFSWvQxt6AcupX8DIdmykuk/o/tx0Lze3ErGHJEp5OSRxrelC6+NdQ==}
+    engines: {node: '>= 18.12.0'}
     peerDependencies:
+      '@rspack/core': 0.x || 1.x
       postcss: ^7.0.0 || ^8.0.1
       webpack: ^5.0.0
+    peerDependenciesMeta:
+      '@rspack/core':
+        optional: true
+      webpack:
+        optional: true
     dependencies:
-      cosmiconfig: 7.1.0
-      klona: 2.0.6
+      cosmiconfig: 9.0.0(typescript@4.5.5)
+      jiti: 1.21.6
       postcss: 8.2.12
-      semver: 7.5.3
+      semver: 7.6.2
       webpack: 5.75.0(webpack-cli@5.0.0)
+    transitivePeerDependencies:
+      - typescript
     dev: true
 
   /postcss-logical@5.0.4(postcss@8.2.12):
@@ -7464,6 +7494,12 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+    dev: true
+
+  /semver@7.6.2:
+    resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
+    engines: {node: '>=10'}
+    hasBin: true
     dev: true
 
   /send@0.18.0:

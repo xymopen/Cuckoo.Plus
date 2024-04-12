@@ -1,6 +1,6 @@
-const { mergeWithRules } = require('webpack-merge');
-const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
-const nodeExternals = require('webpack-node-externals');
+import { mergeWithRules } from 'webpack-merge';
+import VueLoaderPlugin from 'vue-loader/lib/plugin-webpack5.js';
+import nodeExternals from 'webpack-node-externals';
 
 const merge = mergeWithRules({
   module: {
@@ -38,7 +38,7 @@ const config = {
 }
 
 /** @return {import('webpack').Configuration} */
-module.exports = env => {
+export default env => {
   if (env !== "test") {
     return config
   } else {

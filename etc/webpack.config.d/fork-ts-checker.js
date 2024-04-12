@@ -1,7 +1,7 @@
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 
 /** @type {import('webpack').Configuration} */
-module.exports = {
+export default {
   plugins: [
     new ForkTsCheckerWebpackPlugin({
       typescript: {

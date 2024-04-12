@@ -1,16 +1,16 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-const { resolve: pathResolve } = require('path');
-const resolve = pathResolve.bind(undefined, __dirname);
+import { resolve as pathResolve } from 'path';
+const resolve = pathResolve.bind(undefined, import.meta.dirname);
 
-// const getTargets = require('@babel/helper-compilation-targets').default;
+// import getTargets from '@babel/helper-compilation-targets';
 
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { GenerateSW } = require("workbox-webpack-plugin");
-const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+import webpack from 'webpack';
+import { merge } from 'webpack-merge';
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import { GenerateSW } from "workbox-webpack-plugin";
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -18,13 +18,13 @@ const stylesHandler = isProduction
   ? MiniCssExtractPlugin.loader
   : "vue-style-loader";
 
-const PublicConfig = require('./etc/webpack.config.d/public');
-const EslintConfig = require('./etc/webpack.config.d/eslint');
-const ForkTsCheckerConfig = require('./etc/webpack.config.d/fork-ts-checker');
-const VueAutoRoutingConfig = require('./etc/webpack.config.d/vue-auto-routing');
-const VueI18nConfig = require('./etc/webpack.config.d/vue-i18n');
-const VueConfig = require('./etc/webpack.config.d/vue');
-const AssetsConfig = require('./etc/webpack.config.d/assets');
+import PublicConfig from './etc/webpack.config.d/public.js';
+import EslintConfig from './etc/webpack.config.d/eslint.js';
+import ForkTsCheckerConfig from './etc/webpack.config.d/fork-ts-checker.js';
+import VueAutoRoutingConfig from './etc/webpack.config.d/vue-auto-routing.js';
+import VueI18nConfig from './etc/webpack.config.d/vue-i18n.js';
+import VueConfig from './etc/webpack.config.d/vue.js';
+import AssetsConfig from './etc/webpack.config.d/assets.js';
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -176,7 +176,7 @@ const config = {
   },
 };
 
-module.exports = env => {
+export default env => {
   /** @type {import('webpack').Configuration[]} */
   const overrides = [];
 

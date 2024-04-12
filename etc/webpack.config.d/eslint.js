@@ -1,7 +1,7 @@
-const EslintWebpackPlugin = require('eslint-webpack-plugin')
+import EslintWebpackPlugin from 'eslint-webpack-plugin'
 
 /** @type {import('webpack').Configuration} */
-module.exports = {
+export default {
   plugins: [
     new EslintWebpackPlugin({
       extensions: [".tsx", ".ts", ".jsx", ".js", ".vue"],

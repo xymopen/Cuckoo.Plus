@@ -1,5 +1,5 @@
 /** @type {import('webpack').Configuration} */
-module.exports = {
+export default {
   module: {
     rules: [
       {
