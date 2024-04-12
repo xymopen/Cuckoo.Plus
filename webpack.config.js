@@ -84,7 +84,7 @@ const config = {
             },
           },
         ],
-        exclude: ["/node_modules/"],
+        exclude: [/([/\\])node_modules\1/],
       },
       {
         test: /\.tsx$/i,
@@ -98,12 +98,12 @@ const config = {
             },
           },
         ],
-        exclude: ["/node_modules/"],
+        exclude: [/([/\\])node_modules\1/],
       },
       {
         test: /\.(jsx?)$/i,
         loader: "babel-loader",
-        exclude: ["/node_modules/"],
+        exclude: [/([/\\])node_modules\1/],
       },
       {
         test: /\.less$/i,
