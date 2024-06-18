@@ -27,13 +27,6 @@
         </mu-load-more>
       </template>
 
-      <!-- todo move those widgets to a common area -->
-      <mu-snackbar position="top" color="info" :open.sync="isSnackBarOpening">
-        <mu-icon left value="info"></mu-icon>
-        {{ snackBarMessage }}
-        <mu-button flat slot="action" color="#fff" @click="isSnackBarOpening = false">Close</mu-button>
-      </mu-snackbar>
-
       <mu-button fab class="post-new-status-button" color="primary" v-show="!isPostStatusDialogOpening"
         @click="showNewPostDialogPanel">
         <mu-icon value="edit" />
@@ -137,10 +130,6 @@ class TimeLines extends Vue {
   isLoading = false
 
   noLoadMoreTimeLineList: Array<string> = []
-
-  isSnackBarOpening = false
-
-  snackBarMessage = ''
 
   isPostStatusDialogOpening = false
 
