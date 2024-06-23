@@ -34,7 +34,7 @@
 
       <post-status-dialog :open.sync="isPostStatusDialogOpening" />
 
-      <new-status-notice-button />
+      <new-status-notice-button :time-line-type="timeLineType" :hash-name="hashName" />
     </div>
   </div>
 </template>
@@ -48,9 +48,9 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Action, State, Getter } from 'vuex-class'
-import { TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
+import { RoutersInfo, TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
 import { mastodonentities } from '@/interface'
-import { getTimeLineTypeAndHashName, isBaseTimeLine, documentGlobalEventBus } from '@/util'
+import { isBaseTimeLine, documentGlobalEventBus } from '@/util'
 import { scrollToTop } from '@/utils'
 import StatusCard from '@/components/StatusCard/index.vue'
 import PostStatusDialog from '@/components/PostStatusDialog.vue'
@@ -65,15 +65,13 @@ const headerHeight = 64
 
 const timelineInitStatusMap = {}
 
-function hasCurrentTimeLineInit ($route) {
-  const { timeLineType, hashName } = getTimeLineTypeAndHashName($route)
+function hasCurrentTimeLineInit ({ timeLineType, hashName }) {
 
   const key = hashName ? `${timeLineType}/${hashName}` : timeLineType
   return timelineInitStatusMap[key]
 }
 
-function setCurrentTimeLineHasInit ($route) {
-  const { timeLineType, hashName } = getTimeLineTypeAndHashName($route)
+function setCurrentTimeLineHasInit ({ timeLineType, hashName }) {
 
   const key = hashName ? `${timeLineType}/${hashName}` : timeLineType
   timelineInitStatusMap[key] = true
@@ -166,7 +164,7 @@ class TimeLines extends Vue {
   get currentRootStatuses (): Array<mastodonentities.Status> {
     if (!this.isCurrentTimeLineRoute) return
 
-    const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)
+    const { timeLineType, hashName } = this
 
     return this.getRootStatuses(timeLineType, hashName).filter(status => status.id)
   }
@@ -174,7 +172,7 @@ class TimeLines extends Vue {
   get currentTimeLineCannotLoadMore () {
     if (!this.isCurrentTimeLineRoute) return
 
-    const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)
+    const { timeLineType, hashName } = this
 
     return this.noLoadMoreTimeLineList.indexOf(`${timeLineType}/${hashName}`) !== -1
   }
@@ -183,21 +181,47 @@ class TimeLines extends Vue {
     return this.appStatus.documentWidth - UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH
   }
 
+  get timeLineTypeAndHashName() {
+    const route = this.$route
+    let timeLineType = '', hashName = ''
+    if (route.name === RoutersInfo.defaulttimelines.name) {
+      timeLineType = route.params.timeLineType
+    }
+    else if (route.name === RoutersInfo.tagtimelines.name) {
+      timeLineType = TimeLineTypes.TAG
+      hashName = route.params.tagName
+    }
+    else if (route.name === RoutersInfo.listtimelines.name) {
+      timeLineType = TimeLineTypes.LIST
+      hashName = route.params.listName
+    }
+
+    return { timeLineType, hashName }
+  }
+
+  get timeLineType() {
+    return this.timeLineTypeAndHashName.timeLineType
+  }
+
+  get hashName() {
+    return this.timeLineTypeAndHashName.hashName
+  }
+
   @Watch('$route')
   async onRouteChanged () {
     if (!this.isCurrentTimeLineRoute) return
 
     this.currentFocusCardId = noneCardFocusId
 
-    if (!hasCurrentTimeLineInit(this.$route)) {
+    if (!hasCurrentTimeLineInit({ timeLineType: this.timeLineType, hashName: this.hashName })) {
       if (this.currentRootStatuses.length === 0) {
         this.isInitLoading = true
       }
       await this.loadStatuses()
       this.isInitLoading = false
-      setCurrentTimeLineHasInit(this.$route)
+      setCurrentTimeLineHasInit({ timeLineType: this.timeLineType, hashName: this.hashName })
     } else {
-      this.loadStreamStatusesPool({ ...getTimeLineTypeAndHashName(this.$route) })
+      this.loadStreamStatusesPool({ timeLineType: this.timeLineType, hashName: this.hashName })
       this.loadStatuses(false, true)
     }
 
@@ -234,7 +258,7 @@ class TimeLines extends Vue {
     this.isLoading = true
 
     const preStatusesLength = this.currentRootStatuses.length
-    const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)
+    const { timeLineType, hashName } = this
     await this.updateTimeLineStatuses({
       isLoadMore,
       isFetchMore,
@@ -258,7 +282,7 @@ class TimeLines extends Vue {
   }
 
   isTimeLineNameEqualCurrentRoute (timeLineName: string): boolean {
-    const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)
+    const { timeLineType, hashName } = this
 
     if (isBaseTimeLine(timeLineName)) {
       return timeLineType === timeLineName
@@ -373,7 +397,7 @@ class TimeLines extends Vue {
       return this.isPostStatusDialogOpening = true
     }
 
-    const { timeLineType } = getTimeLineTypeAndHashName(this.$route)
+    const { timeLineType } = this
     const targetStatusCard = this.$refs[`${timeLineType}_statusCard_${this.currentFocusCardId}`][0]
     targetStatusCard.onReplyToStatus(targetStatusCard.status)
   }
@@ -390,7 +414,7 @@ class TimeLines extends Vue {
       scrollToTarget = 0
     } else {
 
-      const { timeLineType } = getTimeLineTypeAndHashName(this.$route)
+      const { timeLineType } = this
       const $targetStatusCardRef: HTMLDivElement = this.$refs[`${timeLineType}_statusCard_${this.currentFocusCardId}`][0].$el
 
       const bounding = $targetStatusCardRef.getBoundingClientRect()

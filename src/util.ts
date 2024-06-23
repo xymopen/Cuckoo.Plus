@@ -1,6 +1,5 @@
 import store from '@/store'
-import { TimeLineTypes, RoutersInfo, I18nTags, VisibilityTypes } from '@/constant'
-import { Route } from "vue-router"
+import { TimeLineTypes, I18nTags, VisibilityTypes } from '@/constant'
 import Formatter from "./formatter"
 import { mastodonentities } from "@/interface"
 import * as $ from 'jquery'
@@ -24,23 +23,6 @@ export function generateUniqueKey () {
 
 export function isBaseTimeLine (timeLineType: string): boolean {
   return [TimeLineTypes.HOME, TimeLineTypes.PUBLIC, TimeLineTypes.DIRECT, TimeLineTypes.LOCAL].indexOf(timeLineType) !== -1
-}
-
-export function getTimeLineTypeAndHashName (route: Route) {
-  let timeLineType = '', hashName = ''
-  if (route.name === RoutersInfo.defaulttimelines.name) {
-    timeLineType = route.params.timeLineType
-  }
-  else if (route.name === RoutersInfo.tagtimelines.name) {
-    timeLineType = TimeLineTypes.TAG
-    hashName = route.params.tagName
-  }
-  else if (route.name === RoutersInfo.listtimelines.name) {
-    timeLineType = TimeLineTypes.LIST
-    hashName = route.params.listName
-  }
-
-  return { timeLineType, hashName }
 }
 
 export function getTargetStatusesList (listMap, timeLineType, hashName) {

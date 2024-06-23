@@ -13,13 +13,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator'
+import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
 import { State, Mutation, Action } from 'vuex-class'
 import { scrollToTop } from '@/utils'
-import { getTimeLineTypeAndHashName, isBaseTimeLine, getTargetStatusesList } from '@/util'
+import { isBaseTimeLine, getTargetStatusesList } from '@/util'
 
 @Component({})
 class NewStatusNoticeButton extends Vue {
+  @Prop({ required: true })
+  declare readonly timeLineType: string
+
+  @Prop({ required: true })
+  declare readonly hashName: string
 
   @State('appStatus') appStatus
 
@@ -32,7 +37,7 @@ class NewStatusNoticeButton extends Vue {
   translateY = 0
 
   get currentTimeLineStreamPool () {
-    const { timeLineType, hashName } = getTimeLineTypeAndHashName(this.$route)
+    const { timeLineType, hashName } = this
 
     if (timeLineType === '') return []
 
@@ -73,7 +78,10 @@ class NewStatusNoticeButton extends Vue {
 
   async onNoticeButtonClick () {
     await scrollToTop()
-    this.loadStreamStatusesPool({ ...getTimeLineTypeAndHashName(this.$route) })
+    this.loadStreamStatusesPool({
+      timeLineType: this.timeLineType,
+      hashName: this.hashName,
+     })
   }
 }
 
