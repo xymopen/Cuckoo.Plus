@@ -2,7 +2,6 @@ import store from '@/store'
 import { TimeLineTypes, I18nTags, VisibilityTypes } from '@/constant'
 import Formatter from "./formatter"
 import { mastodonentities } from "@/interface"
-import * as $ from 'jquery'
 import { sanitize } from 'dompurify'
 
 export function patchApiUri (uri: string): string {
@@ -160,68 +159,6 @@ function walkTextNodes (node, textNodeHandler) {
       }
     }
   }
-}
-
-export function getNetEaseMusicFrameLinkFromContentLink (link: string): string | void {
-  const url = new URL(link)
-
-  const isNetEaseMusic = url.host === 'music.163.com'
-
-  if (!isNetEaseMusic) return
-
-  let songId
-
-  const isUseSongPath = url.pathname.startsWith('/song')
-  if (isUseSongPath) {
-    // use param song id
-    if (url.searchParams.get('id')) {
-      songId = url.searchParams.get('id')
-    }
-
-    // use path song id
-    if (url.pathname.replace('/song', '').match(/\d+/)) {
-      songId = url.pathname.replace('/song', '').match(/\d+/)[0]
-    }
-  }
-
-  const isUseSongHash = url.hash.startsWith('#/song?')
-  if (isUseSongHash) {
-    const paramsList = url.hash.replace('#/song?', '').split('&').filter(anchor => anchor.startsWith('id='))
-    if (paramsList[0]) songId = paramsList[0].split('=')[1]
-  }
-
-  if (!songId) return
-
-  return `//music.163.com/outchain/player?type=2&id=${songId}&auto=0&height=66`
-}
-
-export function getYoutubeVideoFrameLinkFromContentLink (link: string): string | void {
-  const url = new URL(link)
-
-  let v
-
-  const isShareLink = url.host === 'youtu.be'
-  if (isShareLink) {
-    v = url.pathname.slice(1)
-  }
-
-  const isBrowserLink = url.host === 'www.youtube.com'
-  if (isBrowserLink) {
-    v = url.searchParams.get('v')
-  }
-
-  if (!v) return
-
-  return `https://www.youtube.com/embed/${v}`
-
-  // if (!link.startsWith('https://www.youtube.com/watch')) return
-  //
-  // const url = new URL(link)
-  //
-  // if (!url.searchParams.has('v')) return
-  //
-  // const v = url.searchParams.get('v')
-  // return `https://www.youtube.com/embed/${v}`
 }
 
 export const documentGlobalEventBus = new class {

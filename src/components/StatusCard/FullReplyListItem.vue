@@ -43,16 +43,6 @@
         v-show="(status.spoiler_text ? shouldShowContentWhileSpoilerExists : true)"
         v-html="status.content"></mu-card-text>
 
-      <div v-if="neteaseMusicLink" class="netease-music-panel">
-        <iframe class="netease-music-iframe" frameborder="no" border="0" marginwidth="0" marginheight="0" height=86
-          :src="neteaseMusicLink"></iframe>
-      </div>
-
-      <div v-if="youtubeVideoLink" class="youtube-video-panel">
-        <iframe class="youtube-video-iframe" :height="youtubeVideoIFrameHeight" :src="youtubeVideoLink" frameborder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
-
       <div v-if="!status.reblog && hasLinkCardInfo" class="full-reply-link-preview-area">
         <link-preview-panel :cardInfo="cardMap[status.id]" />
       </div>
@@ -103,8 +93,7 @@ import * as moment from 'moment'
 import { mastodonentities } from "@/interface"
 import MediaPanel from './MediaPanel.vue'
 import LinkPreviewPanel from './LinkPreviewPanel.vue'
-import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromContentLink, getAccountAtName } from '@/util'
-import * as $ from "jquery"
+import { getAccountAtName } from '@/util'
 
 @Component({
   components: {
@@ -147,24 +136,6 @@ class FullReplyListItem extends Vue {
     return this.cardMap[this.status.id]
       && (Object.keys(this.cardMap[this.status.id]).length !== 0)
       && this.cardMap[this.status.id].type === 'link'
-  }
-
-  get contentLinkList () {
-    return [...$(this.status.content).find('a')].map(a => {
-      return a.getAttribute('href')
-    })
-  }
-
-  get neteaseMusicLink () {
-    return this.contentLinkList.map(link => {
-      return getNetEaseMusicFrameLinkFromContentLink(link)
-    }).filter(l => l)[0]
-  }
-
-  get youtubeVideoLink () {
-    return this.contentLinkList.map(link => {
-      return getYoutubeVideoFrameLinkFromContentLink(link)
-    }).filter(l => l)[0]
   }
 
   mounted () {

@@ -19,16 +19,6 @@
         v-show="(status.spoiler_text ? shouldShowContentWhileSpoilerExists : true)"
         class="status-content main-status-content" v-html="status.content" :style="mainStatusContentStyle" />
 
-      <div v-if="neteaseMusicLink" class="netease-music-panel">
-        <iframe class="netease-music-iframe" frameborder="no" border="0" marginwidth="0" marginheight="0" height=86
-          :src="neteaseMusicLink"></iframe>
-      </div>
-
-      <div v-if="youtubeVideoLink" class="youtube-video-panel">
-        <iframe class="youtube-video-iframe" :height="youtubeVideoIFrameHeight" :src="youtubeVideoLink" frameborder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
-
       <div v-if="!status.reblog && hasLinkCardInfo" class="main-link-preview-area">
         <mu-divider class="link-preview-divider" />
         <link-preview-panel :cardInfo="cardMap[status.id]" />
@@ -50,17 +40,6 @@
           </a>
           <mu-card-text v-if="status.reblog.content" class="status-content reblog-status-content"
             v-html="status.reblog.content" />
-        </div>
-
-        <div v-if="reblogNeteaseMusicLink" class="netease-music-panel">
-          <iframe class="netease-music-iframe" frameborder="no" border="0" marginwidth="0" marginheight="0" height=86
-            :src="reblogNeteaseMusicLink"></iframe>
-        </div>
-
-        <div v-if="reblogYoutubeVideoLink" class="youtube-video-panel">
-          <iframe class="youtube-video-iframe" :height="youtubeVideoIFrameHeight" :src="reblogYoutubeVideoLink"
-            frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
         </div>
 
         <div v-if="reblogHasLinkCardInfo" class="main-link-preview-area">
@@ -110,7 +89,6 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { State, Getter, Mutation } from 'vuex-class'
 import { mastodonentities } from '@/interface'
 import { StatusCardTypes } from '@/constant'
-import * as $ from 'jquery'
 
 import CardHeader from './CardHeader.vue'
 import MediaPanel from './MediaPanel.vue'
@@ -120,7 +98,7 @@ import SimpleActionBar from './SimpleActionBar.vue'
 import FullActionBar from './FullActionBar.vue'
 
 import VisibilitySelectPopOver from '@/components/VisibilitySelectPopOver.vue'
-import { getNetEaseMusicFrameLinkFromContentLink, getYoutubeVideoFrameLinkFromContentLink, getAccountAtName } from '@/util'
+import { getAccountAtName } from '@/util'
 
 @Component({
   components: {
@@ -181,42 +159,6 @@ class StatusCard extends Vue {
 
   get mainStatusCardInfo (): mastodonentities.Card {
     return this.cardMap[this.status.id]
-  }
-
-  get contentLinkList () {
-    return [...$(this.status.content).find('a')].map(a => {
-      return a.getAttribute('href')
-    })
-  }
-
-  get neteaseMusicLink () {
-    return this.contentLinkList.map(link => {
-      return getNetEaseMusicFrameLinkFromContentLink(link)
-    }).filter(l => l)[0]
-  }
-
-  get youtubeVideoLink () {
-    return this.contentLinkList.map(link => {
-      return getYoutubeVideoFrameLinkFromContentLink(link)
-    }).filter(l => l)[0]
-  }
-
-  get reblogContentLinkList () {
-    return this.status.reblog ? [...$(this.status.reblog.content).find('a')].map(a => {
-      return a.getAttribute('href')
-    }) : []
-  }
-
-  get reblogNeteaseMusicLink () {
-    return this.reblogContentLinkList.map(link => {
-      return getNetEaseMusicFrameLinkFromContentLink(link)
-    }).filter(l => l)[0]
-  }
-
-  get reblogYoutubeVideoLink () {
-    return this.reblogContentLinkList.map(link => {
-      return getYoutubeVideoFrameLinkFromContentLink(link)
-    }).filter(l => l)[0]
   }
 
   get hasLinkCardInfo () {
