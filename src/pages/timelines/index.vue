@@ -2,30 +2,28 @@
   <div>
     <div class="timelines-container" ref="timelinesContainer" v-loading="isInitLoading">
 
-      <template v-for="(timeLineName, index) in allTimeLineNameList">
-        <mu-load-more :key="index" @load="loadStatuses(true)" v-show="isTimeLineNameEqualCurrentRoute(timeLineName)"
-          :loading="!isInitLoading && isLoading" loading-text="">
-          <div v-masonry-container :style="statusCardsContainerStyle" class="status-cards-container">
+      <mu-load-more :key="currentTimeLineName" @load="loadStatuses(true)" :loading="!isInitLoading && isLoading"
+        loading-text="">
+        <div v-masonry-container :style="statusCardsContainerStyle" class="status-cards-container">
 
-            <post-status-stamp-card @click="showNewPostDialogPanel" class="status-card-container" :style="[statusCardStyle,
-              isTimeLineNameEqualCurrentRoute(timeLineName) && currentFocusCardId === '-1' && cardFocusStyle]" />
+          <post-status-stamp-card @click="showNewPostDialogPanel" class="status-card-container"
+            :style="[statusCardStyle, currentFocusCardId === '-1' && cardFocusStyle]" />
 
-            <template v-for="status in getRootStatuses(timeLineName.split('/')[0], timeLineName.split('/')[1])">
-              <status-card v-masonry-item class="status-card-container" :ref="`${timeLineName}_statusCard_${status.id}`"
-                @statusCardFocus="onStatusCardFocus(status.id)" :shouldCollapseContent="true" :key="status.id"
-                :status="status" :style="[statusCardStyle,
-                  isTimeLineNameEqualCurrentRoute(timeLineName) &&
-                  currentFocusCardId === status.id && cardFocusStyle]" />
-            </template>
+          <template
+            v-for="status in getRootStatuses(currentTimeLineName.split('/')[0], currentTimeLineName.split('/')[1])">
+            <status-card v-masonry-item class="status-card-container"
+              :ref="`${currentTimeLineName}_statusCard_${status.id}`" @statusCardFocus="onStatusCardFocus(status.id)"
+              :shouldCollapseContent="true" :key="status.id" :status="status" :style="[statusCardStyle,
+                currentFocusCardId === status.id && cardFocusStyle]" />
+          </template>
 
-            <p class="no-more-status-notice secondary-read-text-color"
-              v-if="currentTimeLineCannotLoadMore && (count === waterfallLineCount)">
-              {{ $t($i18nTags.timeLines.no_load_more_status_notice) }}
-            </p>
+          <p class="no-more-status-notice secondary-read-text-color"
+            v-if="currentTimeLineCannotLoadMore && (count === waterfallLineCount)">
+            {{ $t($i18nTags.timeLines.no_load_more_status_notice) }}
+          </p>
 
-          </div>
-        </mu-load-more>
-      </template>
+        </div>
+      </mu-load-more>
 
       <mu-button fab class="post-new-status-button" color="primary" v-show="!isPostStatusDialogOpening"
         @click="showNewPostDialogPanel">
@@ -50,7 +48,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Action, State, Getter } from 'vuex-class'
 import { RoutersInfo, TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
 import { mastodonentities } from '@/interface'
-import { isBaseTimeLine, documentGlobalEventBus } from '@/util'
+import { documentGlobalEventBus } from '@/util'
 import { scrollToTop } from '@/utils'
 import StatusCard from '@/components/StatusCard/index.vue'
 import PostStatusDialog from '@/components/PostStatusDialog.vue'
@@ -156,22 +154,19 @@ class TimeLines extends Vue {
     return result
   }
 
-  get isCurrentTimeLineRoute () {
-    // todo use meta?
-    return this.$route.path.startsWith('/timelines/')
+  get currentTimeLineName (): string {
+    const { timeLineType, hashName } = this
+
+    return hashName ? `${timeLineType}/${hashName}` : timeLineType
   }
 
   get currentRootStatuses (): Array<mastodonentities.Status> {
-    if (!this.isCurrentTimeLineRoute) return
-
     const { timeLineType, hashName } = this
 
     return this.getRootStatuses(timeLineType, hashName).filter(status => status.id)
   }
 
   get currentTimeLineCannotLoadMore () {
-    if (!this.isCurrentTimeLineRoute) return
-
     const { timeLineType, hashName } = this
 
     return this.noLoadMoreTimeLineList.indexOf(`${timeLineType}/${hashName}`) !== -1
@@ -181,7 +176,7 @@ class TimeLines extends Vue {
     return this.appStatus.documentWidth - UiWidthCheckConstants.DRAWER_DESKTOP_WIDTH
   }
 
-  get timeLineTypeAndHashName() {
+  get timeLineTypeAndHashName () {
     const route = this.$route
     let timeLineType = '', hashName = ''
     if (route.name === RoutersInfo.defaulttimelines.name) {
@@ -199,18 +194,16 @@ class TimeLines extends Vue {
     return { timeLineType, hashName }
   }
 
-  get timeLineType() {
+  get timeLineType () {
     return this.timeLineTypeAndHashName.timeLineType
   }
 
-  get hashName() {
+  get hashName () {
     return this.timeLineTypeAndHashName.hashName
   }
 
   @Watch('$route')
   async onRouteChanged () {
-    if (!this.isCurrentTimeLineRoute) return
-
     this.currentFocusCardId = noneCardFocusId
 
     if (!hasCurrentTimeLineInit({ timeLineType: this.timeLineType, hashName: this.hashName })) {
@@ -251,8 +244,6 @@ class TimeLines extends Vue {
 
     if (isLoadMore && this.currentTimeLineCannotLoadMore) return
 
-    if (!this.isCurrentTimeLineRoute) return
-
     if (this.isLoading) return
 
     this.isLoading = true
@@ -279,16 +270,6 @@ class TimeLines extends Vue {
     // todo handle history.back() event
     // use vue router?
     this.isPostStatusDialogOpening = true
-  }
-
-  isTimeLineNameEqualCurrentRoute (timeLineName: string): boolean {
-    const { timeLineType, hashName } = this
-
-    if (isBaseTimeLine(timeLineName)) {
-      return timeLineType === timeLineName
-    } else {
-      return `${timeLineType}/${hashName}` === timeLineName
-    }
   }
 
   get waterfallLineCount () {
@@ -327,7 +308,7 @@ class TimeLines extends Vue {
   }
 
   onTimeLinePageKeyDown (e: KeyboardEvent) {
-    if (!this.isCurrentTimeLineRoute || this.isPostStatusDialogOpening) return
+    if (this.isPostStatusDialogOpening) return
 
     const knownKeyList = ['j', 'k', 'Enter']
     if (knownKeyList.indexOf(e.key) === -1) return
