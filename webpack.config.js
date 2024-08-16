@@ -103,7 +103,10 @@ const config = {
       {
         test: /\.(jsx?)$/i,
         loader: "babel-loader",
-        exclude: [/([/\\])node_modules\1/],
+        exclude: {
+          and: [/([/\\])node_modules\1/],
+          not: /muse-ui(-loading|-message|-toast)?/
+        },
       },
       {
         test: /\.less$/i,
@@ -166,6 +169,7 @@ const config = {
   resolve: {
     alias: {
       "muse-ui$": "muse-ui/src/index.js",
+      "muse-ui/lib": "muse-ui/src",
       "muse-ui-loading$": "muse-ui-loading/src/index.js",
       "muse-ui-message$": "muse-ui-message/src/index.js",
       "muse-ui-toast$": "muse-ui-toast/src/index.js"
