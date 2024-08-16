@@ -199,7 +199,6 @@ const callback = env => {
             'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/zh-tw.js',
             'https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/locale/ja.js',
             'https://cdnjs.loli.net/ajax/libs/underscore.js/1.9.1/underscore-min.js',
-            'https://unpkg.com/muse-ui/dist/muse-ui.css',
             'https://gstatic.loli.net/s/materialicons/v46/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2',
           ],
           // workbox-webpack-plugin has some issues

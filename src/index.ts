@@ -16,6 +16,7 @@ import './directives'
 import { Sm, Md, Lg } from '@/components/Breakpoints'
 import DefaultLayout from '@/layouts/default/index.vue'
 import PlainLayout from '@/layouts/plain.vue'
+import 'muse-ui/dist/muse-ui.css'
 
 Vue.use({
   install (Vue) {
