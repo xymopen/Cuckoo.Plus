@@ -177,7 +177,7 @@ const config = {
 };
 
 /** @type {import('webpack-cli').CallableOption} */
-const callback = env => {
+const callback = (env, argv) => {
   /** @type {import('webpack').Configuration[]} */
   const overrides = [];
 
@@ -223,7 +223,7 @@ const callback = env => {
     // ForkTsCheckerConfig,
     VueAutoRoutingConfig,
     VueI18nConfig,
-    VueConfig(env),
+    VueConfig(env, argv),
     AssetsConfig,
     ...overrides
   );
