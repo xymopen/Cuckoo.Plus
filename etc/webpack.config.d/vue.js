@@ -37,7 +37,7 @@ const config = {
   }
 }
 
-/** @return {import('webpack').Configuration} */
+/** @type {import('webpack-cli').CallableOption} */
 export default env => {
   if (env !== "test") {
     return config

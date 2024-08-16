@@ -176,7 +176,8 @@ const config = {
   },
 };
 
-export default env => {
+/** @type {import('webpack-cli').CallableOption} */
+const callback = env => {
   /** @type {import('webpack').Configuration[]} */
   const overrides = [];
 
@@ -227,4 +228,6 @@ export default env => {
     AssetsConfig,
     ...overrides
   );
-};
+}
+
+export default callback;
