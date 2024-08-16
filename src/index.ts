@@ -4,7 +4,6 @@ import Message from 'muse-ui-message'
 import Loading from 'muse-ui-loading'
 import Vue from 'vue'
 import MuseUI from 'muse-ui'
-import 'muse-ui-loading/dist/muse-ui-loading.css'
 import i18n from './i18n'
 import store from './store'
 import router from './router'
@@ -16,7 +15,6 @@ import './directives'
 import { Sm, Md, Lg } from '@/components/Breakpoints'
 import DefaultLayout from '@/layouts/default/index.vue'
 import PlainLayout from '@/layouts/plain.vue'
-import 'muse-ui/dist/muse-ui.css'
 
 Vue.use({
   install (Vue) {

@@ -164,6 +164,12 @@ const config = {
     ],
   },
   resolve: {
+    alias: {
+      "muse-ui$": "muse-ui/src/index.js",
+      "muse-ui-loading$": "muse-ui-loading/src/index.js",
+      "muse-ui-message$": "muse-ui-message/src/index.js",
+      "muse-ui-toast$": "muse-ui-toast/src/index.js"
+    },
     extensions: [".ts", ".js"],
     plugins: [new TsconfigPathsPlugin({
       extensions: [".tsx", ".ts", ".jsx", ".js", ".vue"],
