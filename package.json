@@ -15,10 +15,9 @@
     "dev": "webpack serve --mode=development",
     "lint": "eslint -c .eslintrc.js --ext .tsx,.ts,.jsx,.js,.vue src/ lib/"
   },
-  "packageManager": "pnpm@9.7.1",
   "engines": {
     "node": "^20.15.0",
-    "pnpm": "9.7.1"
+    "pnpm": "^9.0.0"
   },
   "dependencies": {
     "@csstools/normalize.css": "^12.0.0",
