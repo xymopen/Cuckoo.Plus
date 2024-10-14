@@ -19,7 +19,6 @@ const stylesHandler = isProduction
   : "vue-style-loader";
 
 import PublicConfig from './etc/webpack.config.d/public.js';
-import EslintConfig from './etc/webpack.config.d/eslint.js';
 import ForkTsCheckerConfig from './etc/webpack.config.d/fork-ts-checker.js';
 import VueAutoRoutingConfig from './etc/webpack.config.d/vue-auto-routing.js';
 import VueI18nConfig from './etc/webpack.config.d/vue-i18n.js';
@@ -225,7 +224,6 @@ const callback = (env, argv) => {
     config,
     PublicConfig,
     // disable for now for too many errors
-    // EslintConfig,
     // ForkTsCheckerConfig,
     VueAutoRoutingConfig,
     VueI18nConfig,
