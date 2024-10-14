@@ -35,7 +35,6 @@ export default {
         legacy: true
       }
     ],
-    "@babel/plugin-proposal-class-properties",
     [
       "@babel/plugin-transform-runtime",
       {
