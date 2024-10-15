@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@vue/babel-sugar-composition-api-render-instance':
+    hash: tk7qyb25kh2zm5p4bs5qkhm5ki
+    path: patches/@vue__babel-sugar-composition-api-render-instance.patch
+
 importers:
 
   .:
@@ -5480,7 +5485,7 @@ snapshots:
       '@vue/babel-helper-vue-jsx-merge-props': 1.4.0
       '@vue/babel-plugin-transform-vue-jsx': 1.4.0(@babel/core@7.25.8)
       '@vue/babel-sugar-composition-api-inject-h': 1.4.0(@babel/core@7.25.8)
-      '@vue/babel-sugar-composition-api-render-instance': 1.4.0(@babel/core@7.25.8)
+      '@vue/babel-sugar-composition-api-render-instance': 1.4.0(patch_hash=tk7qyb25kh2zm5p4bs5qkhm5ki)(@babel/core@7.25.8)
       '@vue/babel-sugar-functional-vue': 1.4.0(@babel/core@7.25.8)
       '@vue/babel-sugar-inject-h': 1.4.0(@babel/core@7.25.8)
       '@vue/babel-sugar-v-model': 1.4.0(@babel/core@7.25.8)
@@ -5495,7 +5500,7 @@ snapshots:
       '@babel/core': 7.25.8
       '@babel/plugin-syntax-jsx': 7.25.7(@babel/core@7.25.8)
 
-  '@vue/babel-sugar-composition-api-render-instance@1.4.0(@babel/core@7.25.8)':
+  '@vue/babel-sugar-composition-api-render-instance@1.4.0(patch_hash=tk7qyb25kh2zm5p4bs5qkhm5ki)(@babel/core@7.25.8)':
     dependencies:
       '@babel/core': 7.25.8
       '@babel/plugin-syntax-jsx': 7.25.7(@babel/core@7.25.8)
