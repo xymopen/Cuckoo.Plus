@@ -25,7 +25,12 @@ export default {
         ]
       }
     ],
-    "@vue/babel-preset-jsx"
+    [
+      "@vue/babel-preset-jsx",
+      {
+        compositionAPI: true
+      }
+    ]
   ],
   plugins: [
     "@babel/plugin-syntax-dynamic-import",
