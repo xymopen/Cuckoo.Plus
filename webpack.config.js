@@ -182,6 +182,19 @@ const config = {
   externals: {
     // todo muse ui has bug
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          chunks: 'all',
+          test: /([\\/])node_modules\1/,
+          priority: 40,
+          enforce: true,
+        },
+      },
+    },
+  },
 };
 
 /** @type {import('webpack-cli').CallableOption} */
