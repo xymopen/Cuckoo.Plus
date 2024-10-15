@@ -1,10 +1,10 @@
 import * as api from '@/api'
-import { ref } from "vue"
+import { useLocalStorage } from "@vueuse/core"
 import { NotificationTypes } from '@/constant'
 import { mastodonentities } from "@/interface"
 import { ActionTree } from ".."
 
-export const notificationFilters = ref<string[]>([])
+export const notificationFilters = useLocalStorage<string[]>("notification-filters", [])
 
 const notifications: ActionTree = {
 
