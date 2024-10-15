@@ -130,6 +130,7 @@
             </div>
           </SettingsCard>
 
+          <ExperimentalSetting />
         </mu-card-actions>
       </mu-card>
 
@@ -152,6 +153,7 @@ import { State, Mutation, Action } from 'vuex-class'
 import { ThemeNames, I18nLocales, VisibilityTypes } from '@/constant'
 import * as moment from 'moment'
 import ThemeManager from '@/themes'
+import ExperimentalSetting from "@/pages-components/settings/experimental"
 import SettingsCard from '@/pages-components/settings/card'
 
 const ADD_NEW_THEME_OPTION = 'ADD_NEW_THEME_OPTION'
@@ -165,6 +167,7 @@ const presetThemeOptions = [
 
 @Component({
   components: {
+    ExperimentalSetting,
     SettingsCard
   }
 })
