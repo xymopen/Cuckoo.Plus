@@ -198,7 +198,10 @@ const callback = (env, argv) => {
       devtool: false,
 
       plugins: [
-        new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin({
+          filename: "css/[name].css",
+          chunkFilename: "css/[name].css",
+        }),
         // @ts-ignore
         new GenerateSW({
           additionalManifestEntries: [
