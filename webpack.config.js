@@ -30,8 +30,8 @@ const config = {
   entry: "./src/index.ts",
   output: {
     path: resolve("dist"),
-    filename: "js/[name].js",
-    chunkFilename: "js/[name].js",
+    hashFunction: 'xxhash64',
+    hashDigestLength: 16,
     clean: true,
   },
   devServer: {
@@ -195,12 +195,16 @@ const callback = (env, argv) => {
   if (isProduction) {
     overrides.push({
       mode: "production",
+      output: {
+        filename: "js/[name].[contenthash].js",
+        chunkFilename: "js/[name].[contenthash].js",
+      },
       devtool: false,
 
       plugins: [
         new MiniCssExtractPlugin({
-          filename: "css/[name].css",
-          chunkFilename: "css/[name].css",
+          filename: "css/[name].[contenthash].css",
+          chunkFilename: "css/[name].[contenthash].css",
         }),
         // @ts-ignore
         new GenerateSW({
@@ -220,6 +224,10 @@ const callback = (env, argv) => {
   } else {
     overrides.push({
       mode: "development",
+      output: {
+        filename: "js/[name].js",
+        chunkFilename: "js/[name].js",
+      },
       devtool: "source-map"
     })
   }
