@@ -24,6 +24,7 @@ import VueAutoRoutingConfig from './etc/webpack.config.d/vue-auto-routing.js';
 import VueI18nConfig from './etc/webpack.config.d/vue-i18n.js';
 import VueConfig from './etc/webpack.config.d/vue.js';
 import AssetsConfig from './etc/webpack.config.d/assets.js';
+import DotenvConfig from './etc/webpack.config.d/dotenv.js';
 
 /** @type {import('webpack').Configuration & { devServer: import('webpack-dev-server').Configuration }} */
 const config = {
@@ -42,13 +43,6 @@ const config = {
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     new webpack.ProgressPlugin(),
-    new webpack.DefinePlugin({
-      ...Object.fromEntries(
-        Object.entries(process.env)
-          .filter(([key]) => key.startsWith("npm_"))
-          .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
-      ),
-    }),
     new HtmlWebpackPlugin({
       scriptLoading: 'defer',
       templateParameters: (compilation, assets, assetTags, pluginOptions) => {
@@ -254,6 +248,7 @@ const callback = (env, argv) => {
     VueI18nConfig,
     VueConfig(env, argv),
     AssetsConfig,
+    DotenvConfig(env, argv),
     ...overrides
   );
 }

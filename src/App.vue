@@ -30,7 +30,7 @@ import ThemeEditPanel from '@/components/ThemeEditPanel.vue'
 import DefaultLayout from '@/layouts/default/index.vue'
 import PlainLayout from '@/layouts/plain.vue'
 
-const displayName = process.env.npm_package_displayName ?? 'Cuckoo+'
+const displayName = process.env.DISPLAY_NAME ?? 'Cuckoo+'
 
 @Component({
   components: {
