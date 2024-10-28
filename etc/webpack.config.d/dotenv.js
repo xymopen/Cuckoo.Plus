@@ -28,7 +28,11 @@ export default (env, argv) => {
   }, {});
 
   const plugin = new webpack.EnvironmentPlugin([
-    "DISPLAY_NAME"
+    "DISPLAY_NAME",
+    "HOMESERVER",
+    "CLIENT_ID",
+    "CLIENT_SECRET",
+    "ACCESS_TOKEN"
   ])
   plugin.defaultValues = Object.assign(
     Object.fromEntries(plugin.keys.map(key => [key, ""])),

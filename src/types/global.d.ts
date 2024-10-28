@@ -8,6 +8,10 @@ declare global {
   interface NodeProcess {
     env: {
       DISPLAY_NAME: string;
+      HOMESERVER: string;
+      CLIENT_ID: string;
+      CLIENT_SECRET: string;
+      ACCESS_TOKEN: string;
     } & any;
   }
 }

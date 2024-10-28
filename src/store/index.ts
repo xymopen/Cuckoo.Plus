@@ -31,13 +31,13 @@ const state = {
 
   OAuthInfo: {
     // todo encode
-    clientId: localStorage.getItem('clientId') || '',
-    clientSecret: localStorage.getItem('clientSecret') || '',
-    accessToken: localStorage.getItem('accessToken') || '',
+    clientId: process.env.CLIENT_ID || localStorage.getItem('clientId') || '',
+    clientSecret: process.env.CLIENT_SECRET || localStorage.getItem('clientSecret') || '',
+    accessToken: process.env.ACCESS_TOKEN || localStorage.getItem('accessToken') || '',
     code: localStorage.getItem('code') || ''
   },
 
-  mastodonServerUri: localStorage.getItem('mastodonServerUri') || '',
+  mastodonServerUri: process.env.HOMESERVER || localStorage.getItem('mastodonServerUri') || '',
 
   currentUserAccount: getLocalSetting('currentUserAccount', null) as mastodonentities.Account | null,
 
