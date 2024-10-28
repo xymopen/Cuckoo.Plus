@@ -171,7 +171,8 @@ const config = {
       "muse-ui/lib": "muse-ui/src",
       "muse-ui-loading$": "muse-ui-loading/src/index.js",
       "muse-ui-message$": "muse-ui-message/src/index.js",
-      "muse-ui-toast$": "muse-ui-toast/src/index.js"
+      "muse-ui-toast$": "muse-ui-toast/src/index.js",
+      "@vue/reactivity": "vue/dist/vue.runtime.esm.js"
     },
     extensions: [".ts", ".js"],
     plugins: [new TsconfigPathsPlugin({
