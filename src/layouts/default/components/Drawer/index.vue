@@ -7,22 +7,47 @@
 
     <mu-divider />
 
-    <mu-list :value="currentListValue" toggle-nested>
+    <mu-list :value="$route.path" toggle-nested>
 
-      <mu-list-item button v-for="(info, index) in baseRouterInfoList" :value="info.value" :nested="!!info.hashList"
-        :ripple="!info.hashList" :key="index" @click="!info.hashList && onBaseRouteItemClick(info.value)">
+      <mu-list-item button value="/timelines/home" ripple
+        @click="onBaseRouteItemClick('/timelines/home')">
         <mu-list-item-action>
-          <mu-icon :value="info.icon" />
+          <mu-icon value="home" />
         </mu-list-item-action>
-        <mu-list-item-title>{{ $t(info.title) }}</mu-list-item-title>
+        <mu-list-item-title>{{ $t($i18nTags.drawer.home) }}</mu-list-item-title>
 
-        <mu-list-item-action v-if="!!info.hashList">
+      </mu-list-item>
+
+      <mu-list-item button value="/timelines/public" ripple
+        @click="onBaseRouteItemClick('/timelines/public')">
+        <mu-list-item-action>
+          <mu-icon value="public" />
+        </mu-list-item-action>
+        <mu-list-item-title>{{ $t($i18nTags.drawer.public) }}</mu-list-item-title>
+
+      </mu-list-item>
+
+      <mu-list-item button value="/timelines/local" ripple
+        @click="onBaseRouteItemClick('/timelines/local')">
+        <mu-list-item-action>
+          <mu-icon value="people" />
+        </mu-list-item-action>
+        <mu-list-item-title>{{ $t($i18nTags.drawer.local) }}</mu-list-item-title>
+
+      </mu-list-item>
+
+      <mu-list-item button value="/timelines/tag" nested>
+        <mu-list-item-action>
+          <mu-icon value="loyalty" />
+        </mu-list-item-action>
+        <mu-list-item-title>{{ $t($i18nTags.drawer.tag) }}</mu-list-item-title>
+
+        <mu-list-item-action>
           <mu-icon class="toggle-icon" size="24" value="keyboard_arrow_down" />
         </mu-list-item-action>
 
-        <mu-list-item class="hash-list-item" v-if="info.hashList" slot="nested" button
-          v-for="(hashName, index) in info.hashList" :value="info.to + '/' + hashName" :key="index"
-          @click="onHashRouteItemClick(info.value, hashName)">
+        <mu-list-item class="hash-list-item" slot="nested" button v-for="(hashName, index) in hashList"
+          :value="'/timelines/tag/' + hashName" :key="index" @click="onHashRouteItemClick(hashName)">
           <mu-list-item-title># {{ hashName }}</mu-list-item-title>
           <mu-list-item-action>
             <mu-button class="delete-hash-btn" icon @click.stop="onDeleteHash(hashName)">
@@ -30,6 +55,14 @@
             </mu-button>
           </mu-list-item-action>
         </mu-list-item>
+
+      </mu-list-item>
+
+      <mu-list-item button value="profile" ripple @click="onProfileClick">
+        <mu-list-item-action>
+          <mu-icon value="person" />
+        </mu-list-item-action>
+        <mu-list-item-title>{{ $t($i18nTags.drawer.profile) }}</mu-list-item-title>
 
       </mu-list-item>
 
@@ -69,39 +102,6 @@ import { TimeLineTypes, UiWidthCheckConstants, RoutersInfo, I18nTags } from '@/c
 import Search from './Search.vue'
 import { Lg } from "packages/breakpoints/mixins"
 
-const baseRouterInfoList = [
-  {
-    value: TimeLineTypes.HOME,
-    title: I18nTags.drawer.home,
-    icon: 'home',
-    to: '/timelines/home'
-  },
-  {
-    value: TimeLineTypes.PUBLIC,
-    title: I18nTags.drawer.public,
-    icon: 'public',
-    to: '/timelines/public'
-  },
-  {
-    value: TimeLineTypes.LOCAL,
-    title: I18nTags.drawer.local,
-    icon: 'people',
-    to: '/timelines/local'
-  },
-  {
-    value: TimeLineTypes.TAG,
-    title: I18nTags.drawer.tag,
-    icon: 'loyalty',
-    to: '/timelines/tag',
-    hashList: []
-  },
-  {
-    value: 'profile',
-    title: I18nTags.drawer.profile,
-    icon: 'person'
-  }
-]
-
 export default defineComponent({
   mixins: [Lg('shouldDrawerDocked')],
   components: {
@@ -115,11 +115,8 @@ export default defineComponent({
   emits: ['update:isDrawerOpened'],
   computed: {
     ...mapState(['currentUserAccount', 'appStatus', 'mastodonServerUri']),
-    baseRouterInfoList () {
-      // @ts-ignore
-      baseRouterInfoList.find(info => info.value === TimeLineTypes.TAG).hashList = this.appStatus.settings.tags
-
-      return baseRouterInfoList
+    hashList() {
+      return this.appStatus.settings.tags
     },
     drawerStyle () {
       if (this.shouldDrawerDocked) {
@@ -131,15 +128,6 @@ export default defineComponent({
         return {
           width: `${UiWidthCheckConstants.DRAWER_MOBILE_WIDTH}px`
         }
-      }
-    },
-    currentListValue () {
-      if (this.$route.name === RoutersInfo.tagtimelines.name) {
-        return this.$route.path
-      } else {
-        const currentRouterInfo = baseRouterInfoList.find(routerInfo => routerInfo.to === this.$route.path)
-
-        if (currentRouterInfo) return currentRouterInfo.value
       }
     },
   },
@@ -156,36 +144,39 @@ export default defineComponent({
   methods: {
     ...mapMutations(['updateTags']),
     ...mapActions(['updateTimeLineStatuses']),
-    async onBaseRouteItemClick (clickedRouterValue: string) {
-      if (clickedRouterValue === 'profile') {
-        // todo
-        // this.$router.push({
-        //   name: 'accounts',
-        //   params: {
-        //     accountId: this.currentUserAccount.id
-        //   }
-        // })
+    onProfileClick() {
+      // todo
+      // this.$router.push({
+      //   name: 'accounts',
+      //   params: {
+      //     accountId: this.currentUserAccount.id
+      //   }
+      // })
 
-        return window.open(this.currentUserAccount.url, '_blank')
-      } else {
+      return window.open(this.currentUserAccount.url, '_blank')
+    },
+    async onBaseRouteItemClick (targetPath: string) {
+      const clickedRouterValue = ({
+        '/timelines/home': TimeLineTypes.HOME,
+        '/timelines/public': TimeLineTypes.PUBLIC,
+        '/timelines/local': TimeLineTypes.LOCAL,
+        '/timelines/tag': TimeLineTypes.TAG,
+      })[targetPath]
 
-        const targetPath = baseRouterInfoList.find(routerInfo => routerInfo.value === clickedRouterValue).to
-
-        if (isBaseTimeLine(clickedRouterValue) && (targetPath === this.$route.path)) {
-          this.fetchTimeLineStatuses(clickedRouterValue)
-        }
-
-        this.$router.push(targetPath)
-
-        window.scrollTo(0, 0)
+      if (isBaseTimeLine(clickedRouterValue) && (targetPath === this.$route.path)) {
+        this.fetchTimeLineStatuses(clickedRouterValue)
       }
+
+      this.$router.push(targetPath)
+
+      window.scrollTo(0, 0)
     },
 
-    async onHashRouteItemClick (clickedRouterValue: string, hashName: string) {
-      const targetPath = baseRouterInfoList.find(routerInfo => routerInfo.value === clickedRouterValue).to + '/' + hashName
+    async onHashRouteItemClick (hashName: string) {
+      const targetPath = '/timelines/tag/' + hashName
 
       if (targetPath === this.$route.path) {
-        this.fetchTimeLineStatuses(clickedRouterValue, hashName)
+        this.fetchTimeLineStatuses(TimeLineTypes.TAG, hashName)
       }
 
       this.$router.push(targetPath)
