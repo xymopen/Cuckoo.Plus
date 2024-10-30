@@ -87,8 +87,6 @@ const statuses: ActionTree = {
   async updateCardMap (store, statusId: string) {
     const targetStatus = store.state.statusMap[statusId]
 
-    if (targetStatus.pixiv_cards && targetStatus.pixiv_cards.length > 0) return
-
     if (store.state.cardMap[statusId]) return
 
     try {

@@ -58,8 +58,7 @@
       </div>
 
       <div class="full-reply-attachment-area">
-        <media-panel :mediaList="status.media_attachments" :pixivCards="status.pixiv_cards"
-          :sensitive="status.sensitive" />
+        <media-panel :mediaList="status.media_attachments" :sensitive="status.sensitive" />
       </div>
 
       <div class="reply-action-list">

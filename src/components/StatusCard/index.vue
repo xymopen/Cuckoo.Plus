@@ -34,10 +34,10 @@
         <link-preview-panel :cardInfo="cardMap[status.id]" />
       </div>
 
-      <mu-divider v-if="!status.media_attachments.length && !(status.pixiv_cards || []).length" />
+      <mu-divider v-if="!status.media_attachments.length" />
 
       <div v-if="!status.reblog" class="main-attachment-area">
-        <media-panel :mediaList="status.media_attachments" :pixivCards="status.pixiv_cards" :cardInfo="mainStatusCardInfo"
+        <media-panel :mediaList="status.media_attachments" :cardInfo="mainStatusCardInfo"
           :sensitive="status.sensitive" />
       </div>
 
@@ -69,7 +69,7 @@
         </div>
 
         <div class="reblog-attachment-area">
-          <media-panel :mediaList="status.reblog.media_attachments" :pixivCards="status.reblog.pixiv_cards"
+          <media-panel :mediaList="status.reblog.media_attachments"
             :cardInfo="cardMap[status.reblog.id]" :sensitive="status.reblog.sensitive" />
         </div>
       </div>

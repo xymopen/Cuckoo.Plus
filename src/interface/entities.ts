@@ -111,8 +111,6 @@ export namespace mastodonentities {
     language?: string
     // Whether this is the pinned status for the account that posted it
     pinned?: boolean
-    // for pawoo, pixiv_cards info
-    pixiv_cards?: Array<{ image_url: string, url: string }>
   }
 
   export interface Context {

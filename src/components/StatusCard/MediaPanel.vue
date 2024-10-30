@@ -60,8 +60,6 @@ class MediaPanel extends Vue {
 
   @Prop() mediaList?: Array<mastodonentities.Attachment>
 
-  @Prop({ default: () => [] }) pixivCards?: Array<{ url: string, image_url: string }>
-
   @Prop({ default: () => { } }) cardInfo: mastodonentities.Card
 
   @Prop() sensitive?: boolean
@@ -74,17 +72,8 @@ class MediaPanel extends Vue {
 
   onLightBoxClick () { }
 
-  get fixedPixivCards () {
-    if (this.mediaList.length) {
-      return []
-    }
-
-    return this.pixivCards
-  }
-
   get fixedCardInfo () {
-    if (this.mediaList.length ||
-      this.fixedPixivCards.length) {
+    if (this.mediaList.length) {
       return null
     }
 
@@ -140,12 +129,6 @@ class MediaPanel extends Vue {
         }
       }
 
-      // for pixiv cards and photo type card info
-      if (this.fixedPixivCards.length === 1) {
-        // pixiv cards media size is 1050 * 550 by now
-        aspect = 1050 / 550
-      }
-
       if (this.fixedCardInfo) {
         aspect = this.fixedCardInfo.width / this.fixedCardInfo.height
       }
@@ -192,10 +175,6 @@ class MediaPanel extends Vue {
       return { url, type, previewUrl: item.preview_url }
     })
 
-    const pixivCardsPart = this.fixedPixivCards.map(item => {
-      return { url: item.image_url, type: this.mediaTypes.IMAGE }
-    })
-
     const photoCardPart = []
     if (this.fixedCardInfo) {
       photoCardPart.push({
@@ -204,7 +183,7 @@ class MediaPanel extends Vue {
       })
     }
 
-    return [...mediaListPart, ...pixivCardsPart, ...photoCardPart]
+    return [...mediaListPart, ...photoCardPart]
   }
 
   get mediaAreaClass () {
