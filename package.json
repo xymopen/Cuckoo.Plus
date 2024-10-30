@@ -147,7 +147,8 @@
   "homepage": "https://github.com/xymopen/Cuckoo.Plus#README",
   "pnpm": {
     "patchedDependencies": {
-      "@vue/babel-sugar-composition-api-render-instance": "patches/@vue__babel-sugar-composition-api-render-instance.patch"
+      "@vue/babel-sugar-composition-api-render-instance": "patches/@vue__babel-sugar-composition-api-render-instance.patch",
+      "vuex": "patches/vuex.patch"
     }
   }
 }
