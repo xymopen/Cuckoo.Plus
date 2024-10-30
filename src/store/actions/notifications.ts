@@ -1,8 +1,9 @@
 import * as api from '@/api'
 import { NotificationTypes } from '@/constant'
 import { mastodonentities } from "@/interface"
+import { ActionTree } from ".."
 
-const notifications = {
+const notifications: ActionTree = {
 
   async updateNotifications ({ commit, state, dispatch }, { isLoadMore, isFetchMore } = {
     isLoadMore: false,

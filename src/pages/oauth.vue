@@ -41,7 +41,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Mutation, State } from 'vuex-class'
 import { apps } from '@/api'
-import { cuckoostore } from '@/interface'
+import { State as StoreState } from '@/store'
 import { checkShouldRegisterApplication } from '@/util'
 
 // the first step, ask for mastodon OAuth Access token
@@ -70,7 +70,7 @@ function isURL (str) {
 })
 class OAuth extends Vue {
 
-  @State('OAuthInfo') OAuthInfo: cuckoostore.OAuthInfo
+  @State('OAuthInfo') OAuthInfo: StoreState["OAuthInfo"]
 
   @Mutation('updateMastodonServerUri') updateMastodonServerUri
 

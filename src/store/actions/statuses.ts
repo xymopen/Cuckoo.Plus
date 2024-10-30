@@ -1,5 +1,6 @@
 import * as api from '@/api'
 import { TimeLineTypes } from '@/constant'
+import { ActionTree } from ".."
 
 interface postStatusFormData {
   // The text of the status
@@ -18,7 +19,7 @@ interface postStatusFormData {
   language?: string
 }
 
-const statuses = {
+const statuses: ActionTree = {
   async fetchStatusById ({ commit, dispatch }, statusId: string) {
     try {
       const result = await api.statuses.getStatusById(statusId)

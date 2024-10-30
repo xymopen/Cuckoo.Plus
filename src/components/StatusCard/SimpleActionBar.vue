@@ -38,7 +38,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { State, Getter, Action } from 'vuex-class'
 import { I18nLocales, VisibilityTypes } from '@/constant'
-import { mastodonentities, cuckoostore } from '@/interface'
+import { mastodonentities } from '@/interface'
 
 @Component({})
 class SimpleActionBar extends Vue {

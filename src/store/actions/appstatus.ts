@@ -1,8 +1,8 @@
 import { getTargetStatusesList } from '@/util'
 import * as Api from '@/api'
-import { mastodonentities } from "@/interface"
+import { ActionTree } from ".."
 
-const appStatus = {
+const appStatus: ActionTree = {
   loadStreamStatusesPool ({ commit, state }, { timeLineType, hashName }) {
     const targetStreamPool = getTargetStatusesList(state.appStatus.streamStatusesPool, timeLineType, hashName)
 

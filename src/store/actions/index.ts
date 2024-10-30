@@ -6,8 +6,9 @@ import appstatus from './appstatus'
 import relationships from './relationships'
 import accounts from './accounts'
 import { mastodonentities } from "@/interface"
+import { ActionTree } from ".."
 
-const actions = {
+const actions: ActionTree = {
   ...timelines,
   ...statuses,
   ...notifications,

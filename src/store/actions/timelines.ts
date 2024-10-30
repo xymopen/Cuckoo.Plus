@@ -2,6 +2,7 @@ import * as api from '@/api'
 import { mastodonentities } from '@/interface'
 import { isBaseTimeLine } from '@/util'
 import { TimeLineTypes } from '@/constant'
+import { ActionTree } from ".."
 
 export default {
   async updateTimeLineStatuses ({ commit, dispatch, state }, { timeLineType, hashName, isLoadMore, isFetchMore }: {
@@ -83,4 +84,4 @@ export default {
       throw e
     }
   }
-}
+} satisfies ActionTree

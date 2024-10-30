@@ -1,7 +1,8 @@
 import * as Api from '@/api'
 import { mastodonentities } from "@/interface"
+import { ActionTree } from '..'
 
-const accounts = {
+const accounts: ActionTree = {
   async followAccountById ({ commit }, id: string) {
     try {
       const result = await Api.accounts.followAccountById(id)

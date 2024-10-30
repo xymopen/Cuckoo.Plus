@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import { cuckoostore } from '@/interface'
 import { TimeLineTypes } from '@/constant'
 import { isBaseTimeLine } from '@/util'
+import { MutationTree } from ".."
 
 export default {
-  setTimeLineStatuses (state: cuckoostore.stateInfo, { newStatusIdList, timeLineType, hashName }) {
+  setTimeLineStatuses (state, { newStatusIdList, timeLineType, hashName }) {
     if (isBaseTimeLine(timeLineType)) {
       Vue.set(state.timelines, timeLineType, newStatusIdList)
     } else {
@@ -14,7 +14,7 @@ export default {
     }
   },
 
-  pushTimeLineStatuses (state: cuckoostore.stateInfo, { newStatusIdList, timeLineType, hashName }) {
+  pushTimeLineStatuses (state, { newStatusIdList, timeLineType, hashName }) {
     let targetTimeLines
     if (isBaseTimeLine(timeLineType)) {
       targetTimeLines = state.timelines[timeLineType]
@@ -30,7 +30,7 @@ export default {
     targetTimeLines.push(...newStatusIdList)
   },
 
-  unShiftTimeLineStatuses (state: cuckoostore.stateInfo, { newStatusIdList, timeLineType, hashName }) {
+  unShiftTimeLineStatuses (state, { newStatusIdList, timeLineType, hashName }) {
     let targetTimeLines
     if (isBaseTimeLine(timeLineType)) {
       targetTimeLines = state.timelines[timeLineType]
@@ -46,7 +46,7 @@ export default {
     targetTimeLines.unshift(...newStatusIdList)
   },
 
-  deleteStatusFromTimeLine (state: cuckoostore.stateInfo, statusId: string) {
+  deleteStatusFromTimeLine (state, statusId: string) {
     Object.keys(state.timelines).forEach(timeLineType => {
       if (isBaseTimeLine(timeLineType)) {
         const currentTimeLineList = state.timelines[timeLineType]
@@ -69,4 +69,4 @@ export default {
       }
     })
   }
-}
+} satisfies MutationTree

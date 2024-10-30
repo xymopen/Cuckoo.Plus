@@ -1,9 +1,15 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, {
+  GetterTree as VuexGetterTree,
+  ActionTree as VuexActionTree,
+  MutationTree as VuexMutationTree,
+  ModuleTree as VuexModuleTree,
+  Plugin as VuexPlugin,
+} from 'vuex'
 import mutations from './mutations'
 import actions from './actions'
 import getters from './getters'
-import { cuckoostore } from '@/interface'
+import { mastodonentities } from '@/interface/entities'
 import { UiWidthCheckConstants, ThemeNames, I18nLocales, VisibilityTypes } from '@/constant'
 import { TimeLineTypes } from '@/constant'
 
@@ -21,7 +27,7 @@ function getLocalSetting (tag, defaultValue) {
   return parsedData
 }
 
-const state: cuckoostore.stateInfo = {
+const state = {
 
   OAuthInfo: {
     // todo encode
@@ -33,28 +39,39 @@ const state: cuckoostore.stateInfo = {
 
   mastodonServerUri: localStorage.getItem('mastodonServerUri') || '',
 
-  currentUserAccount: getLocalSetting('currentUserAccount', null),
+  currentUserAccount: getLocalSetting('currentUserAccount', null) as mastodonentities.Account | null,
 
   timelines: {
-    home: getLocalSetting('home', []),
-    public: [],
-    direct: [],
-    local: [],
-    tag: {},
-    list: {}
+    home: getLocalSetting('home', []) as string[],
+    public: [] as string[],
+    direct: [] as string[],
+    local: [] as string[],
+    tag: {} as Record<string, string[]>,
+    list: {} as Record<string, string[]>
   },
 
-  contextMap: getLocalSetting('contextMap', {}),
+  contextMap: getLocalSetting('contextMap', {}) as {
+    [statusId: string]: {
+      ancestors: Array<string>
+      descendants: Array<string>
+    }
+  },
 
-  statusMap: getLocalSetting('statusMap', {}),
+  statusMap: getLocalSetting('statusMap', {}) as {
+    [statusId: string]: mastodonentities.Status
+  },
 
-  cardMap: getLocalSetting('cardMap', {}),
+  cardMap: getLocalSetting('cardMap', {}) as {
+    [statusId: string]: mastodonentities.Card
+  },
 
-  customEmojis: getLocalSetting('customEmojis', []),
+  customEmojis: getLocalSetting('customEmojis', []) as mastodonentities.Emoji[],
 
-  notifications: [],
+  notifications: [] as mastodonentities.Notification[],
 
-  relationships: {},
+  relationships: {} as {
+    [id: string]: mastodonentities.Relationship
+  },
 
   appStatus: {
     documentWidth: window.innerWidth,
@@ -70,29 +87,29 @@ const state: cuckoostore.stateInfo = {
     shouldShowThemeEditPanel: false,
 
     streamStatusesPool: {
-      home: [],
-      public: [],
-      direct: [],
-      local: [],
-      tag: {},
-      list: {}
+      home: [] as string[],
+      public: [] as string[],
+      direct: [] as string[],
+      local: [] as string[],
+      tag: {} as Record<string, string[]>,
+      list: {} as Record<string, string[]>
     },
 
     settings: {
-      multiLineMode: getLocalSetting('multiLineMode', true),
-      maximumNumberOfColumnsInMultiLineMode: getLocalSetting('maximumNumberOfColumnsInMultiLineMode', 3),
-      showSensitiveContentMode: getLocalSetting('showSensitiveContentMode', false),
-      realTimeLoadStatusMode: getLocalSetting('realTimeLoadStatusMode', false),
-      autoExpandSpoilerTextMode: getLocalSetting('autoExpandSpoilerTextMode', false),
-      postMediaAsSensitiveMode: getLocalSetting('postMediaAsSensitiveMode', false),
+      multiLineMode: getLocalSetting('multiLineMode', true) as boolean,
+      maximumNumberOfColumnsInMultiLineMode: getLocalSetting('maximumNumberOfColumnsInMultiLineMode', 3) as number,
+      showSensitiveContentMode: getLocalSetting('showSensitiveContentMode', false) as boolean,
+      realTimeLoadStatusMode: getLocalSetting('realTimeLoadStatusMode', false) as boolean,
+      autoExpandSpoilerTextMode: getLocalSetting('autoExpandSpoilerTextMode', false) as boolean,
+      postMediaAsSensitiveMode: getLocalSetting('postMediaAsSensitiveMode', false) as boolean,
       theme: localStorage.getItem('theme') || ThemeNames.GOOGLE_PLUS,
-      tags: getLocalSetting('tags', ['hello']),
-      locale: localStorage.getItem('locale') || I18nLocales.EN,
-      postPrivacy: localStorage.getItem('postPrivacy') || VisibilityTypes.PUBLIC,
-      onlyMentionTargetUserMode: getLocalSetting('onlyMentionTargetUserMode', false),
+      tags: getLocalSetting('tags', ['hello']) as string[],
+      locale: localStorage.getItem('locale') || I18nLocales.EN as string,
+      postPrivacy: localStorage.getItem('postPrivacy') || VisibilityTypes.PUBLIC as string,
+      onlyMentionTargetUserMode: getLocalSetting('onlyMentionTargetUserMode', false) as boolean,
       muteMap: {
-        statusList: getLocalSetting('statusMuteList', []),
-        userList: getLocalSetting('userMuteList', [])
+        statusList: getLocalSetting('statusMuteList', []) as string[],
+        userList: getLocalSetting('userMuteList', []) as string[]
       },
     },
 
@@ -105,6 +122,13 @@ const store = new Vuex.Store({
   actions,
   getters
 })
+
+export type State = typeof state
+export type GetterTree = VuexGetterTree<typeof state, typeof state>;
+export type ActionTree = VuexActionTree<typeof state, typeof state>;
+export type MutationTree = VuexMutationTree<typeof state>;
+export type ModuleTree = VuexModuleTree<typeof state>;
+export type Plugin = VuexPlugin<typeof state>[];
 
 // TODO: We properly need to find a better persist solution
 // Also localStorage is not considered secured and

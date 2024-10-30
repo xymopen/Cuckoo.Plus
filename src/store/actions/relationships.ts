@@ -1,7 +1,8 @@
 import * as Api from '@/api'
 import { mastodonentities } from "@/interface"
+import { ActionTree } from ".."
 
-const relationships = {
+const relationships: ActionTree = {
   async updateRelationships ({ commit }, { idList }: { idList: Array<string> }) {
     try {
       const result = await Api.accounts.fetchRelationships(idList || [])

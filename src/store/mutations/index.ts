@@ -2,16 +2,17 @@ import Vue from 'vue'
 import timelinesMutations from './timelines'
 import notificationsMutations from './notifications'
 import appStatusMutations from './appstatus'
-import { cuckoostore, mastodonentities } from '@/interface'
+import { mastodonentities } from '@/interface'
 import { formatHtml, formatAccountDisplayName } from '@/util'
+import { MutationTree } from ".."
 
 function formatStatusContent (status: mastodonentities.Status) {
   return formatHtml(status.content, { externalEmojis: status.emojis })
 }
 
-const oAuthInfoMutations = {
+const oAuthInfoMutations: MutationTree = {
 
-  clearAllOAuthInfo (state: cuckoostore.stateInfo) {
+  clearAllOAuthInfo (state) {
     state.OAuthInfo.clientId = ''
     state.OAuthInfo.clientSecret = ''
     state.OAuthInfo.code = ''
@@ -20,7 +21,7 @@ const oAuthInfoMutations = {
     localStorage.clear()
   },
 
-  updateClientInfo (state: cuckoostore.stateInfo, { clientId, clientSecret }) {
+  updateClientInfo (state, { clientId, clientSecret }) {
     state.OAuthInfo.clientId = clientId
     state.OAuthInfo.clientSecret = clientSecret
 
@@ -28,21 +29,21 @@ const oAuthInfoMutations = {
     localStorage.setItem('clientSecret', clientSecret)
   },
 
-  updateOAuthCode (state: cuckoostore.stateInfo, code: string) {
+  updateOAuthCode (state, code: string) {
     state.OAuthInfo.code = code
 
     localStorage.setItem('code', code)
   },
 
-  updateOAuthAccessToken (state: cuckoostore.stateInfo, accessToken: string) {
+  updateOAuthAccessToken (state, accessToken: string) {
     state.OAuthInfo.accessToken = accessToken
 
     localStorage.setItem('accessToken', accessToken)
   }
 }
 
-const statusesMutations = {
-  updateStatusMap (state: cuckoostore.stateInfo, newStatusMap) {
+const statusesMutations: MutationTree = {
+  updateStatusMap (state, newStatusMap) {
     Object.keys(newStatusMap).forEach(statusId => {
       // format content
       const newStatus: mastodonentities.Status = newStatusMap[statusId]
@@ -66,11 +67,11 @@ const statusesMutations = {
     })
   },
 
-  removeStatusFromStatusMapById (state: cuckoostore.stateInfo, statusId: string) {
+  removeStatusFromStatusMapById (state, statusId: string) {
     Vue.set(state.statusMap, statusId, undefined)
   },
 
-  updateFavouriteStatusById (state: cuckoostore.stateInfo, { favourited, mainStatusId, targetStatusId, notSelfOperate }) {
+  updateFavouriteStatusById (state, { favourited, mainStatusId, targetStatusId, notSelfOperate }) {
     let targetStatus
     if (mainStatusId === targetStatusId) {
       targetStatus = state.statusMap[targetStatusId]
@@ -88,7 +89,7 @@ const statusesMutations = {
       targetStatus.favourites_count + 1 : targetStatus.favourites_count - 1)
   },
 
-  updateReblogStatusById (state: cuckoostore.stateInfo, { reblogged, mainStatusId, targetStatusId, notSelfOperate }) {
+  updateReblogStatusById (state, { reblogged, mainStatusId, targetStatusId, notSelfOperate }) {
     let targetStatus
     if (mainStatusId === targetStatusId) {
       targetStatus = state.statusMap[targetStatusId]
@@ -107,14 +108,14 @@ const statusesMutations = {
   }
 }
 
-const mutations = {
-  updateMastodonServerUri (state: cuckoostore.stateInfo, mastodonServerUri: string) {
+const mutations: MutationTree = {
+  updateMastodonServerUri (state, mastodonServerUri: string) {
     state.mastodonServerUri = mastodonServerUri
 
     localStorage.setItem('mastodonServerUri', mastodonServerUri)
   },
 
-  updateCurrentUserAccount (state: cuckoostore.stateInfo, currentUserAccount: mastodonentities.Account) {
+  updateCurrentUserAccount (state, currentUserAccount: mastodonentities.Account) {
     currentUserAccount.display_name = formatAccountDisplayName(currentUserAccount)
 
     state.currentUserAccount = currentUserAccount
@@ -122,19 +123,19 @@ const mutations = {
     localStorage.setItem('currentUserAccount', JSON.stringify(currentUserAccount))
   },
 
-  updateCustomEmojis (state: cuckoostore.stateInfo, customEmojis: Array<mastodonentities.Emoji>) {
+  updateCustomEmojis (state, customEmojis: Array<mastodonentities.Emoji>) {
     state.customEmojis = customEmojis
 
     localStorage.setItem('customEmojis', JSON.stringify(customEmojis))
   },
 
-  updateContextMap (state: cuckoostore.stateInfo, newContextMap) {
+  updateContextMap (state, newContextMap) {
     Object.keys(newContextMap).forEach(statusId => {
       Vue.set(state.contextMap, statusId, newContextMap[statusId])
     })
   },
 
-  updateCardMap (state: cuckoostore.stateInfo, newCardMap) {
+  updateCardMap (state, newCardMap) {
     Object.keys(newCardMap).forEach(statusId => {
       Vue.set(state.cardMap, statusId, newCardMap[statusId])
     })

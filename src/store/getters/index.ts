@@ -1,8 +1,9 @@
-import { cuckoostore, mastodonentities } from '@/interface'
+import { mastodonentities } from '@/interface'
 import { isBaseTimeLine } from '@/util'
 import { UiWidthCheckConstants } from '@/constant'
+import { GetterTree } from ".."
 
-const accounts = {
+const accounts: GetterTree = {
   getAccountDisplayName () {
     return (account: mastodonentities.Account) => account.display_name || account.username || account.acct
   },
@@ -12,8 +13,8 @@ const accounts = {
   }
 }
 
-const timelines = {
-  getRootStatuses (state: cuckoostore.stateInfo) {
+const timelines: GetterTree = {
+  getRootStatuses (state) {
     return (timeLineType: string, hashName?: string): Array<mastodonentities.Status> => {
       const targetStatusIdList = isBaseTimeLine(timeLineType) ? state.timelines[timeLineType] :
         state.timelines[timeLineType][hashName]
@@ -35,19 +36,19 @@ const timelines = {
   }
 }
 
-const getters = {
+const getters: GetterTree = {
   ...accounts,
   ...timelines,
 
-  isOAuthUser (state: cuckoostore.stateInfo) {
+  isOAuthUser (state) {
     return state.OAuthInfo.accessToken
   },
 
-  isMobileMode (state: cuckoostore.stateInfo) {
+  isMobileMode (state) {
     return state.appStatus.documentWidth < UiWidthCheckConstants.DRAWER_DOCKING_BOUNDARY
   },
 
-  shouldDialogFullScreen (state: cuckoostore.stateInfo) {
+  shouldDialogFullScreen (state) {
     return state.appStatus.documentWidth <= UiWidthCheckConstants.POST_STATUS_DIALOG_TOGGLE_WIDTH
   }
 }

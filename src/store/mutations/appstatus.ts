@@ -1,69 +1,69 @@
 import Vue from 'vue'
 import { getTargetStatusesList } from '@/util'
 import { ThemeNames } from '@/constant'
-import { cuckoostore } from '@/interface'
 import ThemeManager from '@/themes'
+import { MutationTree } from ".."
 
 export default {
-  updateDrawerOpenStatus (state: cuckoostore.stateInfo, isDrawerOpened: boolean) {
+  updateDrawerOpenStatus (state, isDrawerOpened: boolean) {
     state.appStatus.isDrawerOpened = isDrawerOpened
   },
 
-  updateNotificationsPanelStatus (state: cuckoostore.stateInfo, isNotificationsPanelOpened: boolean) {
+  updateNotificationsPanelStatus (state, isNotificationsPanelOpened: boolean) {
     state.appStatus.isNotificationsPanelOpened = isNotificationsPanelOpened
   },
 
-  updateUnreadNotificationCount (state: cuckoostore.stateInfo, count: number) {
+  updateUnreadNotificationCount (state, count: number) {
     state.appStatus.unreadNotificationCount = count
   },
 
-  updateDocumentWidth (state: cuckoostore.stateInfo) {
+  updateDocumentWidth (state) {
     state.appStatus.documentWidth = window.innerWidth
   },
 
-  updateTheme (state: cuckoostore.stateInfo, newThemeName: string) {
+  updateTheme (state, newThemeName: string) {
     state.appStatus.settings.theme = newThemeName
     localStorage.setItem('theme', newThemeName)
   },
 
-  updateTags (state: cuckoostore.stateInfo, newTags: Array<string>) {
+  updateTags (state, newTags: Array<string>) {
     Vue.set(state.appStatus.settings, 'tags', newTags)
     localStorage.setItem('tags', JSON.stringify(newTags))
   },
 
-  updateMultiLineMode (state: cuckoostore.stateInfo, newMode: boolean) {
+  updateMultiLineMode (state, newMode: boolean) {
     state.appStatus.settings.multiLineMode = newMode
     localStorage.setItem('multiLineMode', JSON.stringify(newMode))
   },
 
-  updateShowSensitiveContentMode (state: cuckoostore.stateInfo, newMode: boolean) {
+  updateShowSensitiveContentMode (state, newMode: boolean) {
     state.appStatus.settings.showSensitiveContentMode = newMode
     localStorage.setItem('showSensitiveContentMode', JSON.stringify(newMode))
   },
 
-  updateRealTimeLoadStatusMode (state: cuckoostore.stateInfo, newMode: boolean) {
+  updateRealTimeLoadStatusMode (state, newMode: boolean) {
     state.appStatus.settings.realTimeLoadStatusMode = newMode
     localStorage.setItem('realTimeLoadStatusMode', JSON.stringify(newMode))
   },
 
-  updateLocale (state: cuckoostore.stateInfo, newLocale: string) {
+  updateLocale (state, newLocale: string) {
     state.appStatus.settings.locale = newLocale
     localStorage.setItem('locale', newLocale)
   },
 
-  updateMuteStatusList (state: cuckoostore.stateInfo, statusId: string) {
+  updateMuteStatusList (state, statusId: string) {
     const statusList: Array<string> = state.appStatus.settings.muteMap.statusList
     if (statusList.indexOf(statusId) === -1) statusList.push(statusId)
     localStorage.setItem('statusMuteList', JSON.stringify(statusList))
   },
 
-  updateMuteUserList (state: cuckoostore.stateInfo, userId: string) {
+  updateMuteUserList (state, userId: string) {
     const userList: Array<string> = state.appStatus.settings.muteMap.userList
     if (userList.indexOf(userId) === -1) userList.push(userId)
     localStorage.setItem('userMuteList', JSON.stringify(userList))
   },
 
-  unShiftStreamStatusesPool (state: cuckoostore.stateInfo, { newStatusIdList, timeLineType, hashName }) {
+  unShiftStreamStatusesPool (state, { newStatusIdList, timeLineType, hashName }) {
     const targetStatusesPool = getTargetStatusesList(state.appStatus.streamStatusesPool, timeLineType, hashName)
     newStatusIdList = newStatusIdList.filter(id => {
       return targetStatusesPool.indexOf(id) === -1
@@ -72,42 +72,42 @@ export default {
     targetStatusesPool.unshift(...newStatusIdList)
   },
 
-  clearStreamStatusesPool (state: cuckoostore.stateInfo, { timeLineType, hashName }) {
+  clearStreamStatusesPool (state, { timeLineType, hashName }) {
     const targetStatusesPool = getTargetStatusesList(state.appStatus.streamStatusesPool, timeLineType, hashName)
     targetStatusesPool.splice(0, targetStatusesPool.length)
   },
 
-  updatePostPrivacy (state: cuckoostore.stateInfo, newPostPrivacy: string) {
+  updatePostPrivacy (state, newPostPrivacy: string) {
     state.appStatus.settings.postPrivacy = newPostPrivacy
     localStorage.setItem('postPrivacy', newPostPrivacy)
   },
 
-  updatePostMediaAsSensitiveMode (state: cuckoostore.stateInfo, newMode: boolean) {
+  updatePostMediaAsSensitiveMode (state, newMode: boolean) {
     state.appStatus.settings.postMediaAsSensitiveMode = newMode
     localStorage.setItem('postMediaAsSensitiveMode', JSON.stringify(newMode))
   },
 
-  updateOnlyMentionTargetUserMode (state: cuckoostore.stateInfo, newMode: boolean) {
+  updateOnlyMentionTargetUserMode (state, newMode: boolean) {
     state.appStatus.settings.onlyMentionTargetUserMode = newMode
     localStorage.setItem('onlyMentionTargetUserMode', JSON.stringify(newMode))
   },
 
-  updateMaximumNumberOfColumnsInMultiLineMode (state: cuckoostore.stateInfo, newNumber: number) {
+  updateMaximumNumberOfColumnsInMultiLineMode (state, newNumber: number) {
     state.appStatus.settings.maximumNumberOfColumnsInMultiLineMode = newNumber
     localStorage.setItem('maximumNumberOfColumnsInMultiLineMode', JSON.stringify(newNumber))
   },
 
-  updateAutoExpandSpoilerTextMode (state: cuckoostore.stateInfo, newMode: boolean) {
+  updateAutoExpandSpoilerTextMode (state, newMode: boolean) {
     state.appStatus.settings.autoExpandSpoilerTextMode = newMode
     localStorage.setItem('autoExpandSpoilerTextMode', JSON.stringify(newMode))
   },
 
-  updateIsEditingThemeMode (state: cuckoostore.stateInfo, newMode: boolean) {
+  updateIsEditingThemeMode (state, newMode: boolean) {
     state.appStatus.isEditingThemeMode = newMode
     state.appStatus.shouldShowThemeEditPanel = newMode
   },
 
-  updateShouldShowThemeEditPanel (state: cuckoostore.stateInfo, show: boolean) {
+  updateShouldShowThemeEditPanel (state, show: boolean) {
     state.appStatus.shouldShowThemeEditPanel = show
   }
-}
+} satisfies MutationTree

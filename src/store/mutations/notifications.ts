@@ -1,9 +1,10 @@
 import Vue from 'vue'
-import { cuckoostore, mastodonentities } from '@/interface'
+import { mastodonentities } from '@/interface'
 import { formatAccountDisplayName, formatHtml } from '@/util'
+import { MutationTree } from ".."
 
 export default {
-  unShiftNotification (state: cuckoostore.stateInfo, newNotifications: Array<mastodonentities.Notification>) {
+  unShiftNotification (state, newNotifications: Array<mastodonentities.Notification>) {
     newNotifications.forEach(notification => {
       if (notification.account) {
         notification.account.display_name = formatAccountDisplayName(notification.account)
@@ -15,13 +16,13 @@ export default {
     state.notifications = newNotifications.concat(state.notifications)
   },
 
-  pushNotifications (state: cuckoostore.stateInfo, newNotifications: Array<mastodonentities.Notification>) {
+  pushNotifications (state, newNotifications: Array<mastodonentities.Notification>) {
     state.notifications = state.notifications.concat(newNotifications)
   },
 
-  updateRelationships (state: cuckoostore.stateInfo, newRelationships: { [id: string]: mastodonentities.Relationship }) {
+  updateRelationships (state, newRelationships: { [id: string]: mastodonentities.Relationship }) {
     Object.keys(newRelationships).forEach(id => {
       Vue.set(state.relationships, id, newRelationships[id])
     })
   }
-}
+} satisfies MutationTree
