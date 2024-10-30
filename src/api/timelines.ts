@@ -8,7 +8,7 @@ const allTimeLineTypeList = [
   TimeLineTypes.TAG, TimeLineTypes.LIST
 ]
 
-async function getTimeLineStatuses ({ timeLineType = '', maxId = '', sinceId = '', hashName = '', limit = 40, local = false } = {}): Promise<{ data: Array<mastodonentities.Status> }> {
+async function getTimeLineStatuses ({ timeLineType = '', maxId = '', sinceId = '', hashName = '', limit = 40, local = false } = {}) {
   if (allTimeLineTypeList.indexOf(timeLineType) === -1) throw new Error('unknown timeline type!')
 
   let urlFragmentString = ''
@@ -27,9 +27,9 @@ async function getTimeLineStatuses ({ timeLineType = '', maxId = '', sinceId = '
     urlFragmentString = TimeLineTypes.PUBLIC
     params.local = true
   }
-  return http.get(patchApiUri(`/api/v1/timelines/${urlFragmentString}`), {
+  return http.get<mastodonentities.Status[]>(patchApiUri(`/api/v1/timelines/${urlFragmentString}`), {
     params
-  }) as any
+  })
 }
 
 export {

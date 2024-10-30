@@ -26,12 +26,12 @@ async function fetchAccountInfoById () {
 
 }
 
-async function fetchCurrentUserAccountInfo (): Promise<{ data: mastodonentities.AuthenticatedAccount }> {
-  return http.get(patchApiUri('/api/v1/accounts/verify_credentials')) as any
+async function fetchCurrentUserAccountInfo () {
+  return http.get<mastodonentities.AuthenticatedAccount>(patchApiUri('/api/v1/accounts/verify_credentials'))
 }
 
-async function updateUserAccountInfo (formData: updateAccountFormData): Promise<{ data: mastodonentities.AuthenticatedAccount }> {
-  return http.patch(patchApiUri('/api/v1/accounts/update_credentials'), formData) as any
+async function updateUserAccountInfo (formData: updateAccountFormData) {
+  return http.patch<mastodonentities.AuthenticatedAccount>(patchApiUri('/api/v1/accounts/update_credentials'), formData)
 }
 
 async function fetchRelationships (idList: Array<string>) {
@@ -39,15 +39,15 @@ async function fetchRelationships (idList: Array<string>) {
     params: {
       id: idList
     }
-  }) as any
+  })
 }
 
 async function followAccountById (id: string) {
-  return http.post(patchApiUri(`/api/v1/accounts/${id}/follow`)) as any
+  return http.post(patchApiUri(`/api/v1/accounts/${id}/follow`))
 }
 
 async function unFollowAccountById (id: string) {
-  return http.post(patchApiUri(`/api/v1/accounts/${id}/unfollow`)) as any
+  return http.post(patchApiUri(`/api/v1/accounts/${id}/unfollow`))
 }
 
 export {

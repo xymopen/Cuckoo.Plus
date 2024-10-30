@@ -2,8 +2,8 @@ import { mastodonentities } from '@/interface'
 import { patchApiUri } from '@/util'
 import http from '@/api/http'
 
-async function getCustomEmojis (): Promise<{ data: Array<mastodonentities.Emoji> }> {
-  return http.get(patchApiUri('/api/v1/custom_emojis')) as any
+async function getCustomEmojis () {
+  return http.get<mastodonentities.Emoji[]>(patchApiUri('/api/v1/custom_emojis'))
 }
 
 export {

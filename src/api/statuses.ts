@@ -3,8 +3,8 @@ import { patchApiUri, generateUniqueKey } from '@/util'
 import { VisibilityTypes } from '@/constant'
 import http from '@/api/http'
 
-async function getStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return http.get(patchApiUri(`/api/v1/statuses/${id}`)) as any
+async function getStatusById (id: string) {
+  return http.get<mastodonentities.Status>(patchApiUri(`/api/v1/statuses/${id}`))
 }
 
 interface postStatusFormData {
@@ -24,7 +24,7 @@ interface postStatusFormData {
   language?: string
 }
 
-async function postStatus (formData: postStatusFormData): Promise<{ data: mastodonentities.Status }> {
+async function postStatus (formData: postStatusFormData) {
   const apiFormData: any = {}
 
   apiFormData.status = formData.status
@@ -41,51 +41,51 @@ async function postStatus (formData: postStatusFormData): Promise<{ data: mastod
     }
   }
 
-  return http.post(patchApiUri(`/api/v1/statuses`), apiFormData, config) as any
+  return http.post<mastodonentities.Status>(patchApiUri(`/api/v1/statuses`), apiFormData, config)
 }
 
-async function getStatusContextById (id: string): Promise<{ data: mastodonentities.Context }> {
-  return http.get(patchApiUri(`/api/v1/statuses/${id}/context`)) as any
+async function getStatusContextById (id: string) {
+  return http.get<mastodonentities.Context>(patchApiUri(`/api/v1/statuses/${id}/context`))
 }
 
-async function getReBloggedAccountsById (id: string): Promise<{ data: Array<mastodonentities.Account> }> {
-  return http.get(patchApiUri(`/api/v1/statuses/${id}/reblogged_by`)) as any
+async function getReBloggedAccountsById (id: string) {
+  return http.get<mastodonentities.Account[]>(patchApiUri(`/api/v1/statuses/${id}/reblogged_by`))
 }
 
-async function getFavouritedAccountsById (id: string): Promise<{ data: Array<mastodonentities.Account> }> {
-  return http.get(patchApiUri(`/api/v1/statuses/${id}/favourited_by`)) as any
+async function getFavouritedAccountsById (id: string) {
+  return http.get<mastodonentities.Account[]>(patchApiUri(`/api/v1/statuses/${id}/favourited_by`))
 }
 
-async function favouriteStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return http.post(patchApiUri(`/api/v1/statuses/${id}/favourite`)) as any
+async function favouriteStatusById (id: string) {
+  return http.post<mastodonentities.Status>(patchApiUri(`/api/v1/statuses/${id}/favourite`))
 }
 
-async function unFavouriteStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return http.post(patchApiUri(`/api/v1/statuses/${id}/unfavourite`)) as any
+async function unFavouriteStatusById (id: string) {
+  return http.post<mastodonentities.Status>(patchApiUri(`/api/v1/statuses/${id}/unfavourite`))
 }
 
-async function reblogStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return http.post(patchApiUri(`/api/v1/statuses/${id}/reblog`)) as any
+async function reblogStatusById (id: string) {
+  return http.post<mastodonentities.Status>(patchApiUri(`/api/v1/statuses/${id}/reblog`))
 }
 
-async function unReblogStatusById (id: string): Promise<{ data: mastodonentities.Status }> {
-  return http.post(patchApiUri(`/api/v1/statuses/${id}/unreblog`)) as any
+async function unReblogStatusById (id: string) {
+  return http.post<mastodonentities.Status>(patchApiUri(`/api/v1/statuses/${id}/unreblog`))
 }
 
 async function deleteStatusById (id: string) {
-  return http.delete(patchApiUri(`/api/v1/statuses/${id}`)) as any
+  return http.delete(patchApiUri(`/api/v1/statuses/${id}`))
 }
 
 async function muteStatusById (id: string) {
-  return http.post(patchApiUri(`/api/v1/statuses/${id}/mute`)) as any
+  return http.post(patchApiUri(`/api/v1/statuses/${id}/mute`))
 }
 
 async function unMuteStatusById (id: string) {
-  return http.post(patchApiUri(`/api/v1/statuses/${id}/unmute`)) as any
+  return http.post(patchApiUri(`/api/v1/statuses/${id}/unmute`))
 }
 
-async function getStatusCardInfoById (id: string): Promise<{ data: mastodonentities.Card }> {
-  return http.get(patchApiUri(`/api/v1/statuses/${id}/card`)) as any
+async function getStatusCardInfoById (id: string) {
+  return http.get<mastodonentities.Card>(patchApiUri(`/api/v1/statuses/${id}/card`))
 }
 
 export {

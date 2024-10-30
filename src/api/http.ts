@@ -1,13 +1,11 @@
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-import store from '@/store'
+import store from "@/store";
+import http from 'axios'
 
-Vue.use(VueResource)
+// Axios is not a good option, but it works for now
 
-const http = (Vue as any).http as VueResource.Http
-
-http.interceptors.push(request => {
+http.interceptors.request.use(request => {
   request.headers.set('Authorization', `Bearer ${store.state.OAuthInfo.accessToken}`);
+  return request
 })
 
 export default http

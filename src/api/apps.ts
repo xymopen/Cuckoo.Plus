@@ -18,27 +18,23 @@ namespace Apps {
     website?: string
   }
 
-  export interface registerApplicationReturnData {
-    data: {
-      client_id: string,
-      client_secret: string,
-      id: string,
-      name: string,
-      redirect_uri: string,
-      website: string | null
-    }
-  }
-
 }
 
-async function registerApplication (): Promise<Apps.registerApplicationReturnData> {
+async function registerApplication () {
   const formData: Apps.registerApplicationFormData = {
     client_name: clientName,
     redirect_uris: location.origin,
     scopes: scopes
   }
 
-  return http.post(patchApiUri('/api/v1/apps'), formData) as any
+  return http.post<{
+    client_id: string,
+    client_secret: string,
+    id: string,
+    name: string,
+    redirect_uri: string,
+    website: string | null
+  }>(patchApiUri('/api/v1/apps'), formData)
 }
 
 export {

@@ -13,13 +13,13 @@ interface getNotificationsQueryParams {
   exclude_types?: Array<mastodonentities.NotificationType>
 }
 
-async function getNotifications (queryParams: getNotificationsQueryParams): Promise<{ data: Array<mastodonentities.Notification> }> {
+async function getNotifications (queryParams: getNotificationsQueryParams) {
   queryParams.limit = 30
   const config = {
     params: queryParams
   }
 
-  return http.get(patchApiUri('/api/v1/notifications'), config) as any
+  return http.get<mastodonentities.Notification[]>(patchApiUri('/api/v1/notifications'), config)
 }
 
 export {

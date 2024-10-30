@@ -1,15 +1,8 @@
 import store from '@/store'
 import { patchApiUri } from '@/util'
-import VueResource from 'vue-resource'
 import http from '@/api/http'
 
-interface fetchOAuthTokenReturnData extends VueResource.HttpResponse {
-  data: {
-    access_token: string
-  }
-}
-
-async function fetchOAuthToken (): Promise<fetchOAuthTokenReturnData> {
+async function fetchOAuthToken () {
   const OAuthInfo = store.state.OAuthInfo
 
   const formData = {
@@ -20,7 +13,9 @@ async function fetchOAuthToken (): Promise<fetchOAuthTokenReturnData> {
     code: OAuthInfo.code
   }
 
-  return await http.post(patchApiUri('/oauth/token'), formData) as any
+  return await http.post<{
+    access_token: string
+  }>(patchApiUri('/oauth/token'), formData)
 }
 
 export {
