@@ -1,11 +1,11 @@
 <template>
-  <DefaultLayout>
+  <div>
     <div class="account-container">
       <div class="account-header">
 
       </div>
     </div>
-  </DefaultLayout>
+  </div>
 </template>
 
 <route>

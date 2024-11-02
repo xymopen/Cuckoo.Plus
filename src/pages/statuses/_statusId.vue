@@ -1,9 +1,9 @@
 <template>
-  <DefaultLayout>
+  <div>
     <div class="statuses-page-container" v-loading="!status">
       <status-card class="status-card-container" v-if="status" :status="status" />
     </div>
-  </DefaultLayout>
+  </div>
 </template>
 
 <route>

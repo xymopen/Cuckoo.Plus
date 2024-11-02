@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout>
+  <div>
     <div class="timelines-container" ref="timelinesContainer" v-loading="isInitLoading">
 
       <template v-for="(timeLineName, index) in allTimeLineNameList">
@@ -43,7 +43,7 @@
 
       <new-status-notice-button />
     </div>
-  </DefaultLayout>
+  </div>
 </template>
 
 <route-meta>

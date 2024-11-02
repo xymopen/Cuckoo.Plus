@@ -1,10 +1,23 @@
 <template>
   <div id="app">
     <keep-alive>
-      <router-view v-if="$route.meta.keepAlive" />
+      <template v-if="$route.meta.keepAlive">
+        <PlainLayout v-if="$route.meta.layout === 'plain'">
+          <router-view />
+        </PlainLayout>
+        <DefaultLayout v-else>
+          <router-view />
+        </DefaultLayout>
+      </template>
     </keep-alive>
-
-    <router-view v-if="!$route.meta.keepAlive" />
+    <template v-if="!$route.meta.keepAlive">
+      <PlainLayout v-if="$route.meta.layout === 'plain'">
+        <router-view />
+      </PlainLayout>
+      <DefaultLayout v-else>
+        <router-view />
+      </DefaultLayout>
+    </template>
     <theme-edit-panel v-if="appStatus.isEditingThemeMode" />
   </div>
 </template>
@@ -14,12 +27,16 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Mutation, State } from 'vuex-class'
 import { debounce } from 'lodash'
 import ThemeEditPanel from '@/components/ThemeEditPanel.vue'
+import DefaultLayout from '@/layouts/default/index.vue'
+import PlainLayout from '@/layouts/plain.vue'
 
 const displayName = process.env.npm_package_displayName ?? 'Cuckoo+'
 
 @Component({
   components: {
-    'theme-edit-panel': ThemeEditPanel
+    'theme-edit-panel': ThemeEditPanel,
+    DefaultLayout: DefaultLayout,
+    PlainLayout: PlainLayout
   }
 })
 class App extends Vue {

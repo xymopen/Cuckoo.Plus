@@ -1,5 +1,5 @@
 <template>
-  <PlainLayout>
+  <div>
     <section class="oauth-container">
 
       <div class="form-container">
@@ -34,8 +34,14 @@
       </div>
 
     </section>
-  </PlainLayout>
+  </div>
 </template>
+
+<route-meta>
+{
+  "layout": "plain"
+}
+</route-meta>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'

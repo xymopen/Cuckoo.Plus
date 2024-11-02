@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout>
+  <div>
     <div class="setting-page-container">
       <mu-card v-loading="isLoading">
         <mu-card-actions class="setting-card">
@@ -133,7 +133,7 @@
 
 
     </div>
-  </DefaultLayout>
+  </div>
 </template>
 
 <route-meta>
