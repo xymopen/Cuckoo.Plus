@@ -80,20 +80,19 @@ const statusInitManager = new class {
 
   private loadingInstance = null
 
-  private loadingProcessList = []
+  private loadingProcessCount = 0
 
   private startLoading (process: string) {
-    this.loadingProcessList.push(process)
-    this.loadingInstance = Loading() || this.loadingInstance
+    if (this.loadingProcessCount === 0) {
+      this.loadingInstance = Loading()
+    }
+    this.loadingProcessCount += 1
   }
 
   private endLoading () {
-    if (this.loadingProcessList.every(process => this[process])) {
-      try {
-        this.loadingInstance && this.loadingInstance.close()
-      } catch (e) {
-
-      }
+    this.loadingProcessCount -= 1
+    if (this.loadingProcessCount === 0 && this.loadingInstance != null) {
+      this.loadingInstance.close()
     }
   }
 
