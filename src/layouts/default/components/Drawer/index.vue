@@ -163,11 +163,11 @@ export default defineComponent({
         '/timelines/tag': TimeLineTypes.TAG,
       })[targetPath]
 
-      if (isBaseTimeLine(clickedRouterValue) && (targetPath === this.$route.path)) {
+      if (targetPath === this.$route.path) {
         this.fetchTimeLineStatuses(clickedRouterValue)
+      } else if (isBaseTimeLine(clickedRouterValue)) {
+        this.$router.push(targetPath)
       }
-
-      this.$router.push(targetPath)
 
       window.scrollTo(0, 0)
     },
@@ -177,9 +177,9 @@ export default defineComponent({
 
       if (targetPath === this.$route.path) {
         this.fetchTimeLineStatuses(TimeLineTypes.TAG, hashName)
+      } else {
+        this.$router.push(targetPath)
       }
-
-      this.$router.push(targetPath)
 
       window.scrollTo(0, 0)
     },
