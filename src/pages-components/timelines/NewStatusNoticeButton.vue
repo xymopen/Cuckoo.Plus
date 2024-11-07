@@ -13,77 +13,80 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
-import { State, Mutation, Action } from 'vuex-class'
+import { computed, defineComponent, onMounted, reactive, ref } from "vue"
 import { scrollToTop } from '@/utils'
 import { isBaseTimeLine, getTargetStatusesList } from '@/util'
+import store from "@/store"
 
-@Component({})
-class NewStatusNoticeButton extends Vue {
-  @Prop({ required: true })
-  declare readonly timeLineType: string
+export default defineComponent({
+  props: {
+    timeLineType: {
+      type: String,
+      required: true
+    },
+    hashName: {
+      type: String,
+      required: true
+    }
+  },
+  setup (props) {
+    const translateY = ref(0)
 
-  @Prop({ required: true })
-  declare readonly hashName: string
+    const currentTimeLineStreamPool = computed(() => {
+      const { timeLineType, hashName } = props
+      const { appStatus, statusMap } = store.state
 
-  @State('appStatus') appStatus
+      if (timeLineType === '') return []
 
-  @State('statusMap') statusMap
+      const targetStreamPool = getTargetStatusesList(appStatus.streamStatusesPool, timeLineType, hashName)
 
-  @Mutation('unShiftTimeLineStatuses') unShiftTimeLineStatuses
+      // filter root status
+      return targetStreamPool.filter(id => statusMap[id] && !statusMap[id].in_reply_to_id)
+    })
 
-  @Action('loadStreamStatusesPool') loadStreamStatusesPool
+    const buttonStyle = computed(() => {
+      return { transform: `translate(-50%, ${translateY}px)` }
+    })
 
-  translateY = 0
+    const initWindowScrollEvent = () => {
+      let preScrollY = window.scrollY
 
-  get currentTimeLineStreamPool () {
-    const { timeLineType, hashName } = this
+      const minTranslateY = -110
+      const maxTranslateY = 0
 
-    if (timeLineType === '') return []
+      window.addEventListener('scroll', () => {
+        if (!currentTimeLineStreamPool.value.length) return
 
-    const targetStreamPool = getTargetStatusesList(this.appStatus.streamStatusesPool, timeLineType, hashName)
+        if (translateY.value >= minTranslateY && translateY.value <= maxTranslateY) {
+          translateY.value -= window.scrollY - preScrollY
 
-    // filter root status
-    return targetStreamPool.filter(id => this.statusMap[id] && !this.statusMap[id].in_reply_to_id)
+          if (translateY.value < minTranslateY) translateY.value = minTranslateY
+          if (translateY.value > maxTranslateY) translateY.value = maxTranslateY
+        }
+
+        preScrollY = window.scrollY
+
+      }, { passive: true })
+    }
+
+    onMounted(initWindowScrollEvent)
+
+    const onNoticeButtonClick = async () => {
+      await scrollToTop()
+      store.dispatch('loadStreamStatusesPool', {
+        timeLineType: props.timeLineType,
+        hashName: props.hashName,
+      })
+    }
+
+    return reactive({
+      get appStatus () {
+        return store.state.appStatus
+      },
+      currentTimeLineStreamPool,
+      buttonStyle,
+      onNoticeButtonClick,
+    })
   }
-
-  get buttonStyle () {
-    return { transform: `translate(-50%, ${this.translateY}px)` }
-  }
-
-  mounted () {
-    this.initWindowScrollEvent()
-  }
-
-  initWindowScrollEvent () {
-    let preScrollY = window.scrollY
-
-    const minTranslateY = -110
-    const maxTranslateY = 0
-
-    window.addEventListener('scroll', () => {
-      if (!this.currentTimeLineStreamPool.length) return
-
-      if (this.translateY >= minTranslateY && this.translateY <= maxTranslateY) {
-        this.translateY -= window.scrollY - preScrollY
-
-        if (this.translateY < minTranslateY) this.translateY = minTranslateY
-        if (this.translateY > maxTranslateY) this.translateY = maxTranslateY
-      }
-
-      preScrollY = window.scrollY
-
-    }, { passive: true })
-  }
-
-  async onNoticeButtonClick () {
-    await scrollToTop()
-    this.loadStreamStatusesPool({
-      timeLineType: this.timeLineType,
-      hashName: this.hashName,
-     })
-  }
-}
-
-export default NewStatusNoticeButton
+})
 </script>
