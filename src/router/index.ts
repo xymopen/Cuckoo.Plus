@@ -17,7 +17,9 @@ const homePath = '/timelines/home'
 const localPath = '/timelines/local'
 const publicPath = '/timelines/public'
 
-const timelinesRoute = routes.find(route => route.path === '/timelines')!
+const timelinesRouteIndex = routes.findIndex(route => route.path === '/timelines')
+const timelinesRoute = routes[timelinesRouteIndex]!
+routes.splice(timelinesRouteIndex, 1)
 
 const router = new Router({
   routes: [
