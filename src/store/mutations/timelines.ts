@@ -1,9 +1,23 @@
 import Vue from 'vue'
 import { TimeLineTypes } from '@/constant'
-import { isBaseTimeLine } from '@/util'
+import { getTargetStatusesList, isBaseTimeLine } from '@/util'
 import { MutationTree } from ".."
 
 export default {
+  unShiftStreamStatusesPool (state, { newStatusIdList, timeLineType, hashName }) {
+    const targetStatusesPool = getTargetStatusesList(state.streamStatusesPool, timeLineType, hashName)
+    newStatusIdList = newStatusIdList.filter(id => {
+      return targetStatusesPool.indexOf(id) === -1
+    })
+
+    targetStatusesPool.unshift(...newStatusIdList)
+  },
+
+  clearStreamStatusesPool (state, { timeLineType, hashName }) {
+    const targetStatusesPool = getTargetStatusesList(state.streamStatusesPool, timeLineType, hashName)
+    targetStatusesPool.splice(0, targetStatusesPool.length)
+  },
+
   setTimeLineStatuses (state, { newStatusIdList, timeLineType, hashName }) {
     if (isBaseTimeLine(timeLineType)) {
       Vue.set(state.timelines, timeLineType, newStatusIdList)

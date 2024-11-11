@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { getTargetStatusesList } from '@/util'
 import { ThemeNames } from '@/constant'
 import ThemeManager from '@/themes'
 import { MutationTree } from ".."
@@ -53,20 +52,6 @@ export default {
     const userList: Array<string> = state.appStatus.settings.muteMap.userList
     if (userList.indexOf(userId) === -1) userList.push(userId)
     localStorage.setItem('userMuteList', JSON.stringify(userList))
-  },
-
-  unShiftStreamStatusesPool (state, { newStatusIdList, timeLineType, hashName }) {
-    const targetStatusesPool = getTargetStatusesList(state.appStatus.streamStatusesPool, timeLineType, hashName)
-    newStatusIdList = newStatusIdList.filter(id => {
-      return targetStatusesPool.indexOf(id) === -1
-    })
-
-    targetStatusesPool.unshift(...newStatusIdList)
-  },
-
-  clearStreamStatusesPool (state, { timeLineType, hashName }) {
-    const targetStatusesPool = getTargetStatusesList(state.appStatus.streamStatusesPool, timeLineType, hashName)
-    targetStatusesPool.splice(0, targetStatusesPool.length)
   },
 
   updatePostPrivacy (state, newPostPrivacy: string) {

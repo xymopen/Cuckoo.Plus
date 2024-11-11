@@ -34,11 +34,11 @@ export default defineComponent({
 
     const currentTimeLineStreamPool = computed(() => {
       const { timeLineType, hashName } = props
-      const { appStatus, statusMap } = store.state
+      const { streamStatusesPool, statusMap } = store.state
 
       if (timeLineType === '') return []
 
-      const targetStreamPool = getTargetStatusesList(appStatus.streamStatusesPool, timeLineType, hashName)
+      const targetStreamPool = getTargetStatusesList(streamStatusesPool, timeLineType, hashName)
 
       // filter root status
       return targetStreamPool.filter(id => statusMap[id] && !statusMap[id].in_reply_to_id)

@@ -50,6 +50,15 @@ const state = {
     list: {} as Record<string, string[]>
   },
 
+  streamStatusesPool: {
+    home: [] as string[],
+    public: [] as string[],
+    direct: [] as string[],
+    local: [] as string[],
+    tag: {} as Record<string, string[]>,
+    list: {} as Record<string, string[]>
+  },
+
   contextMap: getLocalSetting('contextMap', {}) as {
     [statusId: string]: {
       ancestors: Array<string>
@@ -81,15 +90,6 @@ const state = {
     isEditingThemeMode: false,
 
     shouldShowThemeEditPanel: false,
-
-    streamStatusesPool: {
-      home: [] as string[],
-      public: [] as string[],
-      direct: [] as string[],
-      local: [] as string[],
-      tag: {} as Record<string, string[]>,
-      list: {} as Record<string, string[]>
-    },
 
     settings: {
       multiLineMode: getLocalSetting('multiLineMode', true) as boolean,

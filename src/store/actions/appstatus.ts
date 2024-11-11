@@ -1,19 +1,7 @@
-import { getTargetStatusesList } from '@/util'
 import * as Api from '@/api'
 import { ActionTree } from ".."
 
 const appStatus: ActionTree = {
-  loadStreamStatusesPool ({ commit, state }, { timeLineType, hashName }) {
-    const targetStreamPool = getTargetStatusesList(state.appStatus.streamStatusesPool, timeLineType, hashName)
-
-    commit('unShiftTimeLineStatuses', {
-      newStatusIdList: targetStreamPool.filter(id => state.statusMap[id]),
-      timeLineType, hashName
-    })
-
-    commit('clearStreamStatusesPool', { timeLineType, hashName })
-  },
-
   async updatePostPrivacy ({ commit }, newPrivacy: string) {
     try {
       await Api.accounts.updateUserAccountInfo({ source: { privacy: newPrivacy } })

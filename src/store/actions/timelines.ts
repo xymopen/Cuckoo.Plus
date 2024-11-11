@@ -1,10 +1,21 @@
 import * as api from '@/api'
 import { mastodonentities } from '@/interface'
-import { isBaseTimeLine } from '@/util'
+import { getTargetStatusesList, isBaseTimeLine } from '@/util'
 import { TimeLineTypes } from '@/constant'
 import { ActionTree } from ".."
 
 export default {
+  loadStreamStatusesPool ({ commit, state }, { timeLineType, hashName }) {
+    const targetStreamPool = getTargetStatusesList(state.streamStatusesPool, timeLineType, hashName)
+
+    commit('unShiftTimeLineStatuses', {
+      newStatusIdList: targetStreamPool.filter(id => state.statusMap[id]),
+      timeLineType, hashName
+    })
+
+    commit('clearStreamStatusesPool', { timeLineType, hashName })
+  },
+
   async updateTimeLineStatuses ({ commit, dispatch, state }, { timeLineType, hashName, isLoadMore, isFetchMore }: {
     timeLineType: string
     hashName?: string
