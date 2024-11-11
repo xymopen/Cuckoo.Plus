@@ -45,10 +45,11 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
-import { Action, State, Getter } from 'vuex-class'
+import { Action, State } from 'vuex-class'
+import store from '@/store'
 import { RoutersInfo, TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
 import { mastodonentities } from '@/interface'
-import { documentGlobalEventBus } from '@/util'
+import { documentGlobalEventBus, isBaseTimeLine } from '@/util'
 import { scrollToTop } from '@/utils'
 import StatusCard from '@/components/StatusCard/index.vue'
 import PostStatusDialog from '@/components/PostStatusDialog.vue'
@@ -108,8 +109,6 @@ class TimeLines extends Vue {
   @State('appStatus') appStatus
 
   @State('timelines') timelines
-
-  @Getter('getRootStatuses') getRootStatuses
 
   @Action('updateTimeLineStatuses') updateTimeLineStatuses
 
@@ -421,6 +420,26 @@ class TimeLines extends Vue {
       scrollToTop()
     }
 
+  }
+
+  getRootStatuses (timeLineType: string, hashName?: string): Array<mastodonentities.Status> {
+    const { state } = store
+    const targetStatusIdList = isBaseTimeLine(timeLineType) ? state.timelines[timeLineType] :
+      state.timelines[timeLineType][hashName]
+
+    // todo avoid this situation
+    if (!targetStatusIdList) return []
+
+    return targetStatusIdList
+      .map(statusId => state.statusMap[statusId]).filter(status => status)
+      .filter((status: mastodonentities.Status) => !status.in_reply_to_id)
+      .filter(status => {
+        const muteStatusList = state.appStatus.settings.muteMap.statusList
+        return muteStatusList.indexOf(status.id) === -1
+      }).filter(status => {
+        const muteUserList = state.appStatus.settings.muteMap.userList
+        return muteUserList.indexOf(status.account.id) === -1
+      })
   }
 }
 
