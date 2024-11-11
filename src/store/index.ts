@@ -41,6 +41,8 @@ const state = {
 
   currentUserAccount: getLocalSetting('currentUserAccount', null) as mastodonentities.Account | null,
 
+  noLoadMoreTimeLineList: [] as string[],
+
   timelines: {
     home: getLocalSetting('home', []) as string[],
     public: [] as string[],

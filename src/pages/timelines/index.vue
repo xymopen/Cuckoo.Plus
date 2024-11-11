@@ -125,7 +125,7 @@ class TimeLines extends Vue {
   * */
   isLoading = false
 
-  noLoadMoreTimeLineList: Array<string> = []
+  @State('noLoadMoreTimeLineList') noLoadMoreTimeLineList
 
   isPostStatusDialogOpening = false
 
