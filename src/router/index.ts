@@ -42,6 +42,13 @@ const router = new Router({
       meta: {
         ...timelinesRoute.meta,
         keepAlive: true
+      },
+      beforeEnter(to, from, next) {
+        if (!isBaseTimeLine(to.params.timeLineType)) {
+          return next(homePath)
+        }
+
+        next()
       }
     },
     {
@@ -190,17 +197,6 @@ const beforeEachHooks: { [key: string]: NavigationGuard } = {
   async beforeEachRoute (to, from, next) {
 
     await statusInitManager.updateCustomEmojis()
-
-    next()
-  },
-
-  // children routes can't use in-router guide...
-  beforeDefaultTimeLines (to, from, next) {
-    if (to.name === RoutersInfo.defaulttimelines.name) {
-      if (!isBaseTimeLine(to.params.timeLineType)) {
-        return next(homePath)
-      }
-    }
 
     next()
   },
