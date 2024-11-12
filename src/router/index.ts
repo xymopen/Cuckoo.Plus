@@ -164,7 +164,9 @@ const statusInitManager = new class {
   }
 
   public async updateOAuthAccessToken () {
-    if (!store.state.OAuthInfo.accessToken && !this.hasUpdateOAuthAccessToken) {
+    if (store.state.OAuthInfo.accessToken) {
+      this.hasUpdateOAuthAccessToken = true
+    } else if (!this.hasUpdateOAuthAccessToken) {
       this.startLoading('updateOAuthAccessToken')
       const result = await Api.oauth.fetchOAuthToken()
       store.commit('updateOAuthAccessToken', result.data.access_token)
