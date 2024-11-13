@@ -1,9 +1,16 @@
 import store from '@/store'
-import { StreamingEventTypes, TimeLineTypes, NotificationTypes, I18nTags } from '@/constant'
+import { TimeLineTypes, NotificationTypes, I18nTags } from '@/constant'
 import { mastodonentities } from "@/interface"
 import router from '@/router'
 import { extractText, getAccountDisplayName, prepareRootStatus } from "@/util"
 import i18n from '@/i18n'
+
+const StreamingEventTypes = {
+  UPDATE: 'update',
+  NOTIFICATION: 'notification',
+  DELETE: 'delete',
+  FILTERS_CHANGED: 'filters_changed'
+}
 
 const emit = (newNotification: mastodonentities.Notification) => {
   switch (newNotification.type) {

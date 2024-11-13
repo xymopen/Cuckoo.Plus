@@ -48,13 +48,6 @@ const NotificationTypes = {
   FOLLOW: 'follow'
 }
 
-const StreamingEventTypes = {
-  UPDATE: 'update',
-  NOTIFICATION: 'notification',
-  DELETE: 'delete',
-  FILTERS_CHANGED: 'filters_changed'
-}
-
 const StatusCardTypes = {
   LINK: 'link',
   PHOTO: 'photo'
@@ -67,6 +60,5 @@ export {
   UiWidthCheckConstants,
   ThemeNames,
   NotificationTypes,
-  StreamingEventTypes,
   StatusCardTypes
 }
