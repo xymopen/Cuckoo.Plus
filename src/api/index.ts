@@ -8,7 +8,7 @@ import * as notifications from './notifications'
 import * as media from './media'
 import * as instances from './instances'
 import * as search from './search'
-import streaming from './streaming'
+import * as streaming from './streaming'
 
 export {
   apps,

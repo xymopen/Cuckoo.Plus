@@ -5,191 +5,170 @@ import router from '@/router'
 import { extractText, getAccountDisplayName, prepareRootStatus } from "@/util"
 import i18n from '@/i18n'
 
-class NotificationHandler {
-  public emit (newNotification: mastodonentities.Notification) {
-    switch (newNotification.type) {
-      case NotificationTypes.MENTION: {
-        return this.emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.mentioned_you))
-      }
-
-      case NotificationTypes.REBLOG: {
-        return this.emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.boosted_your_status))
-      }
-
-      case NotificationTypes.FAVOURITE: {
-        // update status info
-        store.dispatch('fetchStatusById', newNotification.status.id)
-
-        return this.emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.favourited_your_status))
-      }
-
-      case NotificationTypes.FOLLOW: {
-        store.dispatch('updateRelationships', { idList: [newNotification.account.id] })
-
-        return this.emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.someone_followed_you))
-      }
+const emit = (newNotification: mastodonentities.Notification) => {
+  switch (newNotification.type) {
+    case NotificationTypes.MENTION: {
+      return emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.mentioned_you))
     }
-  }
 
-  private emitStatusOperateNotification (newNotification: mastodonentities.Notification, operateTypeString) {
-    const title = `${this.getFromName(newNotification)} ${operateTypeString}`
-    const bodyText = newNotification.status ? extractText(newNotification.status.content) : ''
+    case NotificationTypes.REBLOG: {
+      return emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.boosted_your_status))
+    }
 
-    // ignore all muted status's notification
-    if (newNotification.status && (store.state.appStatus.settings.muteMap.statusList.indexOf(newNotification.status) !== -1)) return
+    case NotificationTypes.FAVOURITE: {
+      // update status info
+      store.dispatch('fetchStatusById', newNotification.status.id)
 
-    if (store.state.appStatus.settings.muteMap.userList.indexOf(newNotification.account.id) !== -1) return
+      return emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.favourited_your_status))
+    }
 
-    const nativeNotification = new Notification(title, { body: bodyText, icon: this.getImageUrl(newNotification) })
+    case NotificationTypes.FOLLOW: {
+      store.dispatch('updateRelationships', { idList: [newNotification.account.id] })
 
-    nativeNotification.addEventListener('click', () => {
-      if (store.state.appStatus.unreadNotificationCount > 0) {
-        store.commit('updateUnreadNotificationCount', store.state.appStatus.unreadNotificationCount - 1)
-      }
-
-      this.routeToTargetStatus(newNotification)
-    })
-  }
-
-  private getFromName (newNotification: mastodonentities.Notification): string {
-    // account's display name have been formatted
-    return getAccountDisplayName(newNotification.account)
-      .replace('<span>', '').replace('</span>', '')
-  }
-
-  private getImageUrl (newNotification: mastodonentities.Notification): string {
-    return newNotification.account.avatar
-  }
-
-  private async routeToTargetStatus (newNotification: mastodonentities.Notification) {
-    const targetStatus = await prepareRootStatus(newNotification.status)
-
-    router.push({
-      name: "statuses",
-      params: {
-        statusId: targetStatus.id
-      }
-    })
-  }
-
-  private routeToTargetAccount () {
-
+      return emitStatusOperateNotification(newNotification, i18n.t(I18nTags.notifications.someone_followed_you))
+    }
   }
 }
 
-const notificationHandler = new NotificationHandler()
+const emitStatusOperateNotification = (newNotification: mastodonentities.Notification, operateTypeString) => {
+  const title = `${getFromName(newNotification)} ${operateTypeString}`
+  const bodyText = newNotification.status ? extractText(newNotification.status.content) : ''
 
-class Streaming {
+  // ignore all muted status's notification
+  if (newNotification.status && (store.state.appStatus.settings.muteMap.statusList.indexOf(newNotification.status) !== -1)) return
 
-  private userStreamWs: WebSocket
+  if (store.state.appStatus.settings.muteMap.userList.indexOf(newNotification.account.id) !== -1) return
 
-  private localStreamWs: WebSocket
+  const nativeNotification = new Notification(title, { body: bodyText, icon: getImageUrl(newNotification) })
 
-  private publicStreamWs: WebSocket
-
-  private createWsUrl (streamName: string) {
-    return `wss://${new URL(store.state.mastodonServerUri).hostname}/api/v1/streaming/?stream=${streamName}&access_token=${store.state.OAuthInfo.accessToken}`
-  }
-
-  public openUserConnection () {
-    const wsUrl = this.createWsUrl('user')
-
-    this.userStreamWs = new WebSocket(wsUrl)
-
-    this.initEventListener(this.userStreamWs, TimeLineTypes.HOME)
-  }
-
-  public openLocalConnection () {
-    const wsUrl = this.createWsUrl('public:local')
-
-    this.localStreamWs = new WebSocket(wsUrl)
-
-    this.initEventListener(this.localStreamWs, TimeLineTypes.LOCAL)
-  }
-
-  public openPublicConnection () {
-    const wsUrl = this.createWsUrl('public')
-
-    this.publicStreamWs = new WebSocket(wsUrl)
-
-    this.initEventListener(this.publicStreamWs, TimeLineTypes.PUBLIC)
-  }
-
-  public closeConnection (timeLineType: string) {
-    const typeToWsMap = {
-      [TimeLineTypes.HOME]: this.userStreamWs,
-      [TimeLineTypes.LOCAL]: this.localStreamWs,
-      [TimeLineTypes.PUBLIC]: this.publicStreamWs
+  nativeNotification.addEventListener('click', () => {
+    if (store.state.appStatus.unreadNotificationCount > 0) {
+      store.commit('updateUnreadNotificationCount', store.state.appStatus.unreadNotificationCount - 1)
     }
 
-    typeToWsMap[timeLineType].close()
-  }
+    routeToTargetStatus(newNotification)
+  })
+}
 
-  private initEventListener (targetWs: WebSocket, timeLineType, hashName?) {
-    targetWs.onmessage = (message) => {
-      if (message.data.length) {
-        const parsedMessage = JSON.parse(message.data)
+const getFromName = (newNotification: mastodonentities.Notification): string => {
+  // account's display name have been formatted
+  return getAccountDisplayName(newNotification.account)
+    .replace('<span>', '').replace('</span>', '')
+}
 
-        switch (parsedMessage.event) {
-          case StreamingEventTypes.UPDATE: {
-            return this.updateStatus(JSON.parse(parsedMessage.payload), timeLineType, hashName)
-          }
+const getImageUrl = (newNotification: mastodonentities.Notification): string => {
+  return newNotification.account.avatar
+}
 
-          case StreamingEventTypes.DELETE: {
-            return this.deleteStatus(parsedMessage.payload)
-          }
+const routeToTargetStatus = async (newNotification: mastodonentities.Notification) => {
+  const targetStatus = await prepareRootStatus(newNotification.status)
 
-          case StreamingEventTypes.NOTIFICATION: {
-            return this.emitNotification(JSON.parse(parsedMessage.payload))
-          }
+  router.push({
+    name: "statuses",
+    params: {
+      statusId: targetStatus.id
+    }
+  })
+}
+
+const routeToTargetAccount = () => {
+
+}
+
+const createWsUrl = (streamName: string) => {
+    return `wss://${new URL(store.state.mastodonServerUri).hostname}/api/v1/streaming/?stream=${streamName}&access_token=${store.state.OAuthInfo.accessToken}`
+}
+
+export const openUserConnection = () => {
+  const wsUrl = createWsUrl('user')
+
+  const userStreamWs = new WebSocket(wsUrl)
+
+  userStreamWs.onmessage = initEventListener(TimeLineTypes.HOME)
+
+  return userStreamWs.close.bind(userStreamWs)
+}
+
+export const openLocalConnection = () => {
+  const wsUrl = createWsUrl('public:local')
+
+  const localStreamWs = new WebSocket(wsUrl)
+
+  localStreamWs.onmessage = initEventListener(TimeLineTypes.LOCAL)
+
+  return localStreamWs.close.bind(localStreamWs)
+}
+
+export const openPublicConnection = () => {
+  const wsUrl = createWsUrl('public')
+
+  const publicStreamWs = new WebSocket(wsUrl)
+
+  publicStreamWs.onmessage = initEventListener(TimeLineTypes.PUBLIC)
+
+  return publicStreamWs.close.bind(publicStreamWs)
+}
+
+const initEventListener = (timeLineType, hashName?) =>
+  (message: MessageEvent<any>) => {
+    if (message.data.length) {
+      const parsedMessage = JSON.parse(message.data)
+
+      switch (parsedMessage.event) {
+        case StreamingEventTypes.UPDATE: {
+          return updateStatus(JSON.parse(parsedMessage.payload), timeLineType, hashName)
+        }
+
+        case StreamingEventTypes.DELETE: {
+          return deleteStatus(parsedMessage.payload)
+        }
+
+        case StreamingEventTypes.NOTIFICATION: {
+          return emitNotification(JSON.parse(parsedMessage.payload))
         }
       }
     }
   }
 
-  private updateStatus (newStatus: mastodonentities.Status, timeLineType, hashName?) {
-    if (store.state.statusMap[newStatus.id]) return
+const updateStatus = (newStatus: mastodonentities.Status, timeLineType, hashName?) => {
+  if (store.state.statusMap[newStatus.id]) return
 
-    // update status map
-    store.commit('updateStatusMap', { [newStatus.id]: newStatus })
-    store.dispatch('updateCardMap', newStatus.id)
-    if (timeLineType === TimeLineTypes.HOME) {
-      prepareRootStatus(newStatus)
-    }
-
-    // update target timeline list
-    const targetMutationName = store.state.appStatus.settings.realTimeLoadStatusMode ? 'unShiftTimeLineStatuses' : 'unShiftStreamStatusesPool'
-    store.commit(targetMutationName, {
-      newStatusIdList: [newStatus.id],
-      timeLineType, hashName
-    })
-
+  // update status map
+  store.commit('updateStatusMap', { [newStatus.id]: newStatus })
+  store.dispatch('updateCardMap', newStatus.id)
+  if (timeLineType === TimeLineTypes.HOME) {
+    prepareRootStatus(newStatus)
   }
 
-  private deleteStatus (statusId: string) {
-    if (!store.state.statusMap[statusId]) return
-
-    // remove from time line
-    store.commit('deleteStatusFromTimeLine', statusId)
-
-    // remove from status map
-    store.commit('removeStatusFromStatusMapById', statusId)
-  }
-
-  private emitNotification (newNotification: mastodonentities.Notification) {
-    // update notification list
-    store.commit('unShiftNotification', [newNotification])
-
-    // set notification icon unread
-    store.commit('updateUnreadNotificationCount', store.state.appStatus.unreadNotificationCount + 1)
-
-    // send browser notification
-    // @ts-ignore
-    if (window.Notification) {
-      notificationHandler.emit(newNotification)
-    }
-  }
+  // update target timeline list
+  const targetMutationName = store.state.appStatus.settings.realTimeLoadStatusMode ? 'unShiftTimeLineStatuses' : 'unShiftStreamStatusesPool'
+  store.commit(targetMutationName, {
+    newStatusIdList: [newStatus.id],
+    timeLineType, hashName
+  })
 
 }
 
-export default new Streaming()
+const deleteStatus = (statusId: string) => {
+  if (!store.state.statusMap[statusId]) return
+
+  // remove from time line
+  store.commit('deleteStatusFromTimeLine', statusId)
+
+  // remove from status map
+  store.commit('removeStatusFromStatusMapById', statusId)
+}
+
+const emitNotification = (newNotification: mastodonentities.Notification) => {
+  // update notification list
+  store.commit('unShiftNotification', [newNotification])
+
+  // set notification icon unread
+  store.commit('updateUnreadNotificationCount', store.state.appStatus.unreadNotificationCount + 1)
+
+  // send browser notification
+  // @ts-ignore
+  if (window.Notification) {
+    emit(newNotification)
+  }
+}

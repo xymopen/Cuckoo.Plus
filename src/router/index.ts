@@ -77,9 +77,9 @@ const statusInitManager = new class {
 
   private hasInitFetchNotifications = false
 
-  private hasInitStreamConnection = false
-  private hasInitLocalStreamConnection = false
-  private hasInitPublicStreamConnection = false
+  private closeStreamConnection: null | (() => void) = null
+  private closeLocalStreamConnection: null | (() => void) = null
+  private closePublicStreamConnection: null | (() => void) = null
 
   private hasUpdateOAuthAccessToken = false
 
@@ -113,37 +113,34 @@ const statusInitManager = new class {
   }
 
   public initStreamConnection () {
-    if (!this.hasInitStreamConnection) {
-      Api.streaming.openUserConnection()
-      this.hasInitStreamConnection = true
+    if (this.closeStreamConnection == null) {
+      this.closeStreamConnection = Api.streaming.openUserConnection()
     }
   }
 
   public initLocalStreamConnection () {
-    if (!this.hasInitLocalStreamConnection) {
-      Api.streaming.openLocalConnection()
-      this.hasInitLocalStreamConnection = true
+    if (this.closeLocalStreamConnection == null) {
+      this.closeLocalStreamConnection = Api.streaming.openLocalConnection()
     }
   }
 
   public destroyLocalStreamConnection () {
-    if (this.hasInitLocalStreamConnection) {
-      Api.streaming.closeConnection(TimeLineTypes.LOCAL)
-      this.hasInitLocalStreamConnection = false
+    if (this.closeLocalStreamConnection != null) {
+      this.closeLocalStreamConnection()
+      this.closeLocalStreamConnection = null
     }
   }
 
   public initPublicStreamConnection () {
-    if (!this.hasInitPublicStreamConnection) {
-      Api.streaming.openPublicConnection()
-      this.hasInitPublicStreamConnection = true
+    if (this.closePublicStreamConnection == null) {
+      this.closePublicStreamConnection = Api.streaming.openPublicConnection()
     }
   }
 
   public destroyPublicStreamConnection () {
-    if (this.hasInitPublicStreamConnection) {
-      Api.streaming.closeConnection(TimeLineTypes.PUBLIC)
-      this.hasInitPublicStreamConnection = false
+    if (this.closePublicStreamConnection != null) {
+      this.closePublicStreamConnection()
+      this.closePublicStreamConnection = null
     }
   }
 
