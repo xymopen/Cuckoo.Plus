@@ -88,56 +88,122 @@ type StreamType = {
   tag?: string;
 }
 
-const createWS = (stream: StreamType) => {
-  const url = new URL(`wss://${new URL(store.state.mastodonServerUri).hostname}/api/v1/streaming`)
-  url.search = new URLSearchParams({
-    access_token: store.state.OAuthInfo.accessToken,
-    ...stream
-  }).toString()
-  return new WebSocket(url.toString())
+let socket: null | WebSocket = null
+
+type Listener = (type: string, payload: any) => void
+
+type Node = {
+  children: null | Record<string, Node>
+  listeners: null | Set<Listener>
 }
 
-export const openUserConnection = () => {
-  const userStreamWs = createWS({ stream: 'user' })
-
-  userStreamWs.onmessage = initEventListener(TimeLineTypes.HOME)
-
-  return userStreamWs.close.bind(userStreamWs)
+const streams: Node = {
+  children: null,
+  listeners: null
 }
 
-export const openLocalConnection = () => {
-  const localStreamWs = createWS({ stream: 'public:local' })
+const createWS = (streamType: StreamType, listener: Listener): () => void => {
+  if (socket === null) {
+    const url = new URL(`wss://${new URL(store.state.mastodonServerUri).hostname}/api/v1/streaming`)
+    url.search = new URLSearchParams({
+      access_token: store.state.OAuthInfo.accessToken,
+      ...streamType
+    }).toString()
+    socket = new WebSocket(url.toString())
+    socket.addEventListener("message", onSocketMessage)
+  } else {
+    socket.send(JSON.stringify({
+      type: "subscribe",
+      ...streamType
+    }))
+  }
 
-  localStreamWs.onmessage = initEventListener(TimeLineTypes.LOCAL)
+  const path = streamType.stream === "hashtag" ? [streamType.stream, streamType.tag!] :
+    streamType.stream === "list" ? [streamType.stream, streamType.list!] :
+      [streamType.stream]
 
-  return localStreamWs.close.bind(localStreamWs)
+  const node = path.reduce((current, seg) => {
+    if (current.children == null) {
+      current.children = {}
+    }
+    if (current.children[seg] == null) {
+      current.children[seg] = {
+        children: null,
+        listeners: null
+      }
+    }
+    return current.children[seg]
+  }, streams)
+
+  if (node.listeners == null) {
+    node.listeners = new Set()
+  }
+
+  node.listeners.add(listener)
+
+  return () => {
+    if (node.listeners != null) {
+      node.listeners.delete(listener) // leave a hole in array
+
+      if (node.listeners.size <= 0) {
+        socket!.send(JSON.stringify({
+          type: "unsubscribe",
+          ...streamType
+        }))
+        node.listeners = null
+        // FIXME: close web socket ?
+      }
+    }
+  }
 }
 
-export const openPublicConnection = () => {
-  const publicStreamWs = createWS({ stream: 'public' })
+const onSocketMessage = (event: MessageEvent) => {
+  if (typeof event.data === 'string') {
+    const { stream: path, event: type, payload: rawPayload } = JSON.parse(event.data) as {
+      stream: string[],
+      event: string,
+      payload?: string
+    }
+    const payload = [
+      "update",
+      "notification",
+      "conversation",
+      "announcement",
+      "announcement.reaction",
+      "status.update"
+    ].includes(type) ? JSON.parse(rawPayload!) : rawPayload
 
-  publicStreamWs.onmessage = initEventListener(TimeLineTypes.PUBLIC)
+    const node = path.reduce((current: Node | null, seg) =>
+      current?.children?.[seg] ?? null, streams)
 
-  return publicStreamWs.close.bind(publicStreamWs)
+    node?.listeners?.forEach(listener => listener(type, payload))
+  }
 }
 
-const initEventListener = (timeLineType, hashName?) =>
-  (message: MessageEvent<any>) => {
-    if (message.data.length) {
-      const parsedMessage = JSON.parse(message.data)
+// TODO: onMessageError() ?
 
-      switch (parsedMessage.event) {
-        case StreamingEventTypes.UPDATE: {
-          return updateStatus(JSON.parse(parsedMessage.payload), timeLineType, hashName)
-        }
+export const openUserConnection = () =>
+  createWS({ stream: 'user' }, initEventListener(TimeLineTypes.HOME))
 
-        case StreamingEventTypes.DELETE: {
-          return deleteStatus(parsedMessage.payload)
-        }
+export const openLocalConnection = () =>
+  createWS({ stream: 'public:local' }, initEventListener(TimeLineTypes.LOCAL))
 
-        case StreamingEventTypes.NOTIFICATION: {
-          return emitNotification(JSON.parse(parsedMessage.payload))
-        }
+export const openPublicConnection = () =>
+  createWS({ stream: 'public' }, initEventListener(TimeLineTypes.PUBLIC))
+
+const initEventListener = (timeLineType, hashName?): Listener =>
+  (type, payload) => {
+    switch (type) {
+      case StreamingEventTypes.UPDATE: {
+        return updateStatus(payload, timeLineType, hashName)
+      }
+
+      case StreamingEventTypes.DELETE: {
+        return deleteStatus(payload)
+      }
+
+      case StreamingEventTypes.NOTIFICATION: {
+        return emitNotification(payload)
       }
     }
   }
