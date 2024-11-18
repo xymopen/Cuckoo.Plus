@@ -82,14 +82,23 @@ const routeToTargetAccount = () => {
 
 }
 
-const createWsUrl = (streamName: string) => {
-    return `wss://${new URL(store.state.mastodonServerUri).hostname}/api/v1/streaming/?stream=${streamName}&access_token=${store.state.OAuthInfo.accessToken}`
+type StreamType = {
+  stream: string;
+  list?: string;
+  tag?: string;
+}
+
+const createWS = (stream: StreamType) => {
+  const url = new URL(`wss://${new URL(store.state.mastodonServerUri).hostname}/api/v1/streaming`)
+  url.search = new URLSearchParams({
+    access_token: store.state.OAuthInfo.accessToken,
+    ...stream
+  }).toString()
+  return new WebSocket(url.toString())
 }
 
 export const openUserConnection = () => {
-  const wsUrl = createWsUrl('user')
-
-  const userStreamWs = new WebSocket(wsUrl)
+  const userStreamWs = createWS({ stream: 'user' })
 
   userStreamWs.onmessage = initEventListener(TimeLineTypes.HOME)
 
@@ -97,9 +106,7 @@ export const openUserConnection = () => {
 }
 
 export const openLocalConnection = () => {
-  const wsUrl = createWsUrl('public:local')
-
-  const localStreamWs = new WebSocket(wsUrl)
+  const localStreamWs = createWS({ stream: 'public:local' })
 
   localStreamWs.onmessage = initEventListener(TimeLineTypes.LOCAL)
 
@@ -107,9 +114,7 @@ export const openLocalConnection = () => {
 }
 
 export const openPublicConnection = () => {
-  const wsUrl = createWsUrl('public')
-
-  const publicStreamWs = new WebSocket(wsUrl)
+  const publicStreamWs = createWS({ stream: 'public' })
 
   publicStreamWs.onmessage = initEventListener(TimeLineTypes.PUBLIC)
 
