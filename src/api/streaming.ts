@@ -201,6 +201,13 @@ export const openLocalConnection = () =>
 export const openPublicConnection = () =>
   createWS({ stream: 'public' }, initEventListener(TimeLineTypes.PUBLIC))
 
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.dispose(() => {
+    socket?.close()
+    socket = null
+  })
+}
+
 const initEventListener = (timeLineType, hashName?): Listener =>
   (type, payload) => {
     switch (type) {
