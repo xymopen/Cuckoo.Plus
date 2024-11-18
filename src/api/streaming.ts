@@ -112,10 +112,20 @@ const createWS = (streamType: StreamType, listener: Listener): () => void => {
     socket = new WebSocket(url.toString())
     socket.addEventListener("message", onSocketMessage)
   } else {
-    socket.send(JSON.stringify({
+    const message = {
       type: "subscribe",
       ...streamType
-    }))
+    }
+
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(message))
+    } else {
+      socket.addEventListener(
+        "open",
+        function () { this.send(JSON.stringify(message)) },
+        { once: true }
+      )
+    }
   }
 
   const path = streamType.stream === "hashtag" ? [streamType.stream, streamType.tag!] :
