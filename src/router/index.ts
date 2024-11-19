@@ -6,7 +6,9 @@ import Router, { Route, NavigationGuard } from 'vue-router'
 import store from '../store'
 import { RoutersInfo } from '@/constant'
 import * as Api from '@/api'
+import { createWS } from "@/api/streaming";
 import { isBaseTimeLine, checkShouldRegisterApplication } from '@/util'
+import { deleteStatus, updateStatus } from "@/pages-components/timelines/edit-status";
 
 // Import generated routes
 import routes from 'vue-auto-routing'
@@ -73,6 +75,17 @@ const router = new Router({
   ]
 });
 
+
+
+export const openUserConnection = () => {
+}
+
+export const openLocalConnection = () => {
+}
+
+export const openPublicConnection = () => {
+}
+
 const statusInitManager = new class {
 
   private hasInitFetchNotifications = false
@@ -114,13 +127,25 @@ const statusInitManager = new class {
 
   public initStreamConnection () {
     if (this.closeStreamConnection == null) {
-      this.closeStreamConnection = Api.streaming.openUserConnection()
+      const ejectOnUpdate = createWS({ stream: 'user' }, 'update', payload => updateStatus(payload, TimeLineTypes.HOME))
+      const ejectOnDelete = createWS({ stream: 'user' }, 'delete', deleteStatus)
+
+      this.closeStreamConnection = () => {
+        ejectOnUpdate()
+        ejectOnDelete()
+      }
     }
   }
 
   public initLocalStreamConnection () {
     if (this.closeLocalStreamConnection == null) {
-      this.closeLocalStreamConnection = Api.streaming.openLocalConnection()
+      const ejectOnUpdate = createWS({ stream: 'public:local' }, 'update', payload => updateStatus(payload, TimeLineTypes.LOCAL))
+      const ejectOnDelete = createWS({ stream: 'public:local' }, 'delete', deleteStatus)
+
+      this.closeLocalStreamConnection = () => {
+        ejectOnUpdate()
+        ejectOnDelete()
+      }
     }
   }
 
@@ -133,7 +158,13 @@ const statusInitManager = new class {
 
   public initPublicStreamConnection () {
     if (this.closePublicStreamConnection == null) {
-      this.closePublicStreamConnection = Api.streaming.openPublicConnection()
+      const ejectOnUpdate = createWS({ stream: 'public' }, 'update', payload => updateStatus(payload, TimeLineTypes.PUBLIC))
+      const ejectOnDelete = createWS({ stream: 'public' }, 'delete', deleteStatus)
+
+      this.closePublicStreamConnection = () => {
+        ejectOnUpdate()
+        ejectOnDelete()
+      }
     }
   }
 

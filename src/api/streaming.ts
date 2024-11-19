@@ -1,12 +1,7 @@
 import store from '@/store'
-import { TimeLineTypes } from '@/constant'
-import { mastodonentities } from "@/interface"
-import { prepareRootStatus } from "@/util"
 import Multimap, { type Multimap as MultimapType } from 'packages/multimap'
 
 const StreamingEventTypes = {
-  UPDATE: 'update',
-  DELETE: 'delete',
   FILTERS_CHANGED: 'filters_changed'
 }
 
@@ -126,68 +121,9 @@ const onSocketMessage = (event: MessageEvent) => {
 
 // TODO: onMessageError() ?
 
-export const openUserConnection = () => {
-  const ejectOnUpdate = createWS({ stream: 'user' }, StreamingEventTypes.UPDATE, payload => updateStatus(payload, TimeLineTypes.HOME))
-  const ejectOnDelete = createWS({ stream: 'user' }, StreamingEventTypes.DELETE, deleteStatus)
-
-  return () => {
-    ejectOnUpdate()
-    ejectOnDelete()
-  }
-}
-
-export const openLocalConnection = () => {
-  const ejectOnUpdate = createWS({ stream: 'public:local' }, StreamingEventTypes.UPDATE, payload => updateStatus(payload, TimeLineTypes.LOCAL))
-  const ejectOnDelete = createWS({ stream: 'public:local' }, StreamingEventTypes.DELETE, deleteStatus)
-
-  return () => {
-    ejectOnUpdate()
-    ejectOnDelete()
-  }
-}
-
-export const openPublicConnection = () => {
-  const ejectOnUpdate = createWS({ stream: 'public' }, StreamingEventTypes.UPDATE, payload => updateStatus(payload, TimeLineTypes.PUBLIC))
-  const ejectOnDelete = createWS({ stream: 'public' }, StreamingEventTypes.DELETE, deleteStatus)
-
-  return () => {
-    ejectOnUpdate()
-    ejectOnDelete()
-  }
-}
-
 if (import.meta.webpackHot) {
   import.meta.webpackHot.dispose(() => {
     socket?.close()
     socket = null
   })
-}
-
-const updateStatus = (newStatus: mastodonentities.Status, timeLineType, hashName?) => {
-  if (store.state.statusMap[newStatus.id]) return
-
-  // update status map
-  store.commit('updateStatusMap', { [newStatus.id]: newStatus })
-  store.dispatch('updateCardMap', newStatus.id)
-  if (timeLineType === TimeLineTypes.HOME) {
-    prepareRootStatus(newStatus)
-  }
-
-  // update target timeline list
-  const targetMutationName = store.state.appStatus.settings.realTimeLoadStatusMode ? 'unShiftTimeLineStatuses' : 'unShiftStreamStatusesPool'
-  store.commit(targetMutationName, {
-    newStatusIdList: [newStatus.id],
-    timeLineType, hashName
-  })
-
-}
-
-const deleteStatus = (statusId: string) => {
-  if (!store.state.statusMap[statusId]) return
-
-  // remove from time line
-  store.commit('deleteStatusFromTimeLine', statusId)
-
-  // remove from status map
-  store.commit('removeStatusFromStatusMapById', statusId)
 }
