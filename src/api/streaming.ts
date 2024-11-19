@@ -103,31 +103,6 @@ const streams: Node = {
 }
 
 const createWS = (streamType: StreamType, listener: Listener): () => void => {
-  if (socket === null) {
-    const url = new URL(`wss://${new URL(store.state.mastodonServerUri).hostname}/api/v1/streaming`)
-    url.search = new URLSearchParams({
-      access_token: store.state.OAuthInfo.accessToken,
-      ...streamType
-    }).toString()
-    socket = new WebSocket(url.toString())
-    socket.addEventListener("message", onSocketMessage)
-  } else {
-    const message = {
-      type: "subscribe",
-      ...streamType
-    }
-
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify(message))
-    } else {
-      socket.addEventListener(
-        "open",
-        function () { this.send(JSON.stringify(message)) },
-        { once: true }
-      )
-    }
-  }
-
   const path = streamType.stream === "hashtag" ? [streamType.stream, streamType.tag!] :
     streamType.stream === "list" ? [streamType.stream, streamType.list!] :
       [streamType.stream]
@@ -144,6 +119,31 @@ const createWS = (streamType: StreamType, listener: Listener): () => void => {
     }
     return current.children[seg]
   }, streams)
+
+  if (socket === null) {
+    const url = new URL(`wss://${new URL(store.state.mastodonServerUri).hostname}/api/v1/streaming`)
+    url.search = new URLSearchParams({
+      access_token: store.state.OAuthInfo.accessToken,
+      ...streamType
+    }).toString()
+    socket = new WebSocket(url.toString())
+    socket.addEventListener("message", onSocketMessage)
+  } else if (node.listeners == null) {
+    const message = {
+      type: "subscribe",
+      ...streamType
+    }
+
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(message))
+    } else {
+      socket.addEventListener(
+        "open",
+        function () { this.send(JSON.stringify(message)) },
+        { once: true }
+      )
+    }
+  }
 
   if (node.listeners == null) {
     node.listeners = new Set()
