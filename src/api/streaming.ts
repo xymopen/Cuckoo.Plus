@@ -4,6 +4,7 @@ import { mastodonentities } from "@/interface"
 import router from '@/router'
 import { extractText, getAccountDisplayName, prepareRootStatus } from "@/util"
 import i18n from '@/i18n'
+import Multimap, { type Multimap as MultimapType } from 'packages/multimap'
 
 const StreamingEventTypes = {
   UPDATE: 'update',
@@ -90,11 +91,11 @@ type StreamType = {
 
 let socket: null | WebSocket = null
 
-type Listener = (type: string, payload: any) => void
+type Listener = (payload: any) => void
 
 type Node = {
   children: null | Record<string, Node>
-  listeners: null | Set<Listener>
+  listeners: null | MultimapType<string, Listener>
 }
 
 const streams: Node = {
@@ -102,7 +103,7 @@ const streams: Node = {
   listeners: null
 }
 
-const createWS = (streamType: StreamType, listener: Listener): () => void => {
+const createWS = (streamType: StreamType, type: string, listener: Listener): () => void => {
   const path = streamType.stream === "hashtag" ? [streamType.stream, streamType.tag!] :
     streamType.stream === "list" ? [streamType.stream, streamType.list!] :
       [streamType.stream]
@@ -146,10 +147,10 @@ const createWS = (streamType: StreamType, listener: Listener): () => void => {
   }
 
   if (node.listeners == null) {
-    node.listeners = new Set()
+    node.listeners = new Multimap()
   }
 
-  node.listeners.add(listener)
+  node.listeners.add(type, listener)
 
   return () => {
     if (node.listeners != null) {
@@ -186,20 +187,49 @@ const onSocketMessage = (event: MessageEvent) => {
     const node = path.reduce((current: Node | null, seg) =>
       current?.children?.[seg] ?? null, streams)
 
-    node?.listeners?.forEach(listener => listener(type, payload))
+    const it = node?.listeners?.getAll(type)
+
+    if (it != null) {
+      for (const listener of it) {
+        listener(payload)
+      }
+    }
   }
 }
 
 // TODO: onMessageError() ?
 
-export const openUserConnection = () =>
-  createWS({ stream: 'user' }, initEventListener(TimeLineTypes.HOME))
+export const openUserConnection = () => {
+  const ejectOnUpdate = createWS({ stream: 'user' }, StreamingEventTypes.UPDATE, payload => updateStatus(payload, TimeLineTypes.HOME))
+  const ejectOnDelete = createWS({ stream: 'user' }, StreamingEventTypes.DELETE, deleteStatus)
+  const ejectOnNotification = createWS({ stream: 'user' }, StreamingEventTypes.NOTIFICATION, emitNotification)
 
-export const openLocalConnection = () =>
-  createWS({ stream: 'public:local' }, initEventListener(TimeLineTypes.LOCAL))
+  return () => {
+    ejectOnUpdate()
+    ejectOnDelete()
+    ejectOnNotification()
+  }
+}
 
-export const openPublicConnection = () =>
-  createWS({ stream: 'public' }, initEventListener(TimeLineTypes.PUBLIC))
+export const openLocalConnection = () => {
+  const ejectOnUpdate = createWS({ stream: 'public:local' }, StreamingEventTypes.UPDATE, payload => updateStatus(payload, TimeLineTypes.LOCAL))
+  const ejectOnDelete = createWS({ stream: 'public:local' }, StreamingEventTypes.DELETE, deleteStatus)
+
+  return () => {
+    ejectOnUpdate()
+    ejectOnDelete()
+  }
+}
+
+export const openPublicConnection = () => {
+  const ejectOnUpdate = createWS({ stream: 'public' }, StreamingEventTypes.UPDATE, payload => updateStatus(payload, TimeLineTypes.PUBLIC))
+  const ejectOnDelete = createWS({ stream: 'public' }, StreamingEventTypes.DELETE, deleteStatus)
+
+  return () => {
+    ejectOnUpdate()
+    ejectOnDelete()
+  }
+}
 
 if (import.meta.webpackHot) {
   import.meta.webpackHot.dispose(() => {
@@ -207,23 +237,6 @@ if (import.meta.webpackHot) {
     socket = null
   })
 }
-
-const initEventListener = (timeLineType, hashName?): Listener =>
-  (type, payload) => {
-    switch (type) {
-      case StreamingEventTypes.UPDATE: {
-        return updateStatus(payload, timeLineType, hashName)
-      }
-
-      case StreamingEventTypes.DELETE: {
-        return deleteStatus(payload)
-      }
-
-      case StreamingEventTypes.NOTIFICATION: {
-        return emitNotification(payload)
-      }
-    }
-  }
 
 const updateStatus = (newStatus: mastodonentities.Status, timeLineType, hashName?) => {
   if (store.state.statusMap[newStatus.id]) return
