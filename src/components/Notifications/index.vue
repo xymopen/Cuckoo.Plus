@@ -25,6 +25,8 @@ import MentionCard from './components/MentionCard.vue'
 import Plus1Card from './components/Plus1Card.vue'
 import RepostCard from './components/RepostCard.vue'
 import { NotificationTypes } from '@/constant'
+import { createWS } from '@/api/streaming'
+import emitNotification from './emit-notification'
 
 export default defineComponent({
   components: {
@@ -35,8 +37,15 @@ export default defineComponent({
   },
   data () {
     return {
+      closeNotificationStream: null as null | (() => void),
       isLoadingNotifications: false
     }
+  },
+  mounted () {
+    this.closeNotificationStream = createWS({ stream: 'user' }, 'notification', emitNotification)
+  },
+  beforeDestroy () {
+    this.closeNotificationStream!()
   },
   computed: {
     ...mapState(['notifications', 'contextMap', 'appStatus']),
