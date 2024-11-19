@@ -5,7 +5,7 @@ const StreamingEventTypes = {
   FILTERS_CHANGED: 'filters_changed'
 }
 
-type StreamType = {
+export type StreamType = {
   stream: string;
   list?: string;
   tag?: string;

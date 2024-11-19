@@ -2,9 +2,18 @@ import store from '@/store'
 import { TimeLineTypes } from '@/constant'
 import { mastodonentities } from "@/interface"
 import { prepareRootStatus } from "@/util"
+import { StreamType } from "@/api/streaming"
 
-export const updateStatus = (newStatus: mastodonentities.Status, timeLineType, hashName?) => {
+export const updateStatus = (newStatus: mastodonentities.Status, stream: StreamType) => {
   if (store.state.statusMap[newStatus.id]) return
+
+  const timeLineType = stream.stream === 'hashtag' ? TimeLineTypes.TAG :
+    stream.stream === 'list' ? TimeLineTypes.LIST :
+    stream.stream === 'public' ? TimeLineTypes.PUBLIC :
+    stream.stream === 'user' ? TimeLineTypes.HOME :
+    stream.stream === 'direct' ? TimeLineTypes.DIRECT :
+    stream.stream === 'public:local' ? TimeLineTypes.LOCAL : undefined
+  const hashName = timeLineType === TimeLineTypes.TAG ? stream.tag! : undefined
 
   // update status map
   store.commit('updateStatusMap', { [newStatus.id]: newStatus })

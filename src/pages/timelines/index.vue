@@ -46,6 +46,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Action, State } from 'vuex-class'
+import { createWS, StreamType } from "@/api/streaming"
 import store from '@/store'
 import { RoutersInfo, TimeLineTypes, UiWidthCheckConstants, ThemeNames } from '@/constant'
 import { mastodonentities } from '@/interface'
@@ -55,6 +56,7 @@ import StatusCard from '@/components/StatusCard/index.vue'
 import PostStatusDialog from '@/components/PostStatusDialog.vue'
 import NewStatusNoticeButton from '@/pages-components/timelines/NewStatusNoticeButton.vue'
 import PostStatusStampCard from '@/pages-components/timelines/PostStatusStampCard.vue'
+import { deleteStatus, updateStatus } from "@/pages-components/timelines/edit-status"
 
 const noneCardFocusId = '-2'
 const stampCardFocusId = '-1'
@@ -130,6 +132,8 @@ class TimeLines extends Vue {
 
   currentFocusCardId: string = noneCardFocusId
 
+  closeStream: (() => void) | null = null
+
   get cardFocusStyle () {
     const darkThemeList = [ThemeNames.DARK, ThemeNames.CUCKOO_HUB]
     const shadowBaseColor = darkThemeList.indexOf(this.appStatus.settings.theme) !== -1 ? 255 : 0
@@ -201,9 +205,48 @@ class TimeLines extends Vue {
     return this.timeLineTypeAndHashName.hashName
   }
 
+  get stream (): StreamType {
+    const { $route } = this
+
+    if ($route.name === RoutersInfo.tagtimelines.name) {
+      return {
+        stream: 'hashtag',
+        tag: $route.params.tagName
+      }
+    } else if ($route.name === RoutersInfo.listtimelines.name) {
+      return {
+        stream: 'list',
+        list: $route.params.listName
+      }
+    } else if ($route.name === RoutersInfo.defaulttimelines.name) {
+      switch ($route.params.timeLineType) {
+        case 'public': return { stream: 'public' }
+        case 'home': return { stream: 'user' }
+        case 'direct': return { stream: 'direct' }
+        case 'local': return { stream: 'public:local' }
+      }
+    }
+
+    throw new RangeError(`Cannot find stream for current route ${$route.fullPath}`)
+  }
+
   @Watch('$route')
   async onRouteChanged () {
     this.currentFocusCardId = noneCardFocusId
+
+    {
+      if (this.closeStream != null) {
+        this.closeStream()
+      }
+
+      const ejectOnUpdate = createWS(this.stream, 'update', payload => updateStatus(payload, this.stream))
+      const ejectOnDelete = createWS(this.stream, 'delete', deleteStatus)
+
+      this.closeStream = () => {
+        ejectOnUpdate()
+        ejectOnDelete()
+      }
+    }
 
     if (!hasCurrentTimeLineInit({ timeLineType: this.timeLineType, hashName: this.hashName })) {
       if (this.currentRootStatuses.length === 0) {
